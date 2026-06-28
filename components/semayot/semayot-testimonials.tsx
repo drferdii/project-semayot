@@ -16,13 +16,13 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "Siti Rahayu",
+    name: "Kristina Natalia",
     role: "Wisatawan",
     company: "Pontianak",
     content:
       "Suasana rumah makannya sangat nyaman dan autentik. Pelayanannya cepat dan ramah. Babi panggangnya wajib dicoba — kulitnya garing, dagingnya lembut!",
     rating: 5,
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Siti&backgroundColor=ffdfbf",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kristina&backgroundColor=ffdfbf",
   },
   {
     id: 3,
