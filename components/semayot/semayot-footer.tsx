@@ -107,6 +107,13 @@ export const SemayotFooter: React.FC = () => {
               <p className="leading-relaxed">
                 Special courtesy to <a href="https://www.instagram.com/alyn_kristiani/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#0A0A0A] transition-colors">dr. Alyn</a> for the trusted collaboration in 2026.
               </p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold text-[#0A0A0A]/40 mt-2 pt-2 border-t border-[#0A0A0A]/5">
+                <a href="/robots.txt" className="hover:text-[#0A0A0A] hover:underline">robots.txt</a>
+                <span>•</span>
+                <a href="/sitemap.xml" className="hover:text-[#0A0A0A] hover:underline">sitemap.xml</a>
+                <span>•</span>
+                <a href="/llms.txt" className="hover:text-[#0A0A0A] hover:underline">llms.txt (AI guidelines)</a>
+              </div>
             </div>
           </motion.div>
         </div>
