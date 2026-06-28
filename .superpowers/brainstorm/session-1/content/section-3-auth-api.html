@@ -1,0 +1,253 @@
+<h2>Phase B · Admin Semayot — Section 3</h2>
+<p class="subtitle">Alur autentikasi + surface API (Next.js Route Handlers). Recap: Supabase Auth + middleware /admin + RLS sebagai source of truth permission.</p>
+
+<!-- ========== 3.1 ALUR AUTENTIKASI ========== -->
+<div class="section">
+  <div class="label">3.1 · Alur Autentikasi</div>
+  <div class="mockup">
+    <div class="mockup-header">Login flow · email + password via Supabase Auth</div>
+    <div class="mockup-body">
+<pre style="font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.78rem; line-height: 1.55; white-space: pre; color: var(--text-primary);">
+Pengguna                    Browser                   Middleware              API Route             Supabase
+─────────                   ───────                   ──────────              ─────────             ────────
+  │                            │                          │                      │                    │
+  │ GET /admin/login           │                          │                      │                    │
+  ├──────────────────────────▶ │ render form login        │                      │                    │
+  │                            │                          │                      │                    │
+  │ submit (email, password)   │                          │                      │                    │
+  ├──────────────────────────▶ │                          │                      │                    │
+  │                            │ POST /api/admin/auth/login                      │                    │
+  │                            ├─────────────────────────┼─────────────────────▶│  signInWithPassword │
+  │                            │                          │                      ├───────────────────▶│
+  │                            │                          │                      │◀──── session cookie │
+  │                            │◀──── 200 + Set-Cookie ──┼──────────────────────┤                    │
+  │                            │                          │                      │                    │
+  │                            │ redirect /admin/overview                         │                    │
+  │◀────────── 302 ───────────┤                          │                      │                    │
+  │                            │                          │                      │                    │
+  │ GET /admin/overview        │                          │                      │                    │
+  ├──────────────────────────▶ │ middleware: cek cookie  │                      │                    │
+  │                            ├─────────────────────────▶│                      │                    │
+  │                            │                          │  valid session →     │                    │
+  │                            │                          │  query profiles.role │                    │
+  │                            │                          ├──────────────────────┼───────────────────▶│
+  │                            │                          │◀──── 'owner'/'staff'│                    │
+  │                            │◀─── 200 render ─────────┤                      │                    │
+  │                            │                          │                      │                    │</pre>
+    </div>
+  </div>
+
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" data-choice="login-page" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; flex-direction: column; gap: 0.6rem; padding: 1.2rem; align-items: stretch;">
+        <div style="font-weight: 600; text-align: center; color: var(--accent);">/admin/login</div>
+        <input class="mock-input" placeholder="email@semayot.id" disabled style="opacity: 0.7;">
+        <input class="mock-input" type="password" placeholder="••••••••" disabled style="opacity: 0.7;">
+        <button class="mock-button">Masuk</button>
+        <div style="font-size: 0.72rem; text-align: center; color: var(--text-secondary);">Lupa password?</div>
+      </div>
+      <div class="card-body">
+        <h3>Halaman Login</h3>
+        <p>Email + password, brand warm cream, error message Bahasa Indonesia. Redirect ke /admin/overview setelah berhasil.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="middleware" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; flex-direction: column; gap: 0.5rem; padding: 1.2rem; align-items: stretch; justify-content: flex-start;">
+        <div style="font-family: monospace; font-size: 0.7rem; color: var(--text-primary); background: var(--bg-tertiary); padding: 0.5rem; border-radius: 4px;">middleware.ts</div>
+        <div style="font-family: monospace; font-size: 0.65rem; color: var(--text-secondary); line-height: 1.6;">
+          match: ['/admin/:path*', '/api/admin/:path*']<br><br>
+          if (!session) {<br>
+          &nbsp;&nbsp;page → 302 /admin/login<br>
+          &nbsp;&nbsp;api → 401 JSON<br>
+          }<br><br>
+          // role check di handler
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Middleware /admin</h3>
+        <p>Cek session Supabase via @supabase/ssr. Kalau belum auth → redirect (page) atau 401 (API). Role check tetap di handler/RLS.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 3.2 API SURFACE ========== -->
+<div class="section">
+  <div class="label">3.2 · API Surface (Next.js Route Handlers di /api/admin/*)</div>
+
+  <div class="mockup">
+    <div class="mockup-header">14 endpoint · semua auth-gated · role enforcement via RLS</div>
+    <div class="mockup-body" style="padding: 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+        <thead>
+          <tr style="background: var(--bg-tertiary); text-align: left;">
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Method</th>
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Path</th>
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Tujuan</th>
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/menu</code></td>
+            <td style="padding: 0.55rem 0.8rem;">list semua menu items</td>
+            <td style="padding: 0.55rem 0.8rem;"><span style="color: var(--text-secondary);">owner · staff</span></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>POST</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/menu</code></td>
+            <td style="padding: 0.55rem 0.8rem;">create menu item (dengan upload foto)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>PUT</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/menu/[id]</code></td>
+            <td style="padding: 0.55rem 0.8rem;">update menu item</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>DELETE</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/menu/[id]</code></td>
+            <td style="padding: 0.55rem 0.8rem;">soft delete (is_active = false)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border); background: rgba(255, 79, 121, 0.05);">
+            <td style="padding: 0.55rem 0.8rem;"><code>POST</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/pos</code></td>
+            <td style="padding: 0.55rem 0.8rem;">catat transaksi baru (POS)</td>
+            <td style="padding: 0.55rem 0.8rem;">staff · owner</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/transactions</code></td>
+            <td style="padding: 0.55rem 0.8rem;">list transaksi (filter tanggal, staff, dll)</td>
+            <td style="padding: 0.55rem 0.8rem;">owner (all) · staff (own)</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/transactions/[id]</code></td>
+            <td style="padding: 0.55rem 0.8rem;">detail transaksi + line items</td>
+            <td style="padding: 0.55rem 0.8rem;">owner · staff (own)</td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>POST</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/expenses</code></td>
+            <td style="padding: 0.55rem 0.8rem;">catat pengeluaran</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/reports/daily</code></td>
+            <td style="padding: 0.55rem 0.8rem;">laporan harian (date=YYYY-MM-DD)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/reports/monthly</code></td>
+            <td style="padding: 0.55rem 0.8rem;">laporan bulanan (year, month)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/reports/export</code></td>
+            <td style="padding: 0.55rem 0.8rem;">export CSV/PDF (from, to, format)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>GET</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/settings</code></td>
+            <td style="padding: 0.55rem 0.8rem;">business settings (jam buka, kontak)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>POST</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/staff/invite</code></td>
+            <td style="padding: 0.55rem 0.8rem;">invite staff baru (kirim email)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+          <tr style="border-top: 1px solid var(--border);">
+            <td style="padding: 0.55rem 0.8rem;"><code>DELETE</code></td>
+            <td style="padding: 0.55rem 0.8rem;"><code>/api/admin/staff/[id]</code></td>
+            <td style="padding: 0.55rem 0.8rem;">nonaktifkan staff (is_active=false)</td>
+            <td style="padding: 0.55rem 0.8rem;"><strong>owner</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 3.3 ERROR ENVELOPE ========== -->
+<div class="section">
+  <div class="label">3.3 · Error Envelope Standar</div>
+
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" data-choice="error-shape" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: auto; padding: 1rem; align-items: stretch;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6; color: var(--text-primary); background: var(--bg-tertiary); padding: 0.8rem; border-radius: 6px; white-space: pre;">{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Nama produk wajib diisi",
+    "details": [
+      { "path": "name", "issue": "required" }
+    ]
+  }
+}</div>
+      </div>
+      <div class="card-body">
+        <h3>Bentuk Error</h3>
+        <p>Selalu bungkus di <code>error: { code, message, details? }</code>. <code>code</code> = string machine-readable. <code>message</code> = Bahasa Indonesia untuk ditampilkan ke user.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="http-codes" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: auto; padding: 1rem; align-items: stretch; flex-direction: column; gap: 0.4rem;">
+        <div style="font-size: 0.78rem;"><code style="color: var(--success);">200</code> OK — success</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--success);">201</code> Created — resource baru</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--warning);">400</code> Bad Request — validasi Zod fail</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--warning);">401</code> Unauthorized — no session</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--warning);">403</code> Forbidden — RLS reject</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--error);">404</code> Not Found</div>
+        <div style="font-size: 0.78rem;"><code style="color: var(--error);">500</code> Internal Server Error</div>
+      </div>
+      <div class="card-body">
+        <h3>HTTP Status Codes</h3>
+        <p>Standar REST. Middleware otomatis 401 untuk no-session. RLS violation dari Supabase = 403 di handler.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== APPROVAL ========== -->
+<div class="section">
+  <div class="label">Persetujuan · Section 3</div>
+  <div class="options">
+
+    <div class="option" data-choice="approve-continue" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Setuju, lanjut Section 4 (struktur UI admin)</h3>
+        <p>OG susun Section 4: layout shell admin (sidebar + topbar), 9 halaman /admin/*, komponen reusable (form, table, modal, toast), dan tone visual mengikuti brand Semayot.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Ada yang perlu direvisi</h3>
+        <p>Sebutkan apa yang perlu diubah — mis. tambah/kurang endpoint, ubah flow auth, ganti error shape, dsb.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="combine" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Gabungkan Section 3+4+5 jadi 1 layar</h3>
+        <p>Auth + API + UI shell + AI summary + SEO panel ditampilkan sekaligus di 1 layar panjang. Hemat round trip approval.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

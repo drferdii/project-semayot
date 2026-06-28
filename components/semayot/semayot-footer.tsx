@@ -42,13 +42,13 @@ export const SemayotFooter: React.FC = () => {
           >
             <div className="flex gap-2 md:gap-3 items-end">
               {/* 3 vertical bars */}
-              <div className="w-8 md:w-12 h-44 md:h-64 bg-[#0A0A0A]" />
-              <div className="w-8 md:w-12 h-44 md:h-64 bg-[#0A0A0A]" />
-              <div className="w-10 md:w-14 h-44 md:h-64 bg-[#0A0A0A]" />
+              <div className="w-6 sm:w-8 md:w-12 h-32 sm:h-44 md:h-64 bg-[#0A0A0A]" />
+              <div className="w-6 sm:w-8 md:w-12 h-32 sm:h-44 md:h-64 bg-[#0A0A0A]" />
+              <div className="w-8 sm:w-10 md:w-14 h-32 sm:h-44 md:h-64 bg-[#0A0A0A]" />
               {/* 2 horizontal rectangles */}
               <div className="flex flex-col gap-2 md:gap-3">
-                <div className="w-36 md:w-52 h-20 md:h-28 bg-[#0A0A0A]" />
-                <div className="w-36 md:w-52 h-20 md:h-28 bg-[#0A0A0A]" />
+                <div className="w-24 sm:w-36 md:w-52 h-14 sm:h-20 md:h-28 bg-[#0A0A0A]" />
+                <div className="w-24 sm:w-36 md:w-52 h-14 sm:h-20 md:h-28 bg-[#0A0A0A]" />
               </div>
             </div>
           </motion.div>
@@ -79,7 +79,7 @@ export const SemayotFooter: React.FC = () => {
                   aria-label="Alamat Email"
                   className="flex-1 bg-transparent border border-[#0A0A0A]/40 px-3 py-2 text-sm font-semibold placeholder:text-[#0A0A0A]/50 focus:outline-none focus:border-[#0A0A0A] transition-colors"
                 />
-                <button className="border border-[#0A0A0A] px-4 py-2 text-sm font-bold hover:bg-[#0A0A0A] hover:text-[#E8F95C] transition-colors">
+                <button className="shrink-0 border border-[#0A0A0A] px-4 py-2 text-sm font-bold hover:bg-[#0A0A0A] hover:text-[#E8F95C] transition-colors">
                   Berlangganan
                 </button>
               </div>

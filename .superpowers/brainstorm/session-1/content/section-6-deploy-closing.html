@@ -1,0 +1,267 @@
+<h2>Phase B · Admin Semayot — Section 6 (final)</h2>
+<p class="subtitle">Error handling matrix · testing · secrets · deploy plan · slicing order · risks · YAGNI · acceptance criteria.</p>
+
+<!-- ========== 6.1 ERROR HANDLING ========== -->
+<div class="section">
+  <div class="label">6.1 · Error Handling Matrix</div>
+  <div class="mockup">
+    <div class="mockup-header">Failure → response per layer (semua dalam Bahasa Indonesia di sisi user)</div>
+    <div class="mockup-body" style="padding: 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+        <thead>
+          <tr style="background: var(--bg-tertiary); text-align: left;">
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Layer</th>
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Failure</th>
+            <th style="padding: 0.6rem 0.8rem; font-weight: 600;">Response</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--border);"><td style="padding: 0.5rem 0.8rem;">Form (client)</td><td>Zod validation fail</td><td>Inline error merah di bawah field, tombol disabled</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>Form (client)</td><td>Network offline</td><td>Toast: "Tidak ada koneksi. Coba lagi."</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>API route</td><td>No session</td><td>401 → redirect /admin/login (page) atau JSON 401 (API)</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>API route</td><td>RLS reject (role)</td><td>403: "Akses ditolak. Hubungi owner."</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>API route</td><td>Zod validation fail</td><td>400 + details per field</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>API route</td><td>DB constraint / duplicate</td><td>409: "Data sudah ada" / "Tidak bisa dihapus, dipakai di tempat lain"</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>API route</td><td>Unexpected DB error</td><td>500 + log ke console (dev) atau Sentry (prod). User: "Terjadi kesalahan. Coba lagi."</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>Supabase Storage</td><td>Upload fail</td><td>Rollback transaction DB, toast error</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>OpenRouter</td><td>Rate limit</td><td>Retry 2s, lalu error: "Terlalu banyak permintaan. Coba lagi nanti."</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td>OpenRouter</td><td>API key invalid/missing</td><td>503: "Layanan AI sedang tidak tersedia." (sama dengan chat-widget)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6.2 TESTING ========== -->
+<div class="section">
+  <div class="label">6.2 · Testing Strategy</div>
+  <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="card"><div class="card-body">
+      <h3>Unit test</h3>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">Zod schemas · money formatting (cents → "Rp 45.000") · snapshot logic (name/price snapshot) · change calculation · date range filter · Indonesian number formatting</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.5rem;">Tool: Vitest (zero-config untuk Next.js)</p>
+    </div></div>
+    <div class="card"><div class="card-body">
+      <h3>Integration test</h3>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">API routes dengan Supabase mocked (per-route test). Verifikasi: response shape, status code, RLS policy integration, error envelope consistency.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.5rem;">Tool: Vitest + mock Supabase client</p>
+    </div></div>
+    <div class="card"><div class="card-body">
+      <h3>Manual smoke</h3>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">End-to-end happy path: login → catat transaksi → lihat di laporan → generate AI summary → salin SEO rec. Checklist per slice.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.5rem;">OG jalankan manual via <code>pnpm dev</code> setelah tiap slice</p>
+    </div></div>
+  </div>
+  <div style="margin-top: 1rem; padding: 0.8rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+    <strong>YAGNI:</strong> No Playwright/Cypress automated E2E untuk MVP. Overkill untuk single-resto + OG solo. Re-evaluate kalau ada 5+ contributor atau 3+ environments.
+  </div>
+</div>
+
+<!-- ========== 6.3 ENV VARS + SECRETS ========== -->
+<div class="section">
+  <div class="label">6.3 · Environment Variables & Secrets</div>
+  <div class="mockup">
+    <div class="mockup-header">.env.local (dev, gitignored) + Vercel env (prod)</div>
+    <div class="mockup-body" style="padding: 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+        <thead><tr style="background: var(--bg-tertiary); text-align: left;">
+          <th style="padding: 0.5rem 0.8rem;">Variable</th>
+          <th style="padding: 0.5rem 0.8rem;">Scope</th>
+          <th style="padding: 0.5rem 0.8rem;">Tujuan</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-top: 1px solid var(--border);"><td style="padding: 0.45rem 0.8rem;"><code>NEXT_PUBLIC_SUPABASE_URL</code></td><td>public</td><td>URL project Supabase (aman di-expose ke client)</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td><td>public</td><td>Anon key (RLS enforce via JWT)</td></tr>
+          <tr style="border-top: 1px solid var(--border); background: rgba(220, 38, 38, 0.05);"><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td><strong style="color: #DC2626;">server only</strong></td><td>Bypass RLS — HANYA untuk migration/admin script. JANGAN pernah dipakai di runtime request handler</td></tr>
+          <tr style="border-top: 1px solid var(--border); background: rgba(220, 38, 38, 0.05);"><td><code>OPENROUTER_API_KEY</code></td><td><strong style="color: #DC2626;">server only</strong></td><td>Sama seperti chat-widget. Dipakai di /api/admin/ai/*</td></tr>
+          <tr style="border-top: 1px solid var(--border);"><td><code>NEXT_PUBLIC_SITE_URL</code></td><td>public</td><td>URL public site (untuk SEO recommendations: og:url, canonical)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="margin-top: 0.8rem; padding: 0.8rem; background: rgba(255, 79, 121, 0.08); border: 1px solid rgba(255, 79, 121, 0.2); border-radius: 8px; font-size: 0.82rem; color: #1C1917; line-height: 1.6;">
+    <strong>⚠️ Hard rules:</strong>
+    <ul style="margin-top: 0.4rem; margin-left: 1.4rem;">
+      <li>Service role key <strong>tidak pernah</strong> dipakai di request handler runtime. Hanya untuk SQL migration & seed script.</li>
+      <li><code>.env.local</code> di-gitignore (sudah). Vercel env vars di-set via dashboard, tidak di-commit.</li>
+      <li>Anon key aman di-expose karena RLS enforce permission. Service role key bypass RLS = privilege escalation kalau bocor.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.4 DEPLOY ========== -->
+<div class="section">
+  <div class="label">6.4 · Deployment Plan</div>
+  <div class="mockup">
+    <div class="mockup-header">Vercel (Next.js) + Supabase (managed) + GitHub (repo)</div>
+    <div class="mockup-body" style="background: #FCF9F2;">
+<pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 1.6; white-space: pre; color: var(--text-primary);">
+LANGKAH DEPLOY (eksekusi OG setelah semua slice approved):
+
+1. Setup Supabase project
+   └─ Create project di supabase.com
+   └─ Run SQL migration files (lib/admin/rls/*.sql) via SQL Editor
+   └─ Create storage bucket "menu-photos" (public read)
+   └─ Setup RLS policies (sudah include di migration)
+
+2. Bootstrap owner pertama
+   └─ Sign up dr. Alyn via Supabase Auth dashboard
+   └─ Insert ke profiles table: role='owner', is_active=true
+
+3. Setup Vercel
+   └─ Connect GitHub repo
+   └─ Set env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
+     OPENROUTER_API_KEY, NEXT_PUBLIC_SITE_URL
+   └─ (JANGAN set SUPABASE_SERVICE_ROLE_KEY di Vercel)
+   └─ Deploy
+
+4. Verifikasi post-deploy
+   └─ Kunjungi https://<domain>/admin/login
+   └─ Login sebagai dr. Alyn → dapat overview
+   └─ Invite 1 staff sebagai smoke test
+   └─ Catat 1 transaksi dummy → cek di /admin/transactions
+   └─ Generate AI summary → cek cached di DB
+   └─ Buka 1 SEO rec → salin & cek format
+
+5. Dokumentasi
+   └─ README di /admin (per-route instruksi singkat)
+   └─ Runbook: "Owner lupa password" / "Tambah staff baru" / "Backup DB"</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6.5 SLICING ORDER ========== -->
+<div class="section">
+  <div class="label">6.5 · Slicing Order (vertical slice, sudah disetujui)</div>
+  <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 1</div>
+      <h3>Auth & Role</h3>
+      <p style="font-size: 0.82rem;">Supabase project setup · SQL migration (profiles + RLS) · <code>/admin/login</code> · middleware · AdminShell · role-based nav.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: login owner + staff, redirect, role nav hide</p>
+    </div></div>
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 2</div>
+      <h3>Menu CRUD</h3>
+      <p style="font-size: 0.82rem;">SQL migration (menu_items + RLS) · <code>/admin/menu</code> list + form · API · FileUpload · Supabase Storage.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: tambah, edit, soft-delete, upload foto, list by staff</p>
+    </div></div>
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 3</div>
+      <h3>POS & Transactions</h3>
+      <p style="font-size: 0.82rem;">SQL migration (transactions + items) · <code>/admin/pos</code> form · <code>/admin/transactions</code> list + detail · API · snapshot logic.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: catat 5 transaksi, edit harga menu, history tetap akurat</p>
+    </div></div>
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 4</div>
+      <h3>Reports & Expenses</h3>
+      <p style="font-size: 0.82rem;">SQL migration (expenses) · <code>/admin/reports</code> (harian + bulanan) · chart sederhana · export CSV/PDF · <code>expenses</code> form.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: laporan 7 hari akurat, expense tercatat, export buka di Excel</p>
+    </div></div>
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 5</div>
+      <h3>AI Summary</h3>
+      <p style="font-size: 0.82rem;">SQL migration (ai_summaries) · <code>/admin/ai</code> page · <code>/api/admin/ai/summary</code> · system prompt · streaming · chat tanya.</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: generate ringkasan 7 hari, refresh, tanya spesifik, cache hit</p>
+    </div></div>
+
+    <div class="card" style="border-left: 3px solid #FF4F79;"><div class="card-body">
+      <div style="font-size: 0.7rem; color: #FF4F79; font-weight: 600; text-transform: uppercase;">Slice 6</div>
+      <h3>SEO Panel + Settings</h3>
+      <p style="font-size: 0.82rem;">10 SEO rec statis (curated) · <code>/admin/seo</code> page · copy-to-clipboard · status toggle · <code>/admin/settings</code> (bisnis + staff manage).</p>
+      <p style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.4rem;">✓ Test: salin JSON-LD valid, tandai diterapkan, invite staff baru</p>
+    </div></div>
+
+  </div>
+</div>
+
+<!-- ========== 6.6 RISKS ========== -->
+<div class="section">
+  <div class="label">6.6 · Risiko yang OG flag (state dulu, lalu mitigasi)</div>
+  <div class="pros-cons">
+    <div class="cons" style="background: rgba(220, 38, 38, 0.04);">
+      <h4 style="color: #DC2626;">Risiko</h4>
+      <ul style="color: var(--text-primary);">
+        <li><strong>Data finansial sensitif</strong> — revenue, expenses, profit. Mitigasi: RLS, HTTPS only, no PII di log, backup Supabase otomatis.</li>
+        <li><strong>Single point of failure</strong> — dr. Alyn satu-satunya owner. Mitigasi: backup owner account via Supabase, dokumentasi recovery process.</li>
+        <li><strong>Free tier limit</strong> — Supabase free 500MB DB, OpenRouter free ada rate limit. Mitigasi: monitor usage bulanan, plan upgrade path jelas.</li>
+        <li><strong>Cash reconciliation</strong> — sistem tidak bisa match otomatis dengan uang fisik di laci. Owner tetap rekonsiliasi manual tiap tutup.</li>
+        <li><strong>Tanpa audit log</strong> — perubahan data (hapus menu, edit expense) tidak ada jejak historis. Trade-off: simplicity vs compliance. Owner-only delete jadi lebih aman.</li>
+        <li><strong>Public ↔ admin out-of-sync</strong> — menu di public site statis, admin bisa update DB. Mitigasi: panel settings ingatkan owner untuk update file TS manual.</li>
+      </ul>
+    </div>
+    <div class="pros" style="background: rgba(21, 128, 61, 0.04);">
+      <h4 style="color: #15803D;">YAGNI (jangan dibangun)</h4>
+      <ul style="color: var(--text-primary);">
+        <li>Multi-restaurant / multi-tenant</li>
+        <li>Online ordering / customer-facing checkout</li>
+        <li>Payment gateway (cash only, by design)</li>
+        <li>Customer accounts / loyalty program</li>
+        <li>Email marketing / newsletter blast</li>
+        <li>Mobile app native</li>
+        <li>i18n (Bahasa Indonesia only)</li>
+        <li>Dark mode admin</li>
+        <li>2FA (overkill untuk warung)</li>
+        <li>Receipt printer integration</li>
+        <li>Inventory management</li>
+        <li>Supplier management</li>
+        <li>Market intel (sudah di-skip)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6.7 ACCEPTANCE ========== -->
+<div class="section">
+  <div class="label">6.7 · Acceptance Criteria (final checklist)</div>
+  <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; font-size: 0.85rem; line-height: 1.8;">
+    <strong>Slice 1-6 deliverables working</strong> — semua 9 halaman /admin/* render tanpa error.<br>
+    <strong>POS can record transaction in &lt;30s</strong> — owner/staff test manual.<br>
+    <strong>Daily report generates in &lt;2s</strong> — query 7 hari Supabase.<br>
+    <strong>AI summary generates in &lt;10s</strong> — OpenRouter streaming.<br>
+    <strong>Build passes</strong> — <code>pnpm build</code> zero error.<br>
+    <strong>Lint passes</strong> — <code>pnpm lint</code> zero warning.<br>
+    <strong>TypeScript strict zero error</strong> — <code>tsc --noEmit</code>.<br>
+    <strong>No secrets in git</strong> — <code>git log -p | grep -i "key\\|secret"</code> negative.<br>
+    <strong>Public site 100% untouched</strong> — diff vs base: hanya file baru di <code>/admin</code>, <code>/api/admin</code>, <code>lib/admin</code>, <code>components/admin</code>.<br>
+    <strong>RLS tested</strong> — staff coba akses <code>/admin/reports</code> → 403. Owner coba hapus menu orang lain → 403.<br>
+    <strong>Backup plan documented</strong> — Supabase daily backup di paid plan, atau export mingguan manual.
+  </div>
+</div>
+
+<!-- ========== APPROVAL ========== -->
+<div class="section">
+  <div class="label">Persetujuan · Section 6 + Tulis Spec Doc</div>
+  <div class="options">
+
+    <div class="option" data-choice="write-spec" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Semua section OK, tulis spec doc lengkap</h3>
+        <p>OG tulis <code>docs/superpowers/specs/2026-06-29-semayot-admin-phase-b-design.md</code> kompilasi Section 1-6. Chief review file markdown. Setelah approved → invoke writing-plans skill untuk implementation plan.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Ada yang perlu direvisi</h3>
+        <p>Sebutkan — mis. tambah risk, ubah slicing, tambah YAGNI item, dsb.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="discuss" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Diskusi dulu sebelum spec doc</h3>
+        <p>Ada pertanyaan / klarifikasi / keberatan yang perlu dibahas sebelum OG kompilasi ke markdown.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

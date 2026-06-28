@@ -170,18 +170,18 @@ export function ChatWidget() {
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3 bg-[#FF4F79] text-white flex-shrink-0">
-              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/20 flex-shrink-0">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
                 <Image
-                  src="/semayot/images/semayot.webp"
-                  alt="Semayot"
+                  src="/semayot/images/avatar.jpg"
+                  alt="Maskot Sema"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="32px"
                 />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm truncate">Tanya Semayot</h3>
-                <p className="text-xs text-white/80">Asisten AI</p>
+                <p className="text-xs text-white/80">Maskot Sema</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
@@ -203,12 +203,12 @@ export function ChatWidget() {
                     transition={{ delay: 0.1 }}
                     className="flex gap-2"
                   >
-                    <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
+                    <div className="relative w-7 h-7 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
                       <Image
-                        src="/semayot/images/semayot.webp"
-                        alt="Semayot"
+                        src="/semayot/images/avatar.jpg"
+                        alt="Maskot Sema"
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                         sizes="28px"
                       />
                     </div>
@@ -246,12 +246,12 @@ export function ChatWidget() {
                       className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       {msg.role === "assistant" && (
-                        <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
+                        <div className="relative w-7 h-7 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
                           <Image
-                            src="/semayot/images/semayot.webp"
-                            alt="Semayot"
+                            src="/semayot/images/avatar.jpg"
+                            alt="Maskot Sema"
                             fill
-                            className="object-cover"
+                            className="object-cover object-top"
                             sizes="28px"
                           />
                         </div>
@@ -275,12 +275,12 @@ export function ChatWidget() {
                       animate={{ opacity: 1 }}
                       className="flex gap-2"
                     >
-                      <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
+                      <div className="relative w-7 h-7 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
                         <Image
-                          src="/semayot/images/semayot.webp"
-                          alt="Semayot"
+                          src="/semayot/images/avatar.jpg"
+                          alt="Maskot Sema"
                           fill
-                          className="object-cover"
+                          className="object-cover object-top"
                           sizes="28px"
                         />
                       </div>
@@ -301,12 +301,12 @@ export function ChatWidget() {
                       animate={{ opacity: 1 }}
                       className="flex gap-2"
                     >
-                      <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
+                      <div className="relative w-7 h-7 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 mt-1">
                         <Image
-                          src="/semayot/images/semayot.webp"
-                          alt="Semayot"
+                          src="/semayot/images/avatar.jpg"
+                          alt="Maskot Sema"
                           fill
-                          className="object-cover"
+                          className="object-cover object-top"
                           sizes="28px"
                         />
                       </div>

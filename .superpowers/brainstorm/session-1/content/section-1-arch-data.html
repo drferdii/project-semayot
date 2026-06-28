@@ -1,0 +1,201 @@
+<h2>Phase B · Admin Semayot — Section 1 & 2</h2>
+<p class="subtitle">Arsitektur overview + Data model (Supabase). Recap keputusan: Supabase + Next.js /admin route + decoupled, owner full + staff POS-only.</p>
+
+<!-- ========== SECTION 1: ARCHITECTURE ========== -->
+<div class="section">
+  <div class="label">Section 1 · Architecture Overview</div>
+  <div class="mockup">
+    <div class="mockup-header">prototype-semayot · Next.js 16 App Router · SAME repo, two runtime surfaces</div>
+    <div class="mockup-body">
+<pre style="font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.72rem; line-height: 1.45; white-space: pre; overflow-x: auto; color: var(--text-primary);">
+┌────────────────────────────────────────────────────────────────┐
+│  PUBLIC  /                                  FROZEN · 0% touch  │
+│  ├─ lib/semayot/*   (static TS data)                           │
+│  └─ components/     (21 existing components)                   │
+│                                                                │
+│  ADMIN   /admin                              NEW · auth-gated  │
+│  ├─ login/                                                       │
+│  ├─ overview/     dashboard, snapshot hari ini                  │
+│  ├─ menu/         CRUD produk                                   │
+│  ├─ pos/          catat transaksi                               │
+│  ├─ transactions/ list + filter + detail                        │
+│  ├─ reports/      harian, bulanan, export CSV/PDF               │
+│  ├─ ai/           AI summary + chat (internal agent)             │
+│  ├─ seo/          rekomendasi SEO panel                          │
+│  └─ settings/     jam buka, kontak, staff manage                │
+│                                                                │
+│  /api/admin/*    Next.js Route Handlers                         │
+│  ├─ menu/  ├─ pos/  ├─ transactions/  ├─ reports/                │
+│  └─ ai/  (POST → OpenRouter streaming)  └─ seo/                  │
+│                                                                │
+│  lib/admin/                                                     │
+│  ├─ supabase/    client + server + middleware                   │
+│  ├─ schemas/     zod validators                                 │
+│  ├─ ai/          prompts + types                                │
+│  └─ rls/         SQL migration files                            │
+└────────────────────────────────────────────────────────────────┘
+              │                                  ▲
+              ▼                                  │
+┌──────────────────────────┐    ┌──────────────────────────────┐
+│  Supabase                │    │  OpenRouter                  │
+│  - Postgres              │    │  - mistral-7b-instruct       │
+│  - Auth (email+pass)     │    │  - free tier                 │
+│  - Storage (menu photos) │    │  - SSE streaming             │
+│  - RLS enabled           │    └──────────────────────────────┘
+└──────────────────────────┘</pre>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Key invariants (tidak boleh dilanggar)</h4>
+      <ul>
+        <li>Public site TIDAK fetch Supabase — 100% baca static</li>
+        <li>Admin TIDAK baca lib/semayot/* — data sendiri</li>
+        <li>Middleware /admin/* wajib check session</li>
+        <li>RLS = source of truth permission (defense in depth)</li>
+        <li>No runtime coupling public ↔ admin</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Tradeoffs yang kita accept</h4>
+      <ul>
+        <li>Menu di public vs admin bisa out-of-sync (manual)</li>
+        <li>Owner harus maintain 2 sources untuk business info</li>
+        <li>Initial setup lebih lama (DB + RLS + seed)</li>
+        <li>Two deploy surfaces instead of one</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 2: DATA MODEL ========== -->
+<div class="section">
+  <div class="label">Section 2 · Data Model (Supabase Postgres + RLS)</div>
+
+  <div class="cards">
+
+    <div class="card" data-choice="profiles" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">profiles</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · full_name · role · is_active</div>
+        <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.5rem;">→ FK auth.users</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: owner full + self read</div>
+      </div>
+      <div class="card-body">
+        <h3>Profiles</h3>
+        <p>Extend auth.users. role: 'owner' | 'staff'. is_active untuk soft-disable staff.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="menu_items" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">menu_items</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · name · description · price_cents · category</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">photo_url · badge · is_active</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: owner CRUD + staff read active</div>
+      </div>
+      <div class="card-body">
+        <h3>Menu items</h3>
+        <p>price_cents INT (bukan float). category enum. photo dari Supabase Storage.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="transactions" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">transactions</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · staff_id · total_cents · paid_cents</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">change_cents (GENERATED) · note</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: staff insert + owner all + staff read own</div>
+      </div>
+      <div class="card-body">
+        <h3>Transactions (POS header)</h3>
+        <p>change_cents = GENERATED column Postgres. payment_method default 'cash'.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="transaction_items" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">transaction_items</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · transaction_id · menu_item_id</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">name_snapshot · price_cents_snapshot</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">quantity · subtotal_cents</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: ikut parent policy</div>
+      </div>
+      <div class="card-body">
+        <h3>Transaction items</h3>
+        <p>Snapshot nama & harga saat transaksi. History akurat walau menu diedit.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="expenses" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">expenses</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · category · amount_cents</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">description · incurred_by · incurred_at</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: owner only</div>
+      </div>
+      <div class="card-body">
+        <h3>Expenses</h3>
+        <p>category enum: bahan | operasional | gaji | lain. Cash out tracking.</p>
+      </div>
+    </div>
+
+    <div class="card" data-choice="ai_summaries" onclick="toggleSelect(this)">
+      <div class="card-image" style="aspect-ratio: 4/3; padding: 1rem; flex-direction: column; gap: 0.3rem; align-items: stretch;">
+        <div style="font-weight: 600; color: var(--accent);">ai_summaries</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">id · period_start · period_end</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">summary_text · generated_at</div>
+        <div style="font-size: 0.72rem; color: var(--success); margin-top: auto;">RLS: owner only · UNIQUE(period)</div>
+      </div>
+      <div class="card-body">
+        <h3>AI summaries cache</h3>
+        <p>Cache hasil AI per periode. Avoid regenerate ringkasan harian yang sama.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+    <strong style="color: var(--text-primary);">Key decisions:</strong>
+    <ul style="margin-top: 0.5rem; margin-left: 1.25rem; line-height: 1.7;">
+      <li><code>price_cents</code> INT — hindari floating-point bug di pembukuan</li>
+      <li>Snapshot <code>name_snapshot</code> & <code>price_cents_snapshot</code> di line items — history tetap akurat</li>
+      <li><code>change_cents</code> sebagai GENERATED column — Postgres hitung, mustahil salah</li>
+      <li>No FK ke <code>auth.users.role</code> — pisah <code>profiles</code>, RLS pakai EXISTS query</li>
+      <li>Indexes: <code>created_at</code> (tx), <code>transaction_id</code> (items), <code>incurred_at</code> (expenses), <code>category</code> (menu)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== APPROVAL ========== -->
+<div class="section">
+  <div class="label">Approval · Section 1 + 2</div>
+  <div class="options">
+
+    <div class="option" data-choice="approve-continue" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Approve, lanjut Section 3 (Auth + API surface)</h3>
+        <p>OG susun Section 3: middleware /admin, login flow, route handler signatures, error envelope, OpenRouter integration shape.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Request revision (ada yang perlu diubah)</h3>
+        <p>Sebutkan apa yang perlu diubah — mis. tambah field di table, ubah RLS policy, tambah/buang table, ubah arsitektur folder, dll.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="stop-spec" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Cukup sampai sini, tulis spec doc</h3>
+        <p>Section 3–6 disusun OG sebagai draft di spec doc, Chief review final. Tidak ada visual approval per section.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

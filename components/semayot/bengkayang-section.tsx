@@ -44,7 +44,7 @@ export const BengkayangSection: React.FC = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl lg:text-8xl font-black font-display tracking-tight uppercase mb-4 leading-none"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black font-display tracking-tight uppercase mb-4 leading-none"
           >
             SEMAYOT NEWS
           </motion.h2>
@@ -64,8 +64,8 @@ export const BengkayangSection: React.FC = () => {
               </a>
               , Kalimantan Barat
             </span>
-            <span>Hari Ini</span>
-            <span>Harga: 1 Porsi Babi Asap</span>
+            <span className="hidden sm:inline">Hari Ini</span>
+            <span className="hidden sm:inline">Harga: 1 Porsi Babi Asap</span>
           </div>
         </div>
 

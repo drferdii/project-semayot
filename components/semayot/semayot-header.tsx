@@ -116,7 +116,7 @@ export const SemayotHeader: React.FC = () => {
                 {/* Mobile Phone Icon */}
                 <a
                   href="tel:+6281649470780"
-                  className="md:hidden w-10 h-10 rounded-full bg-[#1C1917] flex items-center justify-center text-white active:bg-[#292524] transition-colors"
+                  className="md:hidden w-11 h-11 rounded-full bg-[#1C1917] flex items-center justify-center text-white active:bg-[#292524] transition-colors"
                   aria-label="Telepon"
                 >
                   <Phone className="w-4 h-4" />
@@ -126,7 +126,7 @@ export const SemayotHeader: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="md:hidden w-10 h-10 rounded-full bg-[#1C1917]/5 flex items-center justify-center text-[#1C1917] active:bg-[#1C1917]/10 transition-colors"
+                  className="md:hidden w-11 h-11 rounded-full bg-[#1C1917]/5 flex items-center justify-center text-[#1C1917] active:bg-[#1C1917]/10 transition-colors"
                   aria-label="Toggle menu"
                   aria-expanded={isMenuOpen}
                   aria-controls="mobile-nav-panel"

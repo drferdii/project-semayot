@@ -1,0 +1,237 @@
+<h2>Phase B · Admin Semayot — Section 5</h2>
+<p class="subtitle">AI summary internal agent (re-use pola chat-widget) + SEO panel rekomendasi yang di-generate untuk owner apply manual.</p>
+
+<!-- ========== 5.1 AI SUMMARY MECHANISM ========== -->
+<div class="section">
+  <div class="label">5.1 · Mekanisme AI Summary</div>
+
+  <div class="mockup">
+    <div class="mockup-header">Trigger · data source · prompt · cache · output</div>
+    <div class="mockup-body" style="background: #FCF9F2;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.2rem;">
+        <div style="background: white; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08);">
+          <div style="font-size: 0.7rem; color: #FF4F79; text-transform: uppercase; font-weight: 600;">① Trigger</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem; line-height: 1.5;">On-demand: tombol "Generate ringkasan" di /admin/ai. Tidak real-time per transaksi (terlalu berisik).</div>
+        </div>
+        <div style="background: white; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08);">
+          <div style="font-size: 0.7rem; color: #FF4F79; text-transform: uppercase; font-weight: 600;">② Data source</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem; line-height: 1.5;">Transaksi + expenses + top menu items dari Supabase. Range: hari ini / 7 hari / 30 hari.</div>
+        </div>
+        <div style="background: white; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08);">
+          <div style="font-size: 0.7rem; color: #FF4F79; text-transform: uppercase; font-weight: 600;">③ Prompt + AI</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem; line-height: 1.5;">System prompt admin-specific (owner-facing). Model: mistral-7b via OpenRouter. Streaming response.</div>
+        </div>
+        <div style="background: white; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08);">
+          <div style="font-size: 0.7rem; color: #FF4F79; text-transform: uppercase; font-weight: 600;">④ Cache</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem; line-height: 1.5;">Hasil di-simpan di tabel <code>ai_summaries</code> per periode. Tombol "Refresh" untuk regenerate.</div>
+        </div>
+      </div>
+
+      <div style="background: #1C1917; color: #FAF6F0; padding: 1rem; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6; overflow-x: auto;">
+        <div style="color: #FF4F79; margin-bottom: 0.3rem;">// lib/admin/ai/prompts.ts</div>
+const adminSystemPrompt = `
+Kamu adalah asisten bisnis untuk owner Rumah Makan Semayot.
+Tugas: rangkum performa bisnis dari data yang diberikan.
+
+KONTEKS BISNIS:
+- Rumah makan khas Dayak, Bumi Amas, Bengkayang, Kalbar
+- Non-halal / specialty daging babi & asap
+- Cash only, tutup 21:00 WIB
+- Skala kecil: 1 owner + 1-3 staff
+
+GAYA BAHASA:
+- Bahasa Indonesia, sopan, ringkas, langsung ke inti
+- Pakai angka, jangan vague
+- Maks 3 insight utama, 2 saran konkret
+
+FORMAT OUTPUT (markdown):
+**Highlight:** [1 kalimat, pencapaian terbaik]
+**Concern:** [1 kalimat, hal yang perlu diwaspadai]
+**Saran:**
+1. [aksi konkret 1]
+2. [aksi konkret 2]
+`;
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5.2 AI SUMMARY PAGE MOCKUP ========== -->
+<div class="section">
+  <div class="label">5.2 · Halaman /admin/ai (panel + chat)</div>
+  <div class="mockup">
+    <div class="mockup-header">Tab: Ringkasan | Tanya AI</div>
+    <div class="mockup-body" style="background: #FCF9F2; padding: 0;">
+      <div style="display: flex; min-height: 400px;">
+
+        <div style="flex: 1.4; padding: 1.5rem; border-right: 1px solid var(--border); background: white;">
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <button class="mock-button" style="background: #FF4F79; font-size: 0.78rem; padding: 0.4rem 0.8rem;">Hari ini</button>
+            <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.78rem; padding: 0.4rem 0.8rem;">7 hari</button>
+            <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.78rem; padding: 0.4rem 0.8rem;">30 hari</button>
+            <div style="margin-left: auto;">
+              <button class="mock-button" style="background: #1C1917; font-size: 0.78rem; padding: 0.4rem 0.8rem;">🔄 Refresh</button>
+            </div>
+          </div>
+
+          <div style="background: #FCF9F2; border: 1px solid rgba(28,25,23,0.08); border-radius: 12px; padding: 1.2rem;">
+            <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Ringkasan · 28 Juni 2026 · di-generate 19:45</div>
+
+            <div style="font-size: 0.92rem; line-height: 1.7; color: #1C1917;">
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #15803D;">Highlight:</strong> Pendapatan hari ini Rp 1.247.500, tertinggi minggu ini. Daging Asap Suwir laku 14 porsi — menyumbang 51% revenue.</p>
+
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #DC2626;">Concern:</strong> Pengeluaran bahan baku naik 18% dari rata-rata 7 hari. Perlu cek harga供应商 (supplier) minggu ini.</p>
+
+              <p style="margin-bottom: 0.3rem;"><strong>Saran:</strong></p>
+              <ol style="padding-left: 1.4rem; line-height: 1.7;">
+                <li>Tambah stok Daging Asap Suwir untuk besok — prediksi habis pukul 20:30 dengan tren saat ini.</li>
+                <li>Promosikan Tumis Pare Pedas (stok masih banyak, hanya 6 porsi terjual) sebagai menu siang via WhatsApp.</li>
+              </ol>
+            </div>
+
+            <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem;">
+              <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.75rem; padding: 0.3rem 0.7rem;">📋 Salin</button>
+              <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.75rem; padding: 0.3rem 0.7rem;">📤 Kirim ke WhatsApp</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex: 1; padding: 1.5rem; display: flex; flex-direction: column; background: #FCF9F2;">
+          <strong style="margin-bottom: 0.8rem; font-size: 0.95rem;">Tanya AI (analitik)</strong>
+          <div style="flex: 1; min-height: 200px; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.8rem;">
+            <div style="background: white; padding: 0.7rem; border-radius: 10px; font-size: 0.85rem; align-self: flex-end; max-width: 80%;">Menu apa yang paling banyak contribusi revenue bulan ini?</div>
+            <div style="background: #FFF0F3; padding: 0.7rem; border-radius: 10px; font-size: 0.85rem; align-self: flex-start; max-width: 90%; line-height: 1.6;">Bulan Juni: <strong>Daging Asap Suwir</strong> 32% (Rp 8.4jt), <strong>Semur Rebung</strong> 21% (Rp 5.5jt), <strong>Tumis Pare Pedas</strong> 15% (Rp 3.9jt). Total 12 menu terlaris di PDF terlampir.</div>
+          </div>
+          <div style="display: flex; gap: 0.4rem;">
+            <input class="mock-input" placeholder="Tanya soal penjualan, menu, expense..." style="background: white;">
+            <button class="mock-button" style="background: #FF4F79; flex-shrink: 0;">Kirim</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5.3 SEO PANEL MECHANISM ========== -->
+<div class="section">
+  <div class="label">5.3 · Mekanisme SEO Panel</div>
+
+  <div class="cards" style="grid-template-columns: 1fr 1fr;">
+    <div class="card" data-choice="seo-source" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Sumber rekomendasi</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+          <strong>Statis (curated oleh OG)</strong> — 10 rekomendasi berdasarkan best practice SEO lokal resto: meta tags, JSON-LD Restaurant, sitemap, robots, OG image, heading audit, performance budget, internal linking, Google Business Profile, mobile-friendly.<br><br>
+          <strong>AI-generated (masa depan)</strong> — OG agent bisa scan public site via fetch + analisis HTML, tapi ini Phase B+ (overkill untuk MVP).
+        </p>
+      </div>
+    </div>
+    <div class="card" data-choice="seo-flow" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Alur kerja</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+          1. Admin tampilkan list 10 rekomendasi statis.<br>
+          2. Tiap item: judul, kenapa penting, kode/nilai siap salin, lokasi apply, status.<br>
+          3. Owner klik "Salin" → paste manual ke public site.<br>
+          4. Owner tandai "Sudah diterapkan" (status only, no auto-verify).<br>
+          5. Rekomendasi di luar list: form "Tambah rekomendasi sendiri" (owner/konsultan SEO eksternal).
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5.4 SEO PANEL MOCKUP ========== -->
+<div class="section">
+  <div class="label">5.4 · Halaman /admin/seo (panel rekomendasi)</div>
+  <div class="mockup">
+    <div class="mockup-header">10 rekomendasi SEO · 3 diterapkan · 7 menunggu</div>
+    <div class="mockup-body" style="background: #FCF9F2; padding: 1.2rem;">
+
+      <div style="background: white; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08); padding: 1rem; margin-bottom: 0.8rem;">
+        <div style="display: flex; align-items: flex-start; gap: 0.8rem;">
+          <div style="background: #15803D; color: white; border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; margin-top: 0.15rem;">✓ TERAPAN</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">1. Meta title & description</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; line-height: 1.5;">Title dan description saat ini sudah di-set di <code>app/layout.tsx</code>. Panjang optimal 50-60 char untuk title, 150-160 untuk description.</div>
+            <details style="margin-top: 0.5rem;">
+              <summary style="font-size: 0.78rem; color: #FF4F79; cursor: pointer;">Lihat kode saat ini</summary>
+              <pre style="background: #1C1917; color: #FAF6F0; padding: 0.6rem; border-radius: 6px; font-size: 0.7rem; margin-top: 0.4rem; overflow-x: auto;">title: "Rumah Makan Semayot | Cita Rasa Khas Dayak..."
+description: "Nikmati kehangatan hidangan..."</pre>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08); padding: 1rem; margin-bottom: 0.8rem;">
+        <div style="display: flex; align-items: flex-start; gap: 0.8rem;">
+          <div style="background: var(--warning); color: white; border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; margin-top: 0.15rem;">⏳ MENUNGGU</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">2. JSON-LD Restaurant schema</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; line-height: 1.5;">Tambah blok <code>&lt;script type="application/ld+json"&gt;</code> di <code>app/layout.tsx</code> untuk Google rich results (buka jam, rating, alamat, menu).</div>
+            <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.72rem; padding: 0.3rem 0.6rem; margin-top: 0.5rem;">📋 Salin JSON-LD</button>
+            <button class="mock-button" style="background: #1C1917; font-size: 0.72rem; padding: 0.3rem 0.6rem; margin-top: 0.5rem; margin-left: 0.4rem;">Tandai diterapkan</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08); padding: 1rem; margin-bottom: 0.8rem;">
+        <div style="display: flex; align-items: flex-start; gap: 0.8rem;">
+          <div style="background: var(--warning); color: white; border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; margin-top: 0.15rem;">⏳ MENUNGGU</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">3. Sitemap.xml</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; line-height: 1.5;">Generate <code>public/sitemap.xml</code> lalu submit ke Google Search Console. Untuk single-page site, sitemap berisi 1 URL + lastmod.</div>
+            <button class="mock-button" style="background: var(--bg-tertiary); color: var(--text-primary); font-size: 0.72rem; padding: 0.3rem 0.6rem; margin-top: 0.5rem;">📋 Salin sitemap</button>
+          </div>
+        </div>
+      </div>
+
+      <details style="margin-top: 0.8rem;">
+        <summary style="font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; padding: 0.5rem;">+ Lihat 7 rekomendasi lain (robots.txt, OG image, heading audit, perf budget, dll)</summary>
+        <div style="background: white; border-radius: 10px; border: 1px solid rgba(28,25,23,0.08); padding: 1rem; margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.7;">
+          4. <strong>robots.txt</strong> — izinkan semua crawler, referensikan sitemap.<br>
+          5. <strong>OG image (1200×630)</strong> — buat 1 gambar untuk share preview. Rekomendasi: foto Daging Asap Suwir + logo.<br>
+          6. <strong>Heading hierarchy audit</strong> — pastikan 1× H1, berjenjang ke H2/H3.<br>
+          7. <strong>Performance budget</strong> — LCP < 2.5s, CLS < 0.1, INP < 200ms. Sudah dicek via Lighthouse.<br>
+          8. <strong>Google Business Profile</strong> — klaim & verifikasi listing, upload foto mingguan.<br>
+          9. <strong>Local keywords</strong> — "Rumah Makan Dayak Bengkayang", "Makan Siang Bumi Amas".<br>
+          10. <strong>Internal linking</strong> — link WhatsApp CTA ke nomor, link Maps ke embed.
+        </div>
+      </details>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========== APPROVAL ========== -->
+<div class="section">
+  <div class="label">Persetujuan · Section 5</div>
+  <div class="options">
+
+    <div class="option" data-choice="approve-continue" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Setuju, lanjut Section 6 (error handling + testing + deploy)</h3>
+        <p>OG susun Section 6 terakhir: strategi error handling di tiap layer (client/API/DB), testing approach (unit + integration + manual), env vars + secrets, deployment plan ke Vercel, urutan eksekusi slicing.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Ada yang perlu direvisi</h3>
+        <p>Sebutkan — mis. ubah trigger AI (cron otomatis?), tambah/kurang rekomendasi SEO, dsb.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="stop-spec" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Cukup, langsung tulis spec doc</h3>
+        <p>Section 6 disusun OG sebagai draft di spec doc, Chief review final.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

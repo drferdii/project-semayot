@@ -6,11 +6,19 @@ import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowUpRight, MapPin, Phone, Clock, ShoppingBag } from "lucide-react";
 
-const WhatsAppChat = dynamic(() => import("./whatsapp-chat"), { ssr: false });
+const WhatsAppChat = dynamic(() => import("./whatsapp-chat"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex flex-col items-start gap-4">
+      <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl bg-white/10 overflow-hidden animate-shimmer" />
+      <div className="w-full max-w-[300px] sm:max-w-[340px] h-[440px] sm:h-[480px] rounded-[44px] bg-white/10 overflow-hidden animate-shimmer" />
+    </div>
+  ),
+});
 
 export const SemayotHero: React.FC = () => {
   return (
-    <section id="hero" className="relative w-full min-h-[85vh] max-h-[900px] bg-[#2A1810] overflow-hidden flex flex-col">
+    <section id="hero" className="relative w-full min-h-[85vh] lg:max-h-[900px] bg-[#2A1810] overflow-hidden flex flex-col">
       {/* Video background */}
       <div className="absolute inset-0 z-0">
         <video
@@ -19,6 +27,7 @@ export const SemayotHero: React.FC = () => {
           muted
           playsInline
           aria-hidden="true"
+          poster="/semayot/images/han.jpg"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/semayot/images/semarendang.mp4" type="video/mp4" />
@@ -28,7 +37,7 @@ export const SemayotHero: React.FC = () => {
       </div>
 
       {/* Main content - 2 column layout */}
-      <div className="relative z-10 flex flex-col justify-center flex-1 px-6 md:px-12 lg:px-20 py-20 md:py-24">
+      <div className="relative z-10 flex flex-col justify-start lg:justify-center flex-1 px-6 md:px-12 lg:px-20 pt-20 md:pt-24 pb-52 sm:pb-56 md:pb-56 lg:pb-24">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 items-start">
 
           {/* Left - WhatsApp Chat */}
@@ -123,7 +132,7 @@ export const SemayotHero: React.FC = () => {
           className="max-w-5xl mx-auto"
         >
           <div className="bg-[#FAF6F0]/95 backdrop-blur-md rounded-3xl p-5 md:p-8 border border-[#E7E5E4] shadow-[0_16px_48px_rgba(0,0,0,0.2)]">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8">
               <div className="flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
                   <MapPin className="w-3.5 h-3.5 text-[#FF4F79]" />
@@ -136,7 +145,7 @@ export const SemayotHero: React.FC = () => {
                   <Phone className="w-3.5 h-3.5 text-[#FF4F79]" />
                   <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Kontak</h4>
                 </div>
-                <a href="tel:+6281649470780" className="text-[#1C1917] text-sm font-extrabold hover:text-[#FF4F79] transition-colors font-mono">
+                <a href="tel:+6281649470780" className="text-[#1C1917] text-sm font-extrabold hover:text-[#FF4F79] transition-colors font-mono break-all">
                   0816-4947-0780
                 </a>
               </div>
