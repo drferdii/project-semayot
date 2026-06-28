@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -30,7 +28,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
@@ -40,9 +38,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# scratch / temp directories
-/scratch/
-/rumah-makan-semayot/
+# docs / planning / AI artifacts (not needed for deployment)
+/docs
+/ACTION-PLAN.md
+/FULL-AUDIT-REPORT.md
+/prd.md
+/prompt.md
+/spec.md
+/seo-report-localhost
+/check_sma.py
 
-# Superpowers brainstorming
-.superpowers/
+# scratch / temp
+/scratch
+/rumah-makan-semayot
+
+# superpowers
+/.superpowers

@@ -27,7 +27,7 @@ export const SemayotHero: React.FC = () => {
           muted
           playsInline
           aria-hidden="true"
-          poster="/semayot/images/han.jpg"
+
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/semayot/images/semarendang.mp4" type="video/mp4" />
