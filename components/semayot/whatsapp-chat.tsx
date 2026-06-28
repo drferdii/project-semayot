@@ -14,6 +14,13 @@ const chatMessages = [
   { id: 7, sender: "customer", text: "Babi asapnya enak! Pasti balik lagi 🔥👍", delay: 9 },
 ];
 
+export const WhatsAppChatSkeleton: React.FC = () => (
+  <div className="flex flex-col items-start gap-4">
+    <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl bg-white/10 overflow-hidden animate-shimmer" />
+    <div className="w-full max-w-[300px] sm:max-w-[340px] h-[440px] sm:h-[480px] rounded-[44px] bg-white/10 overflow-hidden animate-shimmer" />
+  </div>
+);
+
 export const WhatsAppChat: React.FC = () => {
   const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
