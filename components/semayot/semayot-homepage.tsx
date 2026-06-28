@@ -39,7 +39,7 @@ export const SemayotHomepage: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden shadow-lg border-2 border-white"
                 >
-                  <Image src="/semayot/images/menu1.png" alt="Babi Panggang Khas" fill className="object-cover" sizes="96px" />
+                  <Image src="/semayot/images/menu1.webp" alt="Babi Panggang Khas" fill className="object-cover" sizes="96px" />
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -48,7 +48,7 @@ export const SemayotHomepage: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden shadow-lg border-2 border-white -mt-4 md:-mt-6"
                 >
-                  <Image src="/semayot/images/menu2.png" alt="Daging Asap" fill className="object-cover" sizes="96px" />
+                  <Image src="/semayot/images/menu2.webp" alt="Daging Asap" fill className="object-cover" sizes="96px" />
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
@@ -57,7 +57,7 @@ export const SemayotHomepage: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden shadow-lg border-2 border-white"
                 >
-                  <Image src="/semayot/images/menu3.png" alt="Sayuran Tradisional" fill className="object-cover" sizes="96px" />
+                  <Image src="/semayot/images/menu3.webp" alt="Sayuran Tradisional" fill className="object-cover" sizes="96px" />
                 </motion.div>
               </div>
               

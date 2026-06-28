@@ -172,7 +172,7 @@ export function ChatWidget() {
             <div className="flex items-center gap-3 px-4 py-3 bg-[#FF4F79] text-white flex-shrink-0">
               <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/20 flex-shrink-0">
                 <Image
-                  src="/semayot/images/semayot.png"
+                  src="/semayot/images/semayot.webp"
                   alt="Semayot"
                   fill
                   className="object-cover"
@@ -205,7 +205,7 @@ export function ChatWidget() {
                   >
                     <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
                       <Image
-                        src="/semayot/images/semayot.png"
+                        src="/semayot/images/semayot.webp"
                         alt="Semayot"
                         fill
                         className="object-cover"
@@ -248,7 +248,7 @@ export function ChatWidget() {
                       {msg.role === "assistant" && (
                         <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
                           <Image
-                            src="/semayot/images/semayot.png"
+                            src="/semayot/images/semayot.webp"
                             alt="Semayot"
                             fill
                             className="object-cover"
@@ -277,7 +277,7 @@ export function ChatWidget() {
                     >
                       <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
                         <Image
-                          src="/semayot/images/semayot.png"
+                          src="/semayot/images/semayot.webp"
                           alt="Semayot"
                           fill
                           className="object-cover"
@@ -303,7 +303,7 @@ export function ChatWidget() {
                     >
                       <div className="relative w-7 h-7 rounded-full overflow-hidden bg-[#FF4F79]/10 flex-shrink-0 mt-1">
                         <Image
-                          src="/semayot/images/semayot.png"
+                          src="/semayot/images/semayot.webp"
                           alt="Semayot"
                           fill
                           className="object-cover"

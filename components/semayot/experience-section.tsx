@@ -9,17 +9,17 @@ export const ExperienceSection: React.FC = () => {
     {
       title: "Rasa lokal yang kuat",
       description: "Ulasan pelanggan menyebut makanan Semayot lezat dan memiliki rasa pedas yang pas.",
-      image: "/semayot/images/menu1.png"
+      image: "/semayot/images/menu1.webp"
     },
     {
       title: "Nyaman untuk makan di tempat",
       description: "Semayot tersedia dengan layanan dine-in dan pelanggan menyebut tempatnya nyaman untuk bersantai.",
-      image: "/semayot/images/menu3.png"
+      image: "/semayot/images/menu3.webp"
     },
     {
       title: "Cepat dan sederhana",
       description: "Pelanggan menyebut pelayanan cepat. Informasi juga mencatat takeaway tersedia untuk kenyamanan Anda.",
-      image: "/semayot/images/menu5.png"
+      image: "/semayot/images/menu5.webp"
     }
   ];
 

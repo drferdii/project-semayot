@@ -64,7 +64,7 @@ export const SemayotHeader: React.FC = () => {
               <Link href="#hero" className="flex items-center gap-2.5 group">
                 <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-300 group-hover:scale-105">
                   <Image
-                    src="/semayot/images/logo.png"
+                    src="/semayot/images/logo.webp"
                     alt="Rumah Makan Semayot Logo"
                     fill
                     className="object-contain"

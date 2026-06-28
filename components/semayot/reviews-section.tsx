@@ -20,7 +20,7 @@ export const ReviewsSection: React.FC = () => {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/semayot/images/rumah-makan.png"
+          src="/semayot/images/rumah-makan.webp"
           alt="Gedung Rumah Makan Semayot"
           fill
           className="object-cover opacity-20"

@@ -15,37 +15,37 @@ interface LocalMenuItem {
 export const MenuInfoSection: React.FC = () => {
   const localMenus: LocalMenuItem[] = [
     {
-      src: "/semayot/images/menu1.png",
+      src: "/semayot/images/menu1.webp",
       name: "Tumis Pare Pedas",
       category: "Sayuran Tradisional",
       description: "Pare segar iris melingkar, ditumis dengan cabai merah dan bawang bombay. Rasa pahit-pedas khas yang menggugah selera, disajikan dalam nampan stainless."
     },
     {
-      src: "/semayot/images/menu2.png",
+      src: "/semayot/images/menu2.webp",
       name: "Tumis Rebung",
       category: "Sayuran Tradisional",
       description: "Rebung muda pilihan iris memanjang, dimasak dengan bumbu rempah gurih berkuah merah. Tekstur renyah dengan rasa pedas manis yang khas."
     },
     {
-      src: "/semayot/images/menu3.png",
+      src: "/semayot/images/menu3.webp",
       name: "Daging Masak Rempah",
       category: "Daging Masak",
       description: "Potongan daging pilihan dimasak meresap dalam kuah kental berbumbu rempah khas Kalimantan, dipadu kentang yang lembut. Gurih, pedas, dan beraroma kuat."
     },
     {
-      src: "/semayot/images/menu4.png",
+      src: "/semayot/images/menu4.webp",
       name: "Daging Asap Suwir",
       category: "Daging Asap",
-      description: "Daging asap tradisional disuwir halus, ditumis garing dengan irisan jahe dan bumbu rempah. Aroma asap kayu bakar yang khas dan menggoda."
+      description: "Daging asap tradisional disuwir halus, ditumis garing dengan irisan jahe dan bumbu rempah. Aroma asap kayu bakar yang khas and menggoda."
     },
     {
-      src: "/semayot/images/menu5.png",
+      src: "/semayot/images/menu5.webp",
       name: "Semur Daging Rebung",
       category: "Daging Masak",
       description: "Daging empuk dimasak perlahan dalam kuah semur kental berwarna gelap, dipadu rebung muda dan rempah hutan. Rasa gurih manis yang meresap sempurna."
     },
     {
-      src: "/semayot/images/menu6.png",
+      src: "/semayot/images/menu6.webp",
       name: "Daging Asap Tumis Cabai",
       category: "Daging Asap",
       description: "Olahan daging asap gurih ditumis bersama cabai hijau dan daun rempah. Perpaduan rasa pedas dan aroma asap yang menggugah selera."

@@ -20,7 +20,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
   className = "",
   size = 200,
   useImage = false,
-  imageSrc = "/semayot/images/sema2.png",
+  imageSrc = "/semayot/images/sema2.webp",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
