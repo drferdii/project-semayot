@@ -43,3 +43,6 @@ next-env.d.ts
 # scratch / temp directories
 /scratch/
 /rumah-makan-semayot/
+
+# Superpowers brainstorming
+.superpowers/
