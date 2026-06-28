@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Utensils, Heart, Sparkles, MessageSquare } from "lucide-react";
 import { homepageCopy } from "@/lib/semayot/homepage-copy";
+import { LiquidBlobs } from "./liquid-blobs";
 
 const iconMap = {
   utensils: Utensils,
@@ -13,70 +14,89 @@ const iconMap = {
 };
 
 export const HappyServiceSection: React.FC = () => {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.12,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 25, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" as const },
-    },
-  };
-
   return (
-    <section id="keunggulan" className="py-20 bg-[#FAF3E5] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="keunggulan" className="relative py-24 overflow-hidden">
+      <LiquidBlobs variant="service" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#FF4F79] bg-[#FFF0F3] px-3.5 py-1.5 rounded-full border border-[#FFD4DF]">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="inline-block text-xs font-bold uppercase tracking-widest text-[#15803D] bg-[#F0FDF4]/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[#BBF7D0]"
+          >
             {homepageCopy.service.badge}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#4A3728] mt-4 mb-4">
+          </motion.span>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1C1917] mt-5 mb-5 font-display tracking-tight"
+          >
             {homepageCopy.service.title}
-          </h2>
-          <p className="text-base text-[#6B5A4B] font-semibold leading-relaxed">
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-base text-[#57534E] font-medium leading-relaxed"
+          >
             {homepageCopy.service.subtitle}
-          </p>
+          </motion.p>
         </div>
 
         {/* Pillars Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {homepageCopy.service.pillars.map((pillar, index) => {
             const IconComponent = iconMap[pillar.icon] || Utensils;
             return (
               <motion.div
                 key={index}
-                variants={itemVariants}
-                className="bg-white border border-[#EFE5D3] p-8 rounded-3xl shadow-[0_4px_16px_rgba(74,53,40,0.02)] hover:shadow-[0_8px_24px_rgba(74,53,40,0.05)] hover:border-[#D8C2A0] transition-all duration-300 flex flex-col items-center lg:items-start text-center lg:text-left"
+                initial={{ opacity: 0, y: 35, rotate: -2 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="bg-white/80 backdrop-blur-sm border border-[#E7E5E4] p-8 rounded-3xl shadow-[0_4px_20px_rgba(28,25,23,0.03)] hover:shadow-[0_12px_32px_rgba(28,25,23,0.08)] transition-shadow duration-300 flex flex-col items-center lg:items-start text-center lg:text-left"
               >
-                {/* Icon Container */}
-                <div className="w-12 h-12 rounded-2xl bg-[#FFF0F3] flex items-center justify-center text-[#FF4F79] mb-6 shadow-[0_4px_10px_rgba(255,79,121,0.1)]">
+                {/* Icon with bounce */}
+                <motion.div
+                  whileInView={{
+                    y: [0, -6, 0],
+                  }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 2,
+                    delay: 0.5 + index * 0.15,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                  }}
+                  className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FFF0F3] to-[#FFFBEB] flex items-center justify-center text-[#D97706] mb-6 shadow-[2px_2px_0px_rgba(28,25,23,0.06)]"
+                >
                   <IconComponent className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-[#4A3728] mb-3">
+                </motion.div>
+                <h3 className="text-lg font-bold text-[#1C1917] mb-3 font-display">
                   {pillar.title}
                 </h3>
-                <p className="text-sm text-[#6B5A4B] leading-relaxed font-semibold">
+                <p className="text-sm text-[#57534E] leading-relaxed">
                   {pillar.description}
                 </p>
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

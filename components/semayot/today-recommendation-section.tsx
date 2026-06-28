@@ -3,107 +3,134 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SemayotMascot } from "./semayot-mascot";
+import { LiquidBlobs } from "./liquid-blobs";
 import { featuredMenu } from "@/lib/semayot/menu-data";
 import { semayotBusinessInfo } from "@/lib/semayot/business-info";
 import { homepageCopy } from "@/lib/semayot/homepage-copy";
 import { Phone, Award, AlertCircle } from "lucide-react";
 
 export const TodayRecommendationSection: React.FC = () => {
-  // Ambil menu rekomendasi pertama
   const recommendedItem = featuredMenu[0];
   const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
-
-  // WhatsApp link dengan pesan khusus menu rekomendasi hari ini
   const encodedMessage = encodeURIComponent(
     `Halo Rumah Makan Semayot, saya tertarik memesan Menu Rekomendasi Hari Ini: *${recommendedItem.name}*. Apakah tersedia hari ini?`
   );
   const waUrl = `https://wa.me/62${formattedPhone.substring(1)}?text=${encodedMessage}`;
 
   return (
-    <section id="rekomendasi" className="py-20 bg-[#FCF9F2] overflow-hidden relative">
-      {/* Decorative Blob */}
-      <div className="absolute top-1/2 left-[80%] w-[30vw] h-[30vw] rounded-full bg-[#FFC2D6]/8 blur-[70px] pointer-events-none" />
+    <section id="rekomendasi" className="relative py-24 overflow-hidden">
+      <LiquidBlobs variant="recommendation" />
+
+      {/* Animated gradient border strip at top */}
+      <div className="absolute top-0 left-0 right-0 h-1 animated-border-gradient" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="bg-[#FAF3E5] border border-[#EFE5D3] rounded-[40px] p-8 sm:p-12 lg:p-16 shadow-[0_12px_40px_rgba(139,94,60,0.06)] relative overflow-hidden">
-          {/* Inner Decorative Circle */}
-          <div className="absolute top-[-50px] right-[-50px] w-48 h-48 rounded-full bg-white opacity-20" />
-
+        <div className="bg-white/70 backdrop-blur-md border border-[#E7E5E4] rounded-[2rem] p-8 sm:p-12 shadow-[0_8px_40px_rgba(28,25,23,0.05)]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Mascot in recommendation pose */}
+            {/* Left — Mascot */}
             <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
               <SemayotMascot variant="recommendation" size={240} className="sm:w-[280px] sm:h-[280px]" />
-              
-              {/* Talking Bubble from Mascot */}
+
+              {/* Mascot bubble */}
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
+                transition={{ delay: 0.4, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
                 viewport={{ once: true }}
-                className="absolute top-[-20px] bg-white border border-[#EFE5D3] px-5 py-3 rounded-2xl shadow-[0_8px_20px_rgba(74,53,40,0.08)] text-center max-w-[200px]"
+                className="absolute top-[-16px] bg-white/95 backdrop-blur-md border border-[#E7E5E4] px-5 py-3 rounded-2xl shadow-[0_8px_24px_rgba(28,25,23,0.06)] text-center max-w-[210px]"
               >
-                <p className="text-xs font-bold text-[#4A3728]">
+                <p className="text-xs font-bold text-[#1C1917]">
                   {homepageCopy.recommendation.mascotBubble}
                 </p>
-                {/* Gelembung Arah Bawah */}
-                <div className="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-[#EFE5D3] rotate-45" />
+                <div className="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-[#E7E5E4] rotate-45" />
               </motion.div>
             </div>
 
-            {/* Right Column: Menu details and CTA */}
+            {/* Right — Content */}
             <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F3] border border-[#FFD4DF] text-xs font-extrabold text-[#FF4F79] mb-6 uppercase tracking-wider">
-                <Award className="w-4 h-4 fill-[#FF4F79] stroke-none" />
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FFFBEB]/80 backdrop-blur-sm border border-[#FDE68A] text-xs font-extrabold text-[#D97706] mb-6 uppercase tracking-wider"
+              >
+                <Award className="w-4 h-4 fill-[#D97706] stroke-none" />
                 <span>{homepageCopy.recommendation.badge}</span>
-              </span>
+              </motion.span>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#4A3728] mb-4">
+              <motion.h2
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-3xl sm:text-4xl font-extrabold text-[#1C1917] mb-4 font-display tracking-tight"
+              >
                 {homepageCopy.recommendation.title}
-              </h2>
-              
-              <p className="text-base text-[#6B5A4B] font-semibold leading-relaxed mb-8 max-w-xl">
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="text-base text-[#57534E] font-medium leading-relaxed mb-8 max-w-xl"
+              >
                 {homepageCopy.recommendation.subtitle}
-              </p>
+              </motion.p>
 
-              {/* Special Menu Highlight Card */}
-              <div className="w-full bg-white border border-[#EFE5D3] rounded-3xl p-6 sm:p-8 mb-8 text-left shadow-[0_4px_16px_rgba(74,53,40,0.02)] flex flex-col sm:flex-row gap-6 items-center">
-                {/* Highlight Icon */}
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFF0F3] to-[#FAF3E5] flex items-center justify-center text-4xl shrink-0 shadow-[0_4px_12px_rgba(255,79,121,0.1)]">
-                  🍖
-                </div>
-                
-                {/* Details */}
-                <div className="flex-grow">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-[#4A3728]">
-                      {recommendedItem.name}
-                    </h3>
-                    <span className="text-sm font-extrabold text-[#FF4F79] whitespace-nowrap bg-[#FFF0F3] px-2.5 py-1 rounded-lg border border-[#FFD4DF]">
-                      {recommendedItem.price}
-                    </span>
+              {/* Highlight card with animated gradient border */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="w-full p-[2px] rounded-3xl animated-border-gradient mb-8"
+              >
+                <div className="bg-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-center">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFF0F3] to-[#FFFBEB] flex items-center justify-center text-4xl shrink-0 shadow-[2px_2px_0px_rgba(28,25,23,0.06)]">
+                    🍖
                   </div>
-                  <p className="text-sm text-[#6B5A4B] font-semibold leading-relaxed">
-                    {recommendedItem.description}
-                  </p>
+                  <div className="flex-grow text-left">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
+                      <h3 className="text-xl font-bold text-[#1C1917] font-display">
+                        {recommendedItem.name}
+                      </h3>
+                      <span className="text-xs font-extrabold text-[#D97706] whitespace-nowrap bg-[#FFFBEB] px-2.5 py-1 rounded-lg border border-[#FDE68A]">
+                        {recommendedItem.price}
+                      </span>
+                    </div>
+                    <p className="text-sm text-[#57534E] leading-relaxed">
+                      {recommendedItem.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Needs Owner Confirmation Warning */}
               {recommendedItem.needsOwnerConfirmation && (
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#A08875] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl mb-6">
-                  <AlertCircle className="w-4 h-4 text-[#FF4F79] shrink-0" />
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-[#A8A29E] bg-white/70 backdrop-blur-sm border border-[#E7E5E4] px-4 py-2.5 rounded-2xl mb-6"
+                >
+                  <AlertCircle className="w-4 h-4 text-[#D97706] shrink-0" />
                   <span>Khas Ulasan Pelanggan (Perlu Konfirmasi)</span>
-                </div>
+                </motion.div>
               )}
 
-              {/* Order Action Button */}
               <motion.a
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
                 whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.97 }}
                 href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#FF4F79] hover:bg-[#E03D63] text-white text-base font-bold px-8 py-4 rounded-full shadow-[0_6px_20px_rgba(255,79,121,0.25)] transition-all duration-200"
+                className="inline-flex items-center gap-2.5 bg-[#1C1917] hover:bg-[#292524] text-white text-base font-bold px-8 py-4 rounded-full shadow-[0_8px_30px_rgba(28,25,23,0.15)] transition-colors duration-200"
               >
                 <Phone className="w-5 h-5" />
                 <span>Hubungi via Telepon / WhatsApp</span>

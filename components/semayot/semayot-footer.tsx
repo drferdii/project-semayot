@@ -1,105 +1,111 @@
 "use client";
 
 import React from "react";
-import { MessageCircle, MapPin, Mail, Instagram, Star, Phone } from "lucide-react";
-import { semayotBusinessInfo } from "@/lib/semayot/business-info";
-import { homepageCopy } from "@/lib/semayot/homepage-copy";
+import { motion } from "framer-motion";
 
 export const SemayotFooter: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
 
   return (
-    <footer className="bg-[#4A3728] text-[#FCF9F2] pt-16 pb-8 border-t border-[#3D2C1F] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
-          
-          {/* Brand Summary */}
-          <div className="md:col-span-5 flex flex-col items-start">
-            <span className="text-2xl font-bold tracking-tight text-white flex items-center gap-2 mb-4">
-              <span className="inline-block w-3.5 h-3.5 rounded-full bg-[#FF4F79]" />
-              Semayot
-            </span>
-            <p className="text-sm text-[#D5C2B1] font-semibold leading-relaxed mb-6 max-w-sm">
-              {homepageCopy.footer.desc}
+    <footer className="bg-[#E8F95C] text-[#0A0A0A] relative overflow-hidden">
+      {/* Giant Brand Name */}
+      <div className="px-6 md:px-12 lg:px-20 pt-10 md:pt-14 lg:pt-16 pb-6 md:pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-7xl mx-auto"
+        >
+          <h2 className="text-[14vw] md:text-[11vw] lg:text-[9vw] font-black leading-[0.82] tracking-tighter font-sans text-[#0A0A0A] uppercase">
+            SEMAYOT
+          </h2>
+        </motion.div>
+      </div>
+
+      {/* Separator */}
+      <div className="px-6 md:px-12 lg:px-20">
+        <div className="max-w-7xl mx-auto border-t border-[#0A0A0A]/25" />
+      </div>
+
+      {/* Bottom Content */}
+      <div className="px-6 md:px-12 lg:px-20 py-10 md:py-14 lg:py-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24">
+          {/* Left: Geometric Shapes */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex items-end"
+          >
+            <div className="flex gap-2 md:gap-3 items-end">
+              {/* 3 vertical bars */}
+              <div className="w-8 md:w-12 h-44 md:h-64 bg-[#0A0A0A]" />
+              <div className="w-8 md:w-12 h-44 md:h-64 bg-[#0A0A0A]" />
+              <div className="w-10 md:w-14 h-44 md:h-64 bg-[#0A0A0A]" />
+              {/* 2 horizontal rectangles */}
+              <div className="flex flex-col gap-2 md:gap-3">
+                <div className="w-36 md:w-52 h-20 md:h-28 bg-[#0A0A0A]" />
+                <div className="w-36 md:w-52 h-20 md:h-28 bg-[#0A0A0A]" />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: Contact, Subscribe, Acknowledgement, Credits */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex flex-col gap-8 md:gap-10"
+          >
+            {/* Contact Info */}
+            <div className="space-y-1 text-sm font-bold leading-relaxed">
+              <p>WhatsApp: +62 816 4947 0780</p>
+              <p>Telepon: +62 816 4947 0780</p>
+              <p>Alamat: Bumi Amas, Bengkayang</p>
+              <p>Kalimantan Barat, Indonesia</p>
+            </div>
+
+            {/* Newsletter */}
+            <div className="space-y-3">
+              <p className="text-sm font-bold">Dapatkan update terbaru:</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Alamat Email"
+                  className="flex-1 bg-transparent border border-[#0A0A0A]/40 px-3 py-2 text-sm font-semibold placeholder:text-[#0A0A0A]/50 focus:outline-none focus:border-[#0A0A0A] transition-colors"
+                />
+                <button className="border border-[#0A0A0A] px-4 py-2 text-sm font-bold hover:bg-[#0A0A0A] hover:text-[#E8F95C] transition-colors">
+                  Berlangganan
+                </button>
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="border-t border-[#0A0A0A]/25" />
+
+            {/* Acknowledgement */}
+            <p className="text-sm font-bold leading-relaxed">
+              Rumah Makan Semayot menghargai warisan budaya Dayak dan kuliner tradisional Kalimantan Barat. Kami berkomitmen untuk menjaga cita rasa autentik, memakai bahan segar dan lokal, serta menghadirkan pelayanan terbaik dalam setiap hidangan yang kami sajikan.
             </p>
-            
-            {/* Non-Halal tag in footer */}
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3D2C1F] border border-[#5A4535] rounded-full text-[10px] font-bold text-[#FF85A1] uppercase tracking-wider mb-6">
-              <Star className="w-3 h-3 fill-[#FF85A1] stroke-none" />
-              <span>{homepageCopy.hero.nonHalalWarning}</span>
-            </span>
-          </div>
 
-          {/* Navigation Links */}
-          <div className="md:col-span-3 flex flex-col">
-            <h4 className="text-sm font-extrabold uppercase tracking-widest text-[#FF85A1] mb-6">
-              Navigasi Cepat
-            </h4>
-            <ul className="space-y-3 font-semibold">
-              <li>
-                <a href="#beranda" className="text-[#D5C2B1] hover:text-white transition-colors duration-150">
-                  Beranda
-                </a>
-              </li>
-              <li>
-                <a href="#menu" className="text-[#D5C2B1] hover:text-white transition-colors duration-150">
-                  Menu Pilihan
-                </a>
-              </li>
-              <li>
-                <a href="#keunggulan" className="text-[#D5C2B1] hover:text-white transition-colors duration-150">
-                  Keunggulan
-                </a>
-              </li>
-              <li>
-                <a href="#rekomendasi" className="text-[#D5C2B1] hover:text-white transition-colors duration-150">
-                  Rekomendasi
-                </a>
-              </li>
-              <li>
-                <a href="#lokasi" className="text-[#D5C2B1] hover:text-white transition-colors duration-150">
-                  Lokasi & Kontak
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Details */}
-          <div className="md:col-span-4 flex flex-col">
-            <h4 className="text-sm font-extrabold uppercase tracking-widest text-[#FF85A1] mb-6">
-              Hubungi Kami
-            </h4>
-            <ul className="space-y-4 font-semibold text-sm text-[#D5C2B1]">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <span>{semayotBusinessInfo.address}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <a
-                  href={`tel:${formattedPhone}`}
-                  className="hover:text-white transition-colors"
-                >
-                  Telepon: {semayotBusinessInfo.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Instagram className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <span className="text-[#D5C2B1] cursor-default">
-                  @rm.semayot (Belum Terverifikasi)
-                </span>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Bottom Copyright */}
-        <div className="pt-8 border-t border-[#3D2C1F] text-center text-xs text-[#A38D7C] font-bold">
-          <p>{homepageCopy.footer.copyright} Made with ❤️ for Chief.</p>
+            {/* Credits */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm font-bold">
+              <p className="text-[#0A0A0A]/70">
+                Design & Development
+              </p>
+              <p className="text-right">
+                © 2026 Sentra Mitra Design – All Rights Reserved.<br />
+                This website is proudly designed and maintained by Sentra Mitra Design.<br />
+                Special courtesy to dr. Alyn for the trusted collaboration in 2026.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </footer>
   );
 };
+export default SemayotFooter;

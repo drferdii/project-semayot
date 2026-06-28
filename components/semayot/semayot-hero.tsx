@@ -1,154 +1,159 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Phone, ArrowRight, MapPin, Sparkles } from "lucide-react";
-import { SemayotMascot } from "./semayot-mascot";
-import { semayotBusinessInfo } from "@/lib/semayot/business-info";
-import { homepageCopy } from "@/lib/semayot/homepage-copy";
+import { ArrowUpRight, MapPin, Phone, Clock, ShoppingBag } from "lucide-react";
+
+const WhatsAppChat = dynamic(() => import("./whatsapp-chat"), { ssr: false });
 
 export const SemayotHero: React.FC = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 25, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" as const },
-    },
-  };
-
-  const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
-
   return (
-    <section
-      id="beranda"
-      className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#FCF9F2] via-[#FAF3E5] to-[#FCF9F2]"
-    >
-      {/* Background Decorative Blob/Circles */}
-      <div className="absolute top-1/4 left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FFC2D6]/10 blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-10 right-[-5%] w-[35vw] h-[35vw] rounded-full bg-[#E8D2B5]/20 blur-[90px] pointer-events-none" />
+    <section id="hero" className="relative w-full min-h-[85vh] max-h-[900px] bg-[#2A1810] overflow-hidden flex flex-col">
+      {/* Video background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/semayot/images/semarendang.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-[#1C1917]/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Headline and Actions */}
+      {/* Main content - 2 column layout */}
+      <div className="relative z-10 flex flex-col justify-center flex-1 px-6 md:px-12 lg:px-20 py-20 md:py-24">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4 items-start">
+
+          {/* Left - WhatsApp Chat */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="order-2 lg:order-1 flex justify-center lg:justify-end lg:pr-10 lg:-mt-36"
           >
-            {/* Non-Halal Specialty Label */}
-            <motion.div
-              variants={itemVariants}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F3] border border-[#FFD4DF] text-xs font-bold text-[#FF4F79] mb-6 tracking-wide uppercase shadow-[0_2px_8px_rgba(255,79,121,0.06)]"
-            >
-              <Sparkles className="w-3.5 h-3.5 fill-[#FF4F79] stroke-none" />
-              <span>{homepageCopy.hero.nonHalalWarning}</span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              variants={itemVariants}
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#4A3728] leading-[1.1] mb-6"
-            >
-              {homepageCopy.hero.headline}
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              variants={itemVariants}
-              className="text-base sm:text-lg lg:text-xl text-[#6B5A4B] leading-relaxed max-w-2xl mb-8 font-semibold"
-            >
-              {homepageCopy.hero.subheadline}
-            </motion.p>
-
-            {/* Public Clue Landmark Box */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center gap-2 text-xs font-bold text-[#8A7560] bg-white border border-[#EFE5D3] px-3.5 py-2 rounded-2xl mb-8 shadow-[0_2px_8px_rgba(139,94,60,0.02)]"
-            >
-              <MapPin className="w-4 h-4 text-[#FF4F79]" />
-              <span>Landmark Clue: {semayotBusinessInfo.landmark}</span>
-            </motion.div>
-
-            {/* CTA Actions */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-            >
-              <motion.a
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                href={semayotBusinessInfo.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#FF4F79] hover:bg-[#E03D63] text-white text-base font-extrabold px-8 py-4 rounded-full shadow-[0_6px_20px_rgba(255,79,121,0.25)] transition-all duration-200"
-              >
-                <span>{homepageCopy.hero.ctaPrimary}</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.a>
-
-              <motion.a
-                whileHover={{ scale: 1.03, backgroundColor: "#EFE5D3" }}
-                whileTap={{ scale: 0.98 }}
-                href={`tel:${formattedPhone}`}
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white border-2 border-[#EFE5D3] hover:border-[#D0C0A5] text-[#5C4636] text-base font-extrabold px-8 py-4 rounded-full shadow-[0_4px_12px_rgba(139,94,60,0.04)] transition-all duration-200"
-              >
-                <Phone className="w-5 h-5 text-[#5C4636]" />
-                <span>{homepageCopy.hero.ctaSecondary}</span>
-              </motion.a>
-            </motion.div>
+            <WhatsAppChat />
           </motion.div>
 
-          {/* Right Column: Mascot & Appetizer Composition */}
-          <div className="lg:col-span-5 flex justify-center items-center relative">
-            {/* Soft backdrop blob for mascot */}
-            <div className="absolute w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] rounded-full bg-[#FFE5EC] border-4 border-dashed border-[#FFC2D6] opacity-60 animate-[spin_40s_linear_infinite] pointer-events-none z-0" />
+          {/* Right - Hero Text */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="order-1 lg:order-2 flex flex-col items-center lg:items-start text-center lg:text-left"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/20 mb-6 md:mb-8"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#FFC2D6]" />
+              <span className="text-xs font-bold text-white/90 uppercase tracking-widest">
+                Bengkayang, Kalimantan Barat
+              </span>
+            </motion.div>
 
-            <div className="relative z-10 flex flex-col items-center">
-              {/* Mascot component */}
-              <SemayotMascot variant="welcome" size={260} className="sm:w-[320px] sm:h-[320px]" />
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-4xl md:text-5xl lg:text-7xl font-black text-[#F5E6C8] mb-4 md:mb-6 font-display tracking-tight leading-[1.05]"
+            >
+              Kenikmatan autentik dalam setiap sajian.
+            </motion.h1>
 
-              {/* Float badge overlay: Happy Service */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="text-sm md:text-lg text-white/75 font-medium max-w-lg mb-8 md:mb-10"
+            >
+              Spesialis masakan tradisional Dayak &amp; olahan daging asap otentik di Bumi Amas, Bengkayang.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 1, type: "spring", stiffness: 100 }}
+              className="relative inline-flex items-center justify-center"
+            >
               <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut", delay: 1 }}
-                className="absolute top-4 left-[-20px] sm:left-[-10px] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl shadow-[0_8px_20px_rgba(139,94,60,0.06)] flex items-center gap-2"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[110px] h-[110px] md:w-[130px] md:h-[130px]"
               >
-                <span className="text-xl">🐷</span>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-bold text-[#4A3728]">Hai! Saya Semayot</span>
-                  <span className="text-[10px] text-[#8A7560] font-bold">Menu Khas Dayak Menantimu!</span>
-                </div>
+                <svg viewBox="0 0 140 140" className="w-full h-full">
+                  <defs>
+                    <path id="heroCirclePath" d="M 70, 70 m -55, 0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" />
+                  </defs>
+                  <text className="fill-white/50 text-[9px] font-bold uppercase tracking-[0.25em]">
+                    <textPath href="#heroCirclePath">• LIHAT MENU • LIHAT MENU • LIHAT MENU •</textPath>
+                  </text>
+                </svg>
               </motion.div>
+              <Link
+                href="#menu"
+                className="relative z-10 w-[75px] h-[75px] md:w-[85px] md:h-[85px] bg-[#FAF6F0] rounded-full flex items-center justify-center shadow-[0_8px_40px_rgba(0,0,0,0.25)] hover:scale-105 transition-transform duration-300 group"
+              >
+                <ArrowUpRight className="w-7 h-7 md:w-8 md:h-8 text-[#1C1917] group-hover:rotate-45 transition-transform duration-300" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
 
-              {/* Float badge overlay: Food Preview */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut" }}
-                className="absolute bottom-6 right-[-20px] sm:right-[-10px] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl shadow-[0_8px_20px_rgba(139,94,60,0.06)] flex items-center gap-2"
-              >
-                <span className="text-xl">🔥</span>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-bold text-[#4A3728]">Aroma Asap Otentik</span>
-                  <span className="text-[10px] text-[#8A7560] font-bold">Cita rasa asli pedalaman</span>
+      {/* Info Panel */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 pb-6 md:pb-8 px-4 md:px-8">
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="bg-[#FAF6F0]/95 backdrop-blur-md rounded-3xl p-5 md:p-8 border border-[#E7E5E4] shadow-[0_16px_48px_rgba(0,0,0,0.2)]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#FF4F79]" />
+                  <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Lokasi</h4>
                 </div>
-              </motion.div>
+                <p className="text-[#1C1917] text-sm font-bold leading-snug">Bumi Amas, Bengkayang</p>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Phone className="w-3.5 h-3.5 text-[#FF4F79]" />
+                  <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Kontak</h4>
+                </div>
+                <a href="tel:+6281649470780" className="text-[#1C1917] text-sm font-extrabold hover:text-[#FF4F79] transition-colors font-mono">
+                  0816-4947-0780
+                </a>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-3.5 h-3.5 text-[#FF4F79]" />
+                  <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Jam Buka</h4>
+                </div>
+                <p className="text-[#1C1917] text-sm font-bold">Tutup 21.00 WIB</p>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <ShoppingBag className="w-3.5 h-3.5 text-[#FF4F79]" />
+                  <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Layanan</h4>
+                </div>
+                <p className="text-[#1C1917] text-sm font-bold">Dine-in · Takeaway</p>
+                <span className="text-[10px] text-[#FF4F79] font-extrabold mt-1">Cash only</span>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
+export default SemayotHero;

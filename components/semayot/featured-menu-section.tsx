@@ -4,62 +4,78 @@ import React from "react";
 import { motion } from "framer-motion";
 import { featuredMenu, menuDisclaimer } from "@/lib/semayot/menu-data";
 import { MenuCard } from "./menu-card";
+import { LiquidBlobs } from "./liquid-blobs";
 import { AlertCircle } from "lucide-react";
 
 export const FeaturedMenuSection: React.FC = () => {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" as const },
-    },
-  };
-
   return (
-    <section id="menu" className="py-20 bg-[#FCF9F2] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+    <section id="menu" className="relative py-24 overflow-hidden">
+      <LiquidBlobs variant="menu" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header with text reveal */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#FF4F79] bg-[#FFF0F3] px-3.5 py-1.5 rounded-full border border-[#FFD4DF]">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="inline-block text-xs font-bold uppercase tracking-widest text-[#D97706] bg-[#FFFBEB]/80 backdrop-blur-sm px-4 py-2 rounded-full border border-[#FDE68A]"
+          >
             Menu Pilihan
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#4A3728] mt-4 mb-4">
+          </motion.span>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1C1917] mt-5 mb-5 font-display tracking-tight"
+          >
             Rasa Otentik Khas Semayot
-          </h2>
-          <p className="text-base text-[#6B5A4B] font-semibold leading-relaxed mb-6">
-            Dibuat segar setiap hari dengan rempah-rempah otentik pedalaman Kalimantan Barat dan cita rasa lokal pilihan yang memanjakan selera santap Chief.
-          </p>
-          {/* Menu Disclaimer Box */}
-          <div className="inline-flex items-center justify-center gap-2 text-xs font-bold text-[#A08875] bg-white border border-[#EFE5D3] px-4 py-3 rounded-2xl max-w-2xl mx-auto shadow-[0_2px_8px_rgba(139,94,60,0.01)]">
-            <AlertCircle className="w-4 h-4 text-[#FF4F79] shrink-0" />
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-base text-[#57534E] font-medium leading-relaxed mb-6"
+          >
+            Dibuat segar setiap hari dengan rempah-rempah otentik pedalaman Kalimantan Barat.
+          </motion.p>
+
+          {/* Disclaimer */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="inline-flex items-center justify-center gap-2 text-xs font-bold text-[#A8A29E] bg-white/70 backdrop-blur-sm border border-[#E7E5E4] px-4 py-3 rounded-2xl max-w-2xl mx-auto"
+          >
+            <AlertCircle className="w-4 h-4 text-[#D97706] shrink-0" />
             <span className="text-left leading-relaxed">{menuDisclaimer}</span>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Menu Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
-          {featuredMenu.map((item) => (
-            <motion.div key={item.id} variants={cardVariants}>
+        {/* Cards grid with stagger */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredMenu.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.12,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+            >
               <MenuCard item={item} />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -37,62 +37,64 @@ export interface HomepageCopy {
   footer: {
     desc: string;
     copyright: string;
+    tagline: string;
   };
 }
 
 export const homepageCopy: HomepageCopy = {
   hero: {
     badge: `📍 Bengkayang, Kalimantan Barat`,
-    headline: "Rasa Favorit yang Bikin Pulang Lagi.",
-    subheadline: `Nikmati kehangatan hidangan lokal tradisional khas Dayak dan olahan daging asap otentik di ${semayotBusinessInfo.name}. Datang lapar, pulang senang!`,
+    headline: "Kenikmatan autentik dalam setiap sajian.",
+    subheadline: `Rumah makan spesialis masakan tradisional Dayak dan olahan daging asap otentik di ${semayotBusinessInfo.name}. Resep turun-temurun, bumbu pilihan, rasa yang dirindukan.`,
     ctaPrimary: "Buka Google Maps",
     ctaSecondary: "Hubungi Rumah Makan",
-    nonHalalWarning: "Specialty pork / Non-Halal / Sajian Khas Dayak",
+    nonHalalWarning: "Non-halal · Masakan khas Dayak",
   },
   service: {
-    badge: "Kehangatan Lokal",
-    title: "Makan Enak, Dilayani dengan Senang",
-    subtitle: "Kami percaya bahwa masakan yang dimasak sepenuh hati terasa jauh lebih nikmat saat disajikan dengan kehangatan senyuman keluarga.",
+    badge: "Keunggulan Kami",
+    title: "Tradisi rasa, kualitas prima.",
+    subtitle: "Setiap hidangan dibuat dengan standar tinggi dan bahan pilihan, mengangkat pengalaman makan dari sekadar sehari-hari menjadi sesuatu yang istimewa.",
     pillars: [
       {
-        title: "Cita Rasa Otentik",
-        description: "Bumbu rempah pedas pas dan olahan tradisional Dayak yang dirindukan pelanggan.",
+        title: "Resep Otentik Dayak",
+        description: "Bumbu rempah tradisional yang diwariskan turun-temurun, diracik dengan penuh ketelitian.",
         icon: "utensils"
       },
       {
-        title: "Pelayanan Ramah & Cepat",
-        description: "Makan lezat tak perlu menunggu lama. Kami siap melayani Chief sekeluarga dengan senyuman terbaik.",
+        title: "Bahan Pilihan Terbaik",
+        description: "Daging segar dan rempah pilihan hanya untuk hidangan terbaik di meja Anda.",
         icon: "heart"
       },
       {
-        title: "Suasana Nyaman",
-        description: "Rumah makan yang bersih dan nyaman di kawasan Bumi Amas, tempat pas untuk santap santai.",
+        title: "Suasana Hangat & Bersih",
+        description: "Nikmati santapan dalam suasana rumahan yang nyaman di kawasan Bumi Amas.",
         icon: "sparkles"
       },
       {
-        title: "Akses Lokasi Mudah",
-        description: "Terletak strategis di tepi jalan raya utama Bengkayang, sangat mudah dijangkau oleh kendaraan.",
+        title: "Pelayanan dari Hati",
+        description: "Kami melayani setiap tamu dengan senyuman, layaknya menyambut keluarga sendiri.",
         icon: "message-square"
       }
     ]
   },
   recommendation: {
-    badge: "Pilihan Maskot",
-    title: "Rekomendasi Khas Hari Ini",
-    subtitle: "Setiap hari kami menghadirkan hidangan tradisional Dayak dan sajian asap beraroma wangi kayu bakar. Tanya menu spesial hari ini langsung kepada kami!",
-    mascotBubble: "Menu asap ini harum sekali aromanya, wajib dicoba, Chief! 🐷🔥"
+    badge: "Pilihan Hari Ini",
+    title: "Rekomendasi Khas Semayot",
+    subtitle: "Setiap hari kami menghadirkan hidangan tradisional dengan olahan bumbu otentik dan sajian asap beraroma wangi kayu bakar. Tanya menu spesial hari ini!",
+    mascotBubble: "Coba tanya menu spesial hari ini, pasti bikin nagih!"
   },
   location: {
     badge: "Lokasi Kami",
     title: "Santap Langsung di Bengkayang",
-    directionsLabel: "Panduan Lokasi (Landmark):",
-    operationalHoursLabel: "Jam Operasional & Metode Bayar:",
-    paymentNote: "Metode Pembayaran: Hanya Tunai (Cash Only)",
+    directionsLabel: "Panduan Lokasi:",
+    operationalHoursLabel: "Jam Operasional & Pembayaran:",
+    paymentNote: "Metode Pembayaran: Tunai (Cash Only)",
     ctaMaps: "Navigasi Google Maps",
     ctaCall: "Hubungi via Telepon"
   },
   footer: {
-    desc: `Rumah makan lokal di Bumi Amas, Bengkayang, menyajikan masakan tradisional Dayak dan menu babi/daging asap khas dengan suasana hangat keluarga.`,
+    desc: `Rumah makan spesialis masakan tradisional Dayak dan olahan daging asap di Bumi Amas, Bengkayang.`,
+    tagline: "Resep turun-temurun, rasa yang dirindukan.",
     copyright: `© ${new Date().getFullYear()} Rumah Makan Semayot. Hak Cipta Dilindungi.`
   }
 };

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html style="background: transparent;">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent !important;
+    }
+    /* Force transparency on any element the widget might inject */
+    * {
+      background-color: transparent !important;
+    }
+  </style>
+</head>
+<body style="background: transparent !important;">
+  <script src="https://www.noupe.com/embed/019f0de714f6787abd6c50ddf0e1b0b5e89d.js"></script>
+  <script>
+    // Aggressively strip background colors from injected widget elements
+    (function() {
+      function stripBackgrounds() {
+        document.querySelectorAll('*').forEach(function(el) {
+          var bg = window.getComputedStyle(el).backgroundColor;
+          if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+            el.style.backgroundColor = 'transparent';
+          }
+        });
+      }
+      // Run after widget loads
+      setTimeout(stripBackgrounds, 500);
+      setTimeout(stripBackgrounds, 1500);
+      setTimeout(stripBackgrounds, 3000);
+      // Also watch for new elements
+      var observer = new MutationObserver(function() {
+        stripBackgrounds();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+</body>
+</html>
