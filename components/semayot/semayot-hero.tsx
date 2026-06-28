@@ -8,12 +8,6 @@ import { ArrowUpRight, MapPin, Phone, Clock, ShoppingBag } from "lucide-react";
 
 const WhatsAppChat = dynamic(() => import("./whatsapp-chat"), {
   ssr: false,
-  loading: () => (
-    <div className="flex flex-col items-start gap-4">
-      <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl bg-white/10 overflow-hidden animate-shimmer" />
-      <div className="w-full max-w-[300px] sm:max-w-[340px] h-[440px] sm:h-[480px] rounded-[44px] bg-white/10 overflow-hidden animate-shimmer" />
-    </div>
-  ),
 });
 
 export const SemayotHero: React.FC = () => {
@@ -45,7 +39,7 @@ export const SemayotHero: React.FC = () => {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="order-2 lg:order-1 flex justify-center lg:justify-end lg:pr-10 lg:-mt-36"
+            className="order-2 lg:order-1 flex justify-center lg:justify-end lg:pr-10 lg:-mt-36 min-h-[560px] sm:min-h-[600px]"
           >
             <WhatsAppChat />
           </motion.div>

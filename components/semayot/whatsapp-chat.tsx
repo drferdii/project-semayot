@@ -37,23 +37,14 @@ export const WhatsAppChat: React.FC = () => {
   return (
     <div className="flex flex-col items-start gap-4">
       {/* Lottie Animation */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-32 h-32 lg:w-40 lg:h-40 overflow-hidden"
-      >
+      <div className="w-32 h-32 lg:w-40 lg:h-40 shrink-0">
         <Player src="/Chat WhatsApp.lottie" loop autoplay style={{ width: "100%", height: "100%" }} />
-      </motion.div>
+      </div>
 
       {/* iPhone Mockup */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
+      <div className="w-full max-w-[300px] sm:max-w-[344px] shrink-0">
         {/* Phone Frame */}
-        <div className="w-full max-w-[300px] sm:max-w-[340px] bg-[#0A0A0A] rounded-[44px] p-[10px] shadow-[0_24px_64px_rgba(0,0,0,0.6)] border border-[#2A2A2A]">
+        <div className="bg-[#0A0A0A] rounded-[44px] p-[10px] shadow-[0_24px_64px_rgba(0,0,0,0.6)] border border-[#2A2A2A]">
           {/* Screen */}
           <div className="bg-[#ECE5DD] rounded-[34px] overflow-hidden relative">
             {/* Notch */}
@@ -116,7 +107,7 @@ export const WhatsAppChat: React.FC = () => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
