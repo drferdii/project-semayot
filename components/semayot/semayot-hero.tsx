@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { MessageCircle, ArrowRight, Star } from "lucide-react";
+import { Phone, ArrowRight, MapPin, Sparkles } from "lucide-react";
 import { SemayotMascot } from "./semayot-mascot";
-import { homepageCopy, locationInfo } from "@/lib/semayot/data";
+import { semayotBusinessInfo } from "@/lib/semayot/business-info";
+import { homepageCopy } from "@/lib/semayot/homepage-copy";
 
 export const SemayotHero: React.FC = () => {
   const containerVariants = {
@@ -26,6 +27,8 @@ export const SemayotHero: React.FC = () => {
       transition: { duration: 0.6, ease: "easeOut" as const },
     },
   };
+
+  const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
 
   return (
     <section
@@ -50,8 +53,8 @@ export const SemayotHero: React.FC = () => {
               variants={itemVariants}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F3] border border-[#FFD4DF] text-xs font-bold text-[#FF4F79] mb-6 tracking-wide uppercase shadow-[0_2px_8px_rgba(255,79,121,0.06)]"
             >
-              <Star className="w-3.5 h-3.5 fill-[#FF4F79]" />
-              <span>{homepageCopy.specialtyLabel}</span>
+              <Sparkles className="w-3.5 h-3.5 fill-[#FF4F79] stroke-none" />
+              <span>{homepageCopy.hero.nonHalalWarning}</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -59,16 +62,25 @@ export const SemayotHero: React.FC = () => {
               variants={itemVariants}
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#4A3728] leading-[1.1] mb-6"
             >
-              {homepageCopy.headline}
+              {homepageCopy.hero.headline}
             </motion.h1>
 
             {/* Subheadline */}
             <motion.p
               variants={itemVariants}
-              className="text-base sm:text-lg lg:text-xl text-[#6B5A4B] leading-relaxed max-w-2xl mb-8 font-medium"
+              className="text-base sm:text-lg lg:text-xl text-[#6B5A4B] leading-relaxed max-w-2xl mb-8 font-semibold"
             >
-              {homepageCopy.subheadline}
+              {homepageCopy.hero.subheadline}
             </motion.p>
+
+            {/* Public Clue Landmark Box */}
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-2 text-xs font-bold text-[#8A7560] bg-white border border-[#EFE5D3] px-3.5 py-2 rounded-2xl mb-8 shadow-[0_2px_8px_rgba(139,94,60,0.02)]"
+            >
+              <MapPin className="w-4 h-4 text-[#FF4F79]" />
+              <span>Landmark Clue: {semayotBusinessInfo.landmark}</span>
+            </motion.div>
 
             {/* CTA Actions */}
             <motion.div
@@ -78,23 +90,23 @@ export const SemayotHero: React.FC = () => {
               <motion.a
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                href="#menu"
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#FF4F79] hover:bg-[#E03D63] text-white text-base font-bold px-8 py-4 rounded-full shadow-[0_6px_20px_rgba(255,79,121,0.3)] transition-all duration-200"
+                href={semayotBusinessInfo.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#FF4F79] hover:bg-[#E03D63] text-white text-base font-extrabold px-8 py-4 rounded-full shadow-[0_6px_20px_rgba(255,79,121,0.25)] transition-all duration-200"
               >
-                <span>{homepageCopy.menuCtaText}</span>
+                <span>{homepageCopy.hero.ctaPrimary}</span>
                 <ArrowRight className="w-4 h-4" />
               </motion.a>
 
               <motion.a
                 whileHover={{ scale: 1.03, backgroundColor: "#EFE5D3" }}
                 whileTap={{ scale: 0.98 }}
-                href={locationInfo.whatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white border-2 border-[#EFE5D3] hover:border-[#D0C0A5] text-[#5C4636] text-base font-bold px-8 py-4 rounded-full shadow-[0_4px_12px_rgba(139,94,60,0.05)] transition-all duration-200"
+                href={`tel:${formattedPhone}`}
+                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white border-2 border-[#EFE5D3] hover:border-[#D0C0A5] text-[#5C4636] text-base font-extrabold px-8 py-4 rounded-full shadow-[0_4px_12px_rgba(139,94,60,0.04)] transition-all duration-200"
               >
-                <MessageCircle className="w-5 h-5 fill-[#5C4636] stroke-none" />
-                <span>{homepageCopy.whatsappCtaText}</span>
+                <Phone className="w-5 h-5 text-[#5C4636]" />
+                <span>{homepageCopy.hero.ctaSecondary}</span>
               </motion.a>
             </motion.div>
           </motion.div>
@@ -111,26 +123,26 @@ export const SemayotHero: React.FC = () => {
               {/* Float badge overlay: Happy Service */}
               <motion.div
                 animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut", delay: 1 }}
                 className="absolute top-4 left-[-20px] sm:left-[-10px] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl shadow-[0_8px_20px_rgba(139,94,60,0.06)] flex items-center gap-2"
               >
                 <span className="text-xl">🐷</span>
                 <div className="flex flex-col text-left">
                   <span className="text-xs font-bold text-[#4A3728]">Hai! Saya Semayot</span>
-                  <span className="text-[10px] text-[#8A7560] font-semibold">Siap menyajikan kebahagiaan!</span>
+                  <span className="text-[10px] text-[#8A7560] font-bold">Menu Khas Dayak Menantimu!</span>
                 </div>
               </motion.div>
 
               {/* Float badge overlay: Food Preview */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 4.5, repeat: Infinity, repeatType: "reverse" as const, ease: "easeInOut" }}
                 className="absolute bottom-6 right-[-20px] sm:right-[-10px] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl shadow-[0_8px_20px_rgba(139,94,60,0.06)] flex items-center gap-2"
               >
                 <span className="text-xl">🔥</span>
                 <div className="flex flex-col text-left">
-                  <span className="text-xs font-bold text-[#4A3728]">Kulit Krispi Juara!</span>
-                  <span className="text-[10px] text-[#8A7560] font-semibold">Dipanggang segar setiap hari</span>
+                  <span className="text-xs font-bold text-[#4A3728]">Aroma Asap Otentik</span>
+                  <span className="text-[10px] text-[#8A7560] font-bold">Cita rasa asli pedalaman</span>
                 </div>
               </motion.div>
             </div>

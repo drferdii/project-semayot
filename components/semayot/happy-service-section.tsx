@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Utensils, Heart, Sparkles, MessageSquare } from "lucide-react";
-import { servicePillars, homepageCopy } from "@/lib/semayot/data";
+import { homepageCopy } from "@/lib/semayot/homepage-copy";
 
 const iconMap = {
   utensils: Utensils,
@@ -37,13 +37,13 @@ export const HappyServiceSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-bold uppercase tracking-widest text-[#FF4F79] bg-[#FFF0F3] px-3.5 py-1.5 rounded-full border border-[#FFD4DF]">
-            Mengapa Kami
+            {homepageCopy.service.badge}
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#4A3728] mt-4 mb-4">
-            Komitmen Pelayanan Bahagia
+            {homepageCopy.service.title}
           </h2>
-          <p className="text-base text-[#6B5A4B] font-medium leading-relaxed">
-            {homepageCopy.tagline} bukan sekadar slogan, melainkan pengalaman santap terbaik yang kami hadirkan di setiap kunjungan Anda.
+          <p className="text-base text-[#6B5A4B] font-semibold leading-relaxed">
+            {homepageCopy.service.subtitle}
           </p>
         </div>
 
@@ -55,13 +55,13 @@ export const HappyServiceSection: React.FC = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         >
-          {servicePillars.map((pillar, index) => {
+          {homepageCopy.service.pillars.map((pillar, index) => {
             const IconComponent = iconMap[pillar.icon] || Utensils;
             return (
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="bg-white border border-[#EFE5D3] p-8 rounded-3xl shadow-[0_4px_16px_rgba(139,94,60,0.02)] hover:shadow-[0_8px_24px_rgba(139,94,60,0.06)] hover:border-[#D8C2A0] transition-all duration-300 flex flex-col items-center lg:items-start text-center lg:text-left"
+                className="bg-white border border-[#EFE5D3] p-8 rounded-3xl shadow-[0_4px_16px_rgba(74,53,40,0.02)] hover:shadow-[0_8px_24px_rgba(74,53,40,0.05)] hover:border-[#D8C2A0] transition-all duration-300 flex flex-col items-center lg:items-start text-center lg:text-left"
               >
                 {/* Icon Container */}
                 <div className="w-12 h-12 rounded-2xl bg-[#FFF0F3] flex items-center justify-center text-[#FF4F79] mb-6 shadow-[0_4px_10px_rgba(255,79,121,0.1)]">
@@ -70,7 +70,7 @@ export const HappyServiceSection: React.FC = () => {
                 <h3 className="text-lg font-bold text-[#4A3728] mb-3">
                   {pillar.title}
                 </h3>
-                <p className="text-sm text-[#6B5A4B] leading-relaxed font-medium">
+                <p className="text-sm text-[#6B5A4B] leading-relaxed font-semibold">
                   {pillar.description}
                 </p>
               </motion.div>

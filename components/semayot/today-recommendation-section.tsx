@@ -3,18 +3,21 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SemayotMascot } from "./semayot-mascot";
-import { featuredMenu, locationInfo, homepageCopy } from "@/lib/semayot/data";
-import { MessageCircle, Award, Sparkles } from "lucide-react";
+import { featuredMenu } from "@/lib/semayot/menu-data";
+import { semayotBusinessInfo } from "@/lib/semayot/business-info";
+import { homepageCopy } from "@/lib/semayot/homepage-copy";
+import { Phone, Award, AlertCircle } from "lucide-react";
 
 export const TodayRecommendationSection: React.FC = () => {
-  // Ambil menu rekomendasi pertama (Babi Panggang Semayot)
+  // Ambil menu rekomendasi pertama
   const recommendedItem = featuredMenu[0];
+  const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
 
   // WhatsApp link dengan pesan khusus menu rekomendasi hari ini
   const encodedMessage = encodeURIComponent(
-    `Halo Rumah Makan Semayot, saya tertarik memesan Menu Rekomendasi Hari Ini: *${recommendedItem.name}* (${recommendedItem.price}). Apakah siap diantarkan/dipesan sekarang?`
+    `Halo Rumah Makan Semayot, saya tertarik memesan Menu Rekomendasi Hari Ini: *${recommendedItem.name}*. Apakah tersedia hari ini?`
   );
-  const waUrl = `https://wa.me/${locationInfo.whatsAppNumber.replace(/\+/g, "")}?text=${encodedMessage}`;
+  const waUrl = `https://wa.me/62${formattedPhone.substring(1)}?text=${encodedMessage}`;
 
   return (
     <section id="rekomendasi" className="py-20 bg-[#FCF9F2] overflow-hidden relative">
@@ -37,10 +40,10 @@ export const TodayRecommendationSection: React.FC = () => {
                 whileInView={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.4 }}
                 viewport={{ once: true }}
-                className="absolute top-[-20px] bg-white border border-[#EFE5D3] px-5 py-3 rounded-2xl shadow-[0_8px_20px_rgba(139,94,60,0.08)] text-center max-w-[200px]"
+                className="absolute top-[-20px] bg-white border border-[#EFE5D3] px-5 py-3 rounded-2xl shadow-[0_8px_20px_rgba(74,53,40,0.08)] text-center max-w-[200px]"
               >
                 <p className="text-xs font-bold text-[#4A3728]">
-                  Ini menu favorit saya! Kamu wajib coba hari ini! 🤤
+                  {homepageCopy.recommendation.mascotBubble}
                 </p>
                 {/* Gelembung Arah Bawah */}
                 <div className="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-[#EFE5D3] rotate-45" />
@@ -51,19 +54,19 @@ export const TodayRecommendationSection: React.FC = () => {
             <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F3] border border-[#FFD4DF] text-xs font-extrabold text-[#FF4F79] mb-6 uppercase tracking-wider">
                 <Award className="w-4 h-4 fill-[#FF4F79] stroke-none" />
-                <span>Rekomendasi Hari Ini</span>
+                <span>{homepageCopy.recommendation.badge}</span>
               </span>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#4A3728] mb-4">
-                {homepageCopy.recommendationTitle}
+                {homepageCopy.recommendation.title}
               </h2>
               
-              <p className="text-base text-[#6B5A4B] font-medium leading-relaxed mb-8 max-w-xl">
-                {homepageCopy.recommendationSubtitle}
+              <p className="text-base text-[#6B5A4B] font-semibold leading-relaxed mb-8 max-w-xl">
+                {homepageCopy.recommendation.subtitle}
               </p>
 
               {/* Special Menu Highlight Card */}
-              <div className="w-full bg-white border border-[#EFE5D3] rounded-3xl p-6 sm:p-8 mb-8 text-left shadow-[0_4px_16px_rgba(139,94,60,0.02)] flex flex-col sm:flex-row gap-6 items-center">
+              <div className="w-full bg-white border border-[#EFE5D3] rounded-3xl p-6 sm:p-8 mb-8 text-left shadow-[0_4px_16px_rgba(74,53,40,0.02)] flex flex-col sm:flex-row gap-6 items-center">
                 {/* Highlight Icon */}
                 <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFF0F3] to-[#FAF3E5] flex items-center justify-center text-4xl shrink-0 shadow-[0_4px_12px_rgba(255,79,121,0.1)]">
                   🍖
@@ -75,7 +78,7 @@ export const TodayRecommendationSection: React.FC = () => {
                     <h3 className="text-xl font-bold text-[#4A3728]">
                       {recommendedItem.name}
                     </h3>
-                    <span className="text-lg font-extrabold text-[#FF4F79]">
+                    <span className="text-sm font-extrabold text-[#FF4F79] whitespace-nowrap bg-[#FFF0F3] px-2.5 py-1 rounded-lg border border-[#FFD4DF]">
                       {recommendedItem.price}
                     </span>
                   </div>
@@ -84,6 +87,14 @@ export const TodayRecommendationSection: React.FC = () => {
                   </p>
                 </div>
               </div>
+
+              {/* Needs Owner Confirmation Warning */}
+              {recommendedItem.needsOwnerConfirmation && (
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#A08875] bg-white border border-[#EFE5D3] px-4 py-2.5 rounded-2xl mb-6">
+                  <AlertCircle className="w-4 h-4 text-[#FF4F79] shrink-0" />
+                  <span>Khas Ulasan Pelanggan (Perlu Konfirmasi)</span>
+                </div>
+              )}
 
               {/* Order Action Button */}
               <motion.a
@@ -94,8 +105,8 @@ export const TodayRecommendationSection: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#FF4F79] hover:bg-[#E03D63] text-white text-base font-bold px-8 py-4 rounded-full shadow-[0_6px_20px_rgba(255,79,121,0.25)] transition-all duration-200"
               >
-                <MessageCircle className="w-5 h-5 fill-white" />
-                <span>Pesan Rekomendasi Sekarang</span>
+                <Phone className="w-5 h-5" />
+                <span>Hubungi via Telepon / WhatsApp</span>
               </motion.a>
             </div>
           </div>

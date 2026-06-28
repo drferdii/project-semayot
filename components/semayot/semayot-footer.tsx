@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import { MessageCircle, MapPin, Mail, Instagram, Star } from "lucide-react";
-import { locationInfo, homepageCopy } from "@/lib/semayot/data";
+import { MessageCircle, MapPin, Mail, Instagram, Star, Phone } from "lucide-react";
+import { semayotBusinessInfo } from "@/lib/semayot/business-info";
+import { homepageCopy } from "@/lib/semayot/homepage-copy";
 
 export const SemayotFooter: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const formattedPhone = semayotBusinessInfo.phone.replace(/[^0-9]/g, "");
 
   return (
     <footer className="bg-[#4A3728] text-[#FCF9F2] pt-16 pb-8 border-t border-[#3D2C1F] overflow-hidden">
@@ -19,13 +21,13 @@ export const SemayotFooter: React.FC = () => {
               Semayot
             </span>
             <p className="text-sm text-[#D5C2B1] font-semibold leading-relaxed mb-6 max-w-sm">
-              Rumah makan keluarga dengan menu babi specialty pilihan khas nusantara. Disajikan hangat dengan senyuman dan pelayanan penuh kebahagiaan.
+              {homepageCopy.footer.desc}
             </p>
             
             {/* Non-Halal tag in footer */}
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3D2C1F] border border-[#5A4535] rounded-full text-[10px] font-bold text-[#FF85A1] uppercase tracking-wider mb-6">
               <Star className="w-3 h-3 fill-[#FF85A1] stroke-none" />
-              <span>{homepageCopy.specialtyLabel}</span>
+              <span>{homepageCopy.hero.nonHalalWarning}</span>
             </span>
           </div>
 
@@ -71,30 +73,22 @@ export const SemayotFooter: React.FC = () => {
             <ul className="space-y-4 font-semibold text-sm text-[#D5C2B1]">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <span>{locationInfo.address}</span>
+                <span>{semayotBusinessInfo.address}</span>
               </li>
               <li className="flex items-center gap-3">
-                <MessageCircle className="w-5 h-5 text-[#FF85A1] shrink-0" />
+                <Phone className="w-5 h-5 text-[#FF85A1] shrink-0" />
                 <a
-                  href={locationInfo.whatsAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`tel:${formattedPhone}`}
                   className="hover:text-white transition-colors"
                 >
-                  WhatsApp: {locationInfo.whatsAppNumber}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <a href="mailto:info@semayot.com" className="hover:text-white transition-colors">
-                  info@semayot.com
+                  Telepon: {semayotBusinessInfo.phone}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Instagram className="w-5 h-5 text-[#FF85A1] shrink-0" />
-                <a href="https://instagram.com" className="hover:text-white transition-colors">
-                  @rm.semayot
-                </a>
+                <span className="text-[#D5C2B1] cursor-default">
+                  @rm.semayot (Belum Terverifikasi)
+                </span>
               </li>
             </ul>
           </div>
@@ -103,7 +97,7 @@ export const SemayotFooter: React.FC = () => {
 
         {/* Bottom Copyright */}
         <div className="pt-8 border-t border-[#3D2C1F] text-center text-xs text-[#A38D7C] font-bold">
-          <p>© {currentYear} Rumah Makan Semayot. Hak Cipta Dilindungi. Made with ❤️ for Chief.</p>
+          <p>{homepageCopy.footer.copyright} Made with ❤️ for Chief.</p>
         </div>
       </div>
     </footer>
