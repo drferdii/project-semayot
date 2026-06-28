@@ -18,6 +18,7 @@ export const SemayotHero: React.FC = () => {
           loop
           muted
           playsInline
+          aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/semayot/images/semarendang.mp4" type="video/mp4" />
@@ -103,6 +104,7 @@ export const SemayotHero: React.FC = () => {
               </motion.div>
               <Link
                 href="#menu"
+                aria-label="Lihat Menu"
                 className="relative z-10 w-[75px] h-[75px] md:w-[85px] md:h-[85px] bg-[#FAF6F0] rounded-full flex items-center justify-center shadow-[0_8px_40px_rgba(0,0,0,0.25)] hover:scale-105 transition-transform duration-300 group"
               >
                 <ArrowUpRight className="w-7 h-7 md:w-8 md:h-8 text-[#1C1917] group-hover:rotate-45 transition-transform duration-300" />

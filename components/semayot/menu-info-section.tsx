@@ -101,7 +101,7 @@ export const MenuInfoSection: React.FC = () => {
           >
             <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
             <p className="text-xs md:text-sm font-bold text-amber-950 uppercase tracking-wide">
-              Konfirmasi Menu &amp; Harga via Telepon
+              Konfirmasi Menu & Harga via Telepon
             </p>
           </motion.div>
         </div>
@@ -124,7 +124,7 @@ export const MenuInfoSection: React.FC = () => {
                   src={menu.src}
                   alt={menu.name}
                   fill
-                  sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   priority={idx < 3}
                 />

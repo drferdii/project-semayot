@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Phone, Navigation, AlertTriangle } from "lucide-react";
+import { Phone, Navigation } from "lucide-react";
 
 export const CtaFinalSection: React.FC = () => {
   return (

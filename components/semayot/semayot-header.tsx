@@ -8,7 +8,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 
 export const SemayotHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
   const navLinks = [
@@ -18,13 +17,14 @@ export const SemayotHeader: React.FC = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
     };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isMenuOpen]);
 
   const headerBg = useTransform(
     scrollY,
@@ -128,6 +128,8 @@ export const SemayotHeader: React.FC = () => {
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="md:hidden w-10 h-10 rounded-full bg-[#1C1917]/5 flex items-center justify-center text-[#1C1917] active:bg-[#1C1917]/10 transition-colors"
                   aria-label="Toggle menu"
+                  aria-expanded={isMenuOpen}
+                  aria-controls="mobile-nav-panel"
                 >
                   {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
@@ -156,7 +158,13 @@ export const SemayotHeader: React.FC = () => {
               transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               className="fixed top-16 left-4 right-4 z-50 md:hidden"
             >
-              <div className="bg-[#FAF6F0]/98 backdrop-blur-xl rounded-2xl p-2 shadow-[0_16px_48px_rgba(0,0,0,0.12)] border border-[#E7E5E4]/80">
+              <div 
+                id="mobile-nav-panel"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menu navigasi"
+                className="bg-[#FAF6F0]/98 backdrop-blur-xl rounded-2xl p-2 shadow-[0_16px_48px_rgba(0,0,0,0.12)] border border-[#E7E5E4]/80"
+              >
                 <nav className="flex flex-col">
                   {navLinks.map((link, idx) => (
                     <motion.div

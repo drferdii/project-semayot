@@ -53,7 +53,7 @@ export const HappyServiceSection: React.FC = () => {
         </div>
 
         {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 overflow-x-auto snap-x snap-mandatory md:overflow-visible pb-6 md:pb-0" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
           {homepageCopy.service.pillars.map((pillar, index) => {
             const IconComponent = iconMap[pillar.icon] || Utensils;
             return (
@@ -68,7 +68,7 @@ export const HappyServiceSection: React.FC = () => {
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="bg-white/80 backdrop-blur-sm border border-[#E7E5E4] p-8 rounded-3xl shadow-[0_4px_20px_rgba(28,25,23,0.03)] hover:shadow-[0_12px_32px_rgba(28,25,23,0.08)] transition-shadow duration-300 flex flex-col items-center lg:items-start text-center lg:text-left"
+                className="bg-white/80 backdrop-blur-sm border border-[#E7E5E4] p-8 rounded-3xl shadow-[0_4px_20px_rgba(28,25,23,0.03)] hover:shadow-[0_12px_32px_rgba(28,25,23,0.08)] transition-shadow duration-300 flex flex-col items-center lg:items-start text-center lg:text-left snap-center shrink-0 w-[280px] md:w-auto md:shrink"
               >
                 {/* Icon with bounce */}
                 <motion.div

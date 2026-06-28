@@ -69,7 +69,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item }) => {
         }}
         whileHover={{ scale: 1.03, z: 20 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative bg-white/80 backdrop-blur-sm border border-[#E7E5E4] rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(28,25,23,0.04)] hover:shadow-[0_16px_40px_rgba(28,25,23,0.1)] transition-shadow duration-300 flex flex-col h-full"
+        className="relative bg-white/80 backdrop-blur-sm border border-[#E7E5E4] rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(28,25,23,0.04)] hover:shadow-[0_16px_40px_rgba(28,25,23,0.1)] transition-shadow duration-300 flex flex-col h-full menu-card-glow"
       >
         {/* Shine overlay */}
         <motion.div

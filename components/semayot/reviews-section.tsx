@@ -50,7 +50,7 @@ export const ReviewsSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1C1917] mb-4 font-display tracking-tight"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 font-display tracking-tight"
           >
             Ulasan Pelanggan
           </motion.h2>
@@ -59,7 +59,7 @@ export const ReviewsSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="text-lg text-[#57534E] font-medium"
+            className="text-lg text-white/80 font-medium"
           >
             Apa kata mereka yang sudah mencicipi masakan kami
           </motion.p>
@@ -102,8 +102,8 @@ export const ReviewsSection: React.FC = () => {
             <div className="space-y-4">
               {distributionData.map(({ stars, count }) => (
                 <div key={stars} className="flex items-center gap-4">
-                  <span className="text-sm font-bold text-[#57534E] w-20">{stars} bintang</span>
-                  <div className="flex-1 bg-[#1C1917]/5 rounded-full h-3.5 overflow-hidden border border-[#E7E5E4]/50">
+                  <span className="text-sm font-bold text-white/90 w-20">{stars} bintang</span>
+                  <div className="flex-1 bg-white/10 rounded-full h-3.5 overflow-hidden border border-white/20">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${(count / 9) * 100}%` }}
@@ -112,7 +112,7 @@ export const ReviewsSection: React.FC = () => {
                       className="bg-[#D97706] h-full rounded-full"
                     />
                   </div>
-                  <span className="text-sm font-mono font-bold text-[#1C1917] w-8 text-right">{count}</span>
+                  <span className="text-sm font-mono font-bold text-white w-8 text-right">{count}</span>
                 </div>
               ))}
             </div>

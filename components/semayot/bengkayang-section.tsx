@@ -1,14 +1,21 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin } from "lucide-react";
 
 export const BengkayangSection: React.FC = () => {
   const mapLink = "https://www.google.com/maps?q=Bengkayang,+Kalimantan+Barat";
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+  const contentOpacity = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
+  const contentY = useTransform(scrollYProgress, [0.1, 0.35], [50, 0]);
 
   return (
-    <section className="relative bg-[#F5EFEB] py-14 md:py-18 lg:py-22 overflow-hidden border-b-2 border-t-2 border-[#1C1917]">
+    <section ref={sectionRef} className="relative bg-[#F5EFEB] py-14 md:py-18 lg:py-22 overflow-hidden border-b-2 border-t-2 border-[#1C1917]">
       {/* Newspaper texture overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <div
@@ -82,7 +89,10 @@ export const BengkayangSection: React.FC = () => {
         </div>
 
         {/* Newspaper 3-Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-sm leading-relaxed text-[#292524] text-justify">
+        <motion.div 
+          style={{ opacity: contentOpacity, y: contentY }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-sm leading-relaxed text-[#292524] text-justify"
+        >
           
           {/* COLUMN 1: Sejarah & Julukan Riam */}
           <div className="space-y-8 md:pr-4 md:border-r border-[#1C1917]/25">
@@ -215,7 +225,7 @@ export const BengkayangSection: React.FC = () => {
             </div>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* Newspaper Footer / Page End */}
         <div className="mt-16 pt-6 border-t-4 border-double border-[#1C1917] flex justify-between items-center text-xs font-sans font-bold uppercase text-[#78716C]">

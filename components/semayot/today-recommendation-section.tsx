@@ -22,7 +22,7 @@ export const TodayRecommendationSection: React.FC = () => {
       <LiquidBlobs variant="recommendation" />
 
       {/* Animated gradient border strip at top */}
-      <div className="absolute top-0 left-0 right-0 h-1 animated-border-gradient" />
+      <div className="absolute top-0 left-0 right-0 h-1 animated-border-gradient gpu-accelerated" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="bg-white/70 backdrop-blur-md border border-[#E7E5E4] rounded-[2rem] p-8 sm:p-12 shadow-[0_8px_40px_rgba(28,25,23,0.05)]">
@@ -85,7 +85,7 @@ export const TodayRecommendationSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-full p-[2px] rounded-3xl animated-border-gradient mb-8"
+                className="w-full p-[2px] rounded-3xl animated-border-gradient mb-8 gpu-accelerated"
               >
                 <div className="bg-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-center">
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFF0F3] to-[#FFFBEB] flex items-center justify-center text-4xl shrink-0 shadow-[2px_2px_0px_rgba(28,25,23,0.06)]">

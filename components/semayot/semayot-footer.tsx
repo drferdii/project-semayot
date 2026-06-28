@@ -7,7 +7,7 @@ export const SemayotFooter: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#E8F95C] text-[#0A0A0A] relative overflow-hidden">
+    <footer className="bg-[#E8F95C] text-[#0A0A0A] relative overflow-hidden" aria-label="Footer">
       {/* Giant Brand Name */}
       <div className="px-6 md:px-12 lg:px-20 pt-10 md:pt-14 lg:pt-16 pb-6 md:pb-8">
         <motion.div
@@ -38,6 +38,7 @@ export const SemayotFooter: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="flex items-end"
+            aria-hidden="true"
           >
             <div className="flex gap-2 md:gap-3 items-end">
               {/* 3 vertical bars */}
@@ -75,6 +76,7 @@ export const SemayotFooter: React.FC = () => {
                 <input
                   type="email"
                   placeholder="Alamat Email"
+                  aria-label="Alamat Email"
                   className="flex-1 bg-transparent border border-[#0A0A0A]/40 px-3 py-2 text-sm font-semibold placeholder:text-[#0A0A0A]/50 focus:outline-none focus:border-[#0A0A0A] transition-colors"
                 />
                 <button className="border border-[#0A0A0A] px-4 py-2 text-sm font-bold hover:bg-[#0A0A0A] hover:text-[#E8F95C] transition-colors">

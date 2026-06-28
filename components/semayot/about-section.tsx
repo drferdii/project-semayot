@@ -53,6 +53,7 @@ export const AboutSection: React.FC = () => {
           loop
           muted
           playsInline
+          aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/semayot/images/semayot.mp4" type="video/mp4" />

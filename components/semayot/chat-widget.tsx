@@ -165,8 +165,8 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-[9999] w-full max-w-[360px] flex flex-col rounded-2xl shadow-2xl overflow-hidden border border-[#FFD4DF]"
-            style={{ backgroundColor: "#FFF0F3", maxHeight: "500px" }}
+            className="fixed bottom-6 right-6 z-[9999] w-full max-w-[360px] flex flex-col rounded-2xl shadow-2xl overflow-hidden border border-[#FFD4DF]/80 backdrop-blur-md"
+            style={{ backgroundColor: "rgba(255, 240, 243, 0.95)", maxHeight: "500px" }}
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3 bg-[#FF4F79] text-white flex-shrink-0">

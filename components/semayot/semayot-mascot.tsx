@@ -3,6 +3,7 @@
 import React, { useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export type MascotVariant = "welcome" | "menu" | "recommendation" | "thankyou" | "loading";
 
@@ -73,14 +74,16 @@ export const SemayotMascot: React.FC<MascotProps> = ({
   };
 
   const [blinkState, setBlinkState] = React.useState("open");
+  const isReduced = useReducedMotion();
 
   React.useEffect(() => {
+    if (isReduced) return;
     const interval = setInterval(() => {
       setBlinkState("blink");
       setTimeout(() => setBlinkState("open"), 150);
     }, 3500 + Math.random() * 1500);
     return () => clearInterval(interval);
-  }, []);
+  }, [isReduced]);
 
   // Float animation
   const floatTransition = {
@@ -98,8 +101,8 @@ export const SemayotMascot: React.FC<MascotProps> = ({
       <motion.div
         ref={containerRef}
         className={`relative select-none flex items-center justify-center ${className}`}
-        animate={{ y: [0, -14, 0] }}
-        transition={floatTransition}
+        animate={isReduced ? {} : { y: [0, -14, 0] }}
+        transition={isReduced ? {} : floatTransition}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ width: size, height: size }}
@@ -122,8 +125,8 @@ export const SemayotMascot: React.FC<MascotProps> = ({
     <motion.div
       ref={containerRef}
       className={`relative select-none flex items-center justify-center ${className}`}
-      animate={{ y: [0, -14, 0] }}
-      transition={floatTransition}
+      animate={isReduced ? {} : { y: [0, -14, 0] }}
+      transition={isReduced ? {} : floatTransition}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ width: size, height: size }}
@@ -133,7 +136,10 @@ export const SemayotMascot: React.FC<MascotProps> = ({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full drop-shadow-[0_12px_32px_rgba(251,146,198,0.25)]"
+        role="img"
+        aria-label="Maskot Semayot"
       >
+        <title>Maskot Semayot - Babi Lucu</title>
         {/* Shadow under mascot */}
         <ellipse cx="100" cy="188" rx="50" ry="7" fill="#EDE5D8" opacity="0.7" />
 
@@ -143,7 +149,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
           fill="#FFAEC9"
           stroke="#F898B6"
           strokeWidth="3"
-          animate={variant === "loading" ? { rotate: [0, -10, 0] } : { rotate: [0, 5, -3, 0] }}
+          animate={isReduced ? {} : (variant === "loading" ? { rotate: [0, -10, 0] } : { rotate: [0, 5, -3, 0] })}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
           style={{
             originX: "60px",
@@ -157,7 +163,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
           fill="#FFAEC9"
           stroke="#F898B6"
           strokeWidth="3"
-          animate={variant === "loading" ? { rotate: [0, 10, 0] } : { rotate: [0, -5, 3, 0] }}
+          animate={isReduced ? {} : (variant === "loading" ? { rotate: [0, 10, 0] } : { rotate: [0, -5, 3, 0] })}
           transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
           style={{ originX: "140px", originY: "45px" }}
         />
@@ -249,7 +255,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
         {/* Variant-specific elements */}
         {variant === "welcome" && (
           <motion.g
-            animate={{ rotate: [0, -20, 0, -20, 0] }}
+            animate={isReduced ? {} : { rotate: [0, -20, 0, -20, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             style={{ originX: "155px", originY: "135px" }}
           >
@@ -274,7 +280,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
         {variant === "recommendation" && (
           <g>
             <motion.g
-              animate={{ y: [0, -5, 0] }}
+              animate={isReduced ? {} : { y: [0, -5, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             >
               <circle cx="160" cy="120" r="12" fill="#FFC2D6" stroke="#F898B6" strokeWidth="3" />
@@ -290,8 +296,8 @@ export const SemayotMascot: React.FC<MascotProps> = ({
 
         {variant === "thankyou" && (
           <motion.g
-            initial={{ scale: 0.8, opacity: 0.5 }}
-            animate={{ scale: [0.8, 1.15, 0.8], opacity: [0.7, 1, 0.7] }}
+            initial={isReduced ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0.5 }}
+            animate={isReduced ? {} : { scale: [0.8, 1.15, 0.8], opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             style={{ originX: "100px", originY: "35px" }}
           >
@@ -304,7 +310,7 @@ export const SemayotMascot: React.FC<MascotProps> = ({
 
         {variant === "loading" && (
           <motion.g
-            animate={{ rotate: 360 }}
+            animate={isReduced ? {} : { rotate: 360 }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
             style={{ originX: "100px", originY: "115px" }}
           >
