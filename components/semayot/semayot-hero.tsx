@@ -6,11 +6,14 @@ import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowUpRight, MapPin, Phone, Clock, ShoppingBag } from "lucide-react";
 
-import { WhatsAppChatSkeleton } from "./whatsapp-chat";
-
 const WhatsAppChat = dynamic(() => import("./whatsapp-chat"), {
   ssr: false,
-  loading: () => <WhatsAppChatSkeleton />,
+  loading: () => (
+    <div className="flex flex-col items-start gap-4">
+      <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl bg-white/10 overflow-hidden animate-shimmer" />
+      <div className="w-full max-w-[300px] sm:max-w-[340px] h-[440px] sm:h-[480px] rounded-[44px] bg-white/10 overflow-hidden animate-shimmer" />
+    </div>
+  ),
 });
 
 export const SemayotHero: React.FC = () => {
