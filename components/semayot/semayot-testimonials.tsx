@@ -61,11 +61,20 @@ export const SemayotTestimonials: React.FC = () => {
     <AnimatedTestimonials
       title="Ulasan Pelanggan"
       subtitle="Apa kata mereka yang sudah mencicipi masakan tradisional Dayak kami."
-      badgeText="⭐ 4.9 dari 9 ulasan"
+      badgeText={
+        <a
+          href="https://www.google.com/maps/place/Rumah+Makan+Semayot/@0.8312772,109.4858797,17z/data=!4m8!3m7!1s0x31e335c4a9c2c4cb:0xfc8a3aa13021ead2!8m2!3d0.8312772!4d109.4858797!9m1!1b1!16s%2Fg%2F11fqll5pxj?entry=ttu"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline transition-all flex items-center gap-1 text-xs md:text-sm"
+        >
+          <span>⭐ 4.9 dari 9 ulasan Google Maps</span>
+        </a>
+      }
       testimonials={testimonials}
       autoRotateInterval={5000}
-      className="bg-[#1B6B93]"
-      isDark={true}
+      className="bg-[#FFF0F3]"
+      isDark={false}
     />
   );
 };

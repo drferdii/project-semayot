@@ -53,7 +53,7 @@ export const MenuInfoSection: React.FC = () => {
   ];
 
   return (
-    <section id="menu" className="bg-[#FFF0F3] px-6 md:px-12 lg:px-20 py-20 md:py-28 lg:py-36 border-b border-[#FFD4DF]/60 relative overflow-hidden">
+    <section id="menu" className="bg-[#FFF0F3] px-6 md:px-12 lg:px-20 py-14 md:py-18 lg:py-22 border-b border-[#FFD4DF]/60 relative overflow-hidden">
       {/* Background decoration decorative blobs */}
       <div className="absolute top-1/2 left-[-10%] w-[400px] h-[400px] bg-[#FAF6F0]/30 rounded-full blur-[80px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[350px] h-[350px] bg-[#FFC2D6]/20 rounded-full blur-[70px] pointer-events-none" />

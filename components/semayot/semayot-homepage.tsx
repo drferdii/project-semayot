@@ -78,12 +78,12 @@ export const SemayotHomepage: React.FC = () => {
         </section>
 
         <AboutSection />
-        <ExperienceSection />
         <MenuInfoSection />
+        <ExperienceSection />
         <BengkayangSection />
-        <SemayotTestimonials />
         <CtaFinalSection />
         <LocationSection />
+        <SemayotTestimonials />
       </main>
       <SemayotFooter />
     </div>

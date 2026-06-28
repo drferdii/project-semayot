@@ -14,6 +14,8 @@ export const metadata: Metadata = {
     "Nikmati kehangatan hidangan tradisional Dayak dan olahan daging asap otentik di Rumah Makan Semayot, Bumi Amas, Bengkayang, Kalimantan Barat. Rating 4.9/5 Google Maps.",
 };
 
+import { ChatWidget } from "@/components/semayot/chat-widget";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,7 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${outfit.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

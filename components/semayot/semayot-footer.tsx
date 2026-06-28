@@ -92,14 +92,18 @@ export const SemayotFooter: React.FC = () => {
             </p>
 
             {/* Credits */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm font-bold">
-              <p className="text-[#0A0A0A]/70">
+            <div className="flex flex-col gap-2 text-xs md:text-sm font-bold text-[#0A0A0A]/80 pt-6 border-t border-[#0A0A0A]/15">
+              <p className="text-[#0A0A0A]/50 uppercase tracking-widest text-[10px] mb-1">
                 Design & Development
               </p>
-              <p className="text-right">
-                © 2026 Sentra Mitra Design – All Rights Reserved.<br />
-                This website is proudly designed and maintained by Sentra Mitra Design.<br />
-                Special courtesy to dr. Alyn for the trusted collaboration in 2026.
+              <p className="leading-relaxed">
+                © 2026 Sentra Mitra Design – All Rights Reserved.
+              </p>
+              <p className="leading-relaxed">
+                This website is proudly designed and maintained by Sentra Mitra Design.
+              </p>
+              <p className="leading-relaxed">
+                Special courtesy to <a href="https://www.instagram.com/alyn_kristiani/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#0A0A0A] transition-colors">dr. Alyn</a> for the trusted collaboration in 2026.
               </p>
             </div>
           </motion.div>

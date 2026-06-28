@@ -47,17 +47,21 @@ export const SemayotHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="order-1 lg:order-2 flex flex-col items-center lg:items-start text-center lg:text-left"
           >
-            <motion.div
+            <motion.a
+              href="https://www.google.com/maps?q=Bengkayang,+Kalimantan+Barat"
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/20 mb-6 md:mb-8"
+              whileHover={{ scale: 1.03 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 mb-6 md:mb-8 transition-colors cursor-pointer"
             >
               <MapPin className="w-3.5 h-3.5 text-[#FFC2D6]" />
               <span className="text-xs font-bold text-white/90 uppercase tracking-widest">
                 Bengkayang, Kalimantan Barat
               </span>
-            </motion.div>
+            </motion.a>
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -139,7 +143,7 @@ export const SemayotHero: React.FC = () => {
                   <Clock className="w-3.5 h-3.5 text-[#FF4F79]" />
                   <h4 className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-wider">Jam Buka</h4>
                 </div>
-                <p className="text-[#1C1917] text-sm font-bold">Tutup 21.00 WIB</p>
+                <p className="text-[#1C1917] text-sm font-bold">08:00 - 21:00 WIB</p>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-2 mb-2">

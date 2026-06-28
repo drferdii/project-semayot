@@ -10,7 +10,7 @@ export const LocationSection: React.FC = () => {
   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.5!2d109.4858797!3d0.8312772!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31e335c4a9c2c4cb%3A0xfc8a3aa13021ead2!2sRumah%20Makan%20Semayot!5e0!3m2!1sid!2sid!4v1719000000000";
 
   return (
-    <section id="location" className="bg-[#FCF9F2] px-6 md:px-12 lg:px-20 py-20 md:py-28 lg:py-36 border-b border-[#E7E5E4]">
+    <section id="location" className="bg-[#FCF9F2] px-6 md:px-12 lg:px-20 py-14 md:py-18 lg:py-22 border-b border-[#E7E5E4]">
       <div className="max-w-6xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}

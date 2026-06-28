@@ -19,7 +19,7 @@ export interface Testimonial {
 export interface AnimatedTestimonialsProps {
   title?: string
   subtitle?: string
-  badgeText?: string
+  badgeText?: React.ReactNode
   testimonials?: Testimonial[]
   autoRotateInterval?: number
   trustedCompanies?: string[]
@@ -31,7 +31,7 @@ export interface AnimatedTestimonialsProps {
 export function AnimatedTestimonials({
   title = "Loved by the community",
   subtitle = "Don't just take our word for it. See what developers and companies have to say about our starter template.",
-  badgeText = "Trusted by developers",
+  badgeText,
   testimonials = [],
   autoRotateInterval = 6000,
   trustedCompanies = [],
@@ -93,22 +93,28 @@ export function AnimatedTestimonials({
   }
 
   return (
-    <section ref={sectionRef} id="testimonials" className={`py-24 overflow-hidden ${className || "bg-muted/30"}`}>
+    <section ref={sectionRef} id="testimonials" className={`py-16 md:py-20 overflow-hidden ${className || "bg-muted/30"}`}>
       <div className="px-4 md:px-6">
         <motion.div
           initial="hidden"
           animate={controls}
           variants={containerVariants}
-          className="grid grid-cols-1 gap-16 w-full md:grid-cols-2 lg:gap-24"
+          className="grid grid-cols-1 gap-8 md:gap-12 lg:gap-16 w-full md:grid-cols-2 max-w-5xl mx-auto"
         >
           {/* Left side: Heading and navigation */}
-          <motion.div variants={itemVariants} className="flex flex-col justify-center">
+          <motion.div variants={itemVariants} className="flex flex-col justify-center max-w-md md:ml-auto w-full">
             <div className="space-y-6">
               {badgeText && (
-                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${isDark ? 'bg-white/10 text-white' : 'bg-primary/10 text-primary'}`}>
-                  <Star className={`mr-1 h-3.5 w-3.5 ${isDark ? 'fill-white' : 'fill-primary'}`} />
-                  <span>{badgeText}</span>
-                </div>
+                typeof badgeText === 'string' ? (
+                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${isDark ? 'bg-white/10 text-white' : 'bg-primary/10 text-primary'}`}>
+                    <Star className={`mr-1 h-3.5 w-3.5 ${isDark ? 'fill-white' : 'fill-primary'}`} />
+                    <span>{badgeText}</span>
+                  </div>
+                ) : (
+                  <div className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold ${isDark ? 'bg-white/10 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200 shadow-sm'}`}>
+                    {badgeText}
+                  </div>
+                )
               )}
 
               <h2 className={`text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl ${isDark ? 'text-white' : ''}`}>{title}</h2>
@@ -131,7 +137,7 @@ export function AnimatedTestimonials({
           </motion.div>
 
           {/* Right side: Testimonial cards */}
-          <motion.div variants={itemVariants} className="relative h-full mr-10 min-h-[300px] md:min-h-[400px]">
+          <motion.div variants={itemVariants} className="relative h-full min-h-[300px] md:min-h-[400px] max-w-md w-full">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}

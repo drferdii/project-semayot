@@ -9,9 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.1",
+    "@ai-sdk/react": "4.0.5",
     "@lottiefiles/react-lottie-player": "^3.6.0",
+    "@openrouter/ai-sdk-provider": "^2.10.0",
     "@radix-ui/react-avatar": "^1.2.0",
     "@radix-ui/react-separator": "^1.1.10",
+    "ai": "^7.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.42.0",
     "lucide-react": "^0.469.0",

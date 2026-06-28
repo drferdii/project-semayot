@@ -24,30 +24,48 @@ export const ExperienceSection: React.FC = () => {
   ];
 
   return (
-    <section className="bg-[#f7e4de] px-6 md:px-12 lg:px-20 py-20 md:py-28 lg:py-36 border-b border-[#f7e4de]/60 relative overflow-hidden">
+    <section className="bg-[#f7e4de] px-6 md:px-12 lg:px-20 py-14 md:py-18 lg:py-22 border-b border-[#f7e4de]/60 relative overflow-hidden">
       {/* No pig characters - clean design */}
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="mb-16 md:mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+        <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex-1">
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1C1917] mb-4 font-display tracking-tight"
+            >
+              Yang dicari dari Semayot
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="text-lg md:text-xl text-[#57534E] font-medium"
+            >
+              Dari ulasan pelanggan, Semayot dikenal lewat rasa yang lezat, tempat nyaman, dan pelayanan cepat.
+            </motion.p>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1C1917] mb-4 font-display tracking-tight"
+            transition={{ type: "spring", stiffness: 100, damping: 10, delay: 0.2 }}
+            whileHover={{ scale: 1.08, rotate: -3 }}
+            className="relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 flex-shrink-0 mx-auto md:mx-0 -mt-6 md:-mt-10"
           >
-            Yang dicari dari Semayot
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="text-lg md:text-xl text-[#57534E] font-medium"
-          >
-            Dari ulasan pelanggan, Semayot dikenal lewat rasa yang lezat, tempat nyaman, dan pelayanan cepat.
-          </motion.p>
+            <Image
+              src="/semayot/images/sema2_trans.webp"
+              alt="Maskot Semayot"
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 176px, (max-width: 1024px) 224px, 256px"
+            />
+          </motion.div>
         </div>
 
         {/* Feature blocks */}

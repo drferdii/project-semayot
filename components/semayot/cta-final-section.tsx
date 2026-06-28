@@ -8,7 +8,7 @@ import { Phone, Navigation, AlertTriangle } from "lucide-react";
 
 export const CtaFinalSection: React.FC = () => {
   return (
-    <section className="bg-[#1C1917] px-6 md:px-12 lg:px-20 py-24 md:py-32 lg:py-36 relative overflow-hidden">
+    <section className="bg-[#1C1917] px-6 md:px-12 lg:px-20 py-16 md:py-20 lg:py-24 relative overflow-hidden">
       {/* Noise texture overlay */}
       <div className="absolute inset-0 grain-overlay pointer-events-none opacity-40 z-0" />
 
@@ -29,14 +29,14 @@ export const CtaFinalSection: React.FC = () => {
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <motion.p
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 font-display tracking-tight"
         >
-          Kenikmatan autentik dalam setiap sajian.
+          Dari Tungku Asap Tradisional, Menuju Hangatnya Kebersamaan.
         </motion.h2>
         
         <motion.p

@@ -6,16 +6,16 @@ import { MapPin, Star, Utensils, CreditCard, Clock } from "lucide-react";
 
 export const AboutSection: React.FC = () => {
   const infoItems = [
-    { icon: MapPin, label: "Lokasi", value: "Bumi Amas, Bengkayang" },
-    { icon: Star, label: "Rating", value: "4,9/5 dari 9 ulasan Google" },
+    { icon: MapPin, label: "Lokasi", value: "Bumi Amas, Bengkayang", href: "https://www.google.com/maps?q=Bengkayang,+Kalimantan+Barat" },
+    { icon: Star, label: "Rating", value: "4,9/5 dari 9 ulasan Google", href: "https://www.google.com/maps/place/Rumah+Makan+Semayot/@0.8312772,109.4858797,17z/data=!4m8!3m7!1s0x31e335c4a9c2c4cb:0xfc8a3aa13021ead2!8m2!3d0.8312772!4d109.4858797!9m1!1b1!16s%2Fg%2F11fqll5pxj?entry=ttu" },
     { icon: Utensils, label: "Layanan", value: "Dine-in & Takeaway" },
     { icon: CreditCard, label: "Pembayaran", value: "Cash only" },
-    { icon: Clock, label: "Jam Tutup", value: "Pukul 21:00 (9.00 pm)" },
+    { icon: Clock, label: "Jam Buka", value: "Setiap hari, 08:00 - 21:00 WIB" },
   ];
 
   return (
     <section id="about" className="relative bg-[#FCF9F2] overflow-hidden">
-      {/* Section label */}
+      {/* Section label & Title (Original Position) */}
       <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 pt-24 md:pt-32 lg:pt-40 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,25 +29,24 @@ export const AboutSection: React.FC = () => {
             Tentang Kami
           </span>
         </motion.div>
-
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1C1917] font-display tracking-tight leading-[1.1] max-w-3xl mb-16 md:mb-20"
+          className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1C1917] font-display tracking-tight leading-[1.1] max-w-3xl mb-12 md:mb-16"
         >
           Tentang Semayot
         </motion.h2>
       </div>
 
-      {/* Full-bleed cinematic video */}
+      {/* Full-bleed cinematic video with a slight top spacing */}
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="relative w-full aspect-video md:aspect-[21/9] lg:aspect-[3/1]"
+        className="relative w-full aspect-video md:aspect-[21/9] lg:aspect-[3/1] mt-4 md:mt-6"
       >
         <video
           autoPlay
@@ -79,7 +78,7 @@ export const AboutSection: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Content below video */}
+      {/* Content below video (Original Clean Layout) */}
       <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 pb-24 md:pb-32 lg:pb-40 pt-12 md:pt-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left - Story text */}
@@ -91,14 +90,11 @@ export const AboutSection: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-6"
             >
-              <p className="text-lg md:text-xl text-[#57534E] leading-relaxed font-medium">
-                Rumah Makan Semayot adalah restoran di Bumi Amas, Bengkayang, Kalimantan Barat.
-                Kami melayani dine-in dan takeaway dengan pembayaran tunai.
-              </p>
-
-              <p className="text-base text-[#78716C] leading-relaxed">
-                Terletak di jantung Bumi Amas, Semayot menjadi pilihan utama bagi warga sekitar
-                dan pengunjung yang mencari masakan tradisional dengan cita rasa otentik.
+              <p 
+                className="text-lg md:text-xl text-[#57534E] leading-relaxed font-medium"
+                style={{ fontFamily: "'Epilogue', sans-serif" }}
+              >
+                Melanjutkan dedikasi dari pemilik sebelumnya, kini RM Semayot diurus dan dikembangkan oleh <span className="text-[#FF4F79] font-extrabold">dr. Alyn Kristiani MMRS</span>. Langkah estafet ini kami ambil biar cita rasa legendaris babi asap khas Dayak di Bengkayang tetap mengepul hangat dan terus menemani obrolan santai Anda sekeluarga!
               </p>
             </motion.div>
           </div>
@@ -124,35 +120,28 @@ export const AboutSection: React.FC = () => {
                       <p className="text-[10px] font-bold text-[#A8A29E] uppercase tracking-[0.15em] mb-0.5">
                         {item.label}
                       </p>
-                      <p className="text-sm md:text-base text-[#1C1917] font-bold">{item.value}</p>
+                      {item.href ? (
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm md:text-base text-[#1C1917] font-bold hover:text-[#FF4F79] hover:underline underline-offset-2 decoration-[#FF4F79]/30 transition-colors"
+                        >
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="text-sm md:text-base text-[#1C1917] font-bold">{item.value}</p>
+                      )}
                     </div>
                   </motion.div>
                 );
               })}
             </div>
-
-            {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-8"
-            >
-              <a
-                href="https://www.google.com/maps/place/Rumah+Makan+Semayot/@0.8312772,109.4858797,17z/data=!4m7!3m6!1s0x31e335c4a9c2c4cb:0xfc8a3aa13021ead2!8m2!3d0.8312772!4d109.4858797!10e1!16s%2Fg%2F11fqll5pxj?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#1C1917] hover:text-[#FF4F79] transition-colors group"
-              >
-                <span>Buka Google Maps</span>
-                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </a>
-            </motion.div>
           </div>
         </div>
       </div>
     </section>
   );
 };
+
 export default AboutSection;

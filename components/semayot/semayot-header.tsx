@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, Phone, MapPin, ArrowUpRight, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
@@ -61,8 +62,14 @@ export const SemayotHeader: React.FC = () => {
             <div className="flex items-center justify-between h-16 md:h-20">
               {/* Logo */}
               <Link href="#hero" className="flex items-center gap-2.5 group">
-                <div className="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-[#1C1917] flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <span className="text-white font-black text-xs md:text-sm font-display">S</span>
+                <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-300 group-hover:scale-105">
+                  <Image
+                    src="/semayot/images/logo.png"
+                    alt="Rumah Makan Semayot Logo"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 48px, 56px"
+                  />
                 </div>
                 <span className="text-lg md:text-xl font-black text-[#1C1917] font-display tracking-tight">
                   SEMAYOT
@@ -85,10 +92,15 @@ export const SemayotHeader: React.FC = () => {
               {/* Right Actions */}
               <div className="flex items-center gap-2 md:gap-3">
                 {/* Location Badge - Desktop */}
-                <div className="hidden lg:flex items-center gap-1.5 text-xs font-bold text-[#78716C] mr-1">
+                <a
+                  href="https://www.google.com/maps?q=Bengkayang,+Kalimantan+Barat"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden lg:flex items-center gap-1.5 text-xs font-bold text-[#78716C] hover:text-[#FF4F79] transition-colors mr-1"
+                >
                   <MapPin className="w-3.5 h-3.5 text-[#FF4F79]" />
                   <span>Bengkayang</span>
-                </div>
+                </a>
 
                 {/* CTA Button */}
                 <motion.a
