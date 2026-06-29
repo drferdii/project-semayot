@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { streamText } from 'ai';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { createClient } from '@/lib/admin/supabase/server';
-import { aggregateSummary, formatSummaryForPrompt, type SummaryPeriod } from '@/lib/admin/ai/aggregate';
+import { aggregateSummary, formatSummaryForPrompt } from '@/lib/admin/ai/aggregate';
+import type { SummaryPeriod } from '@/lib/admin/supabase/types';
 import { ADMIN_AI_SYSTEM_PROMPT } from '@/lib/admin/ai/prompts';
 
 const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY! });
