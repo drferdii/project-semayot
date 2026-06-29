@@ -29,7 +29,9 @@ export type Database = {
         Relationships: [];
       };
     };
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Views: {};
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Functions: {};
     Enums: {
       user_role: 'owner' | 'staff';
