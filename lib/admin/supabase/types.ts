@@ -169,6 +169,31 @@ export type Database = {
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         Relationships: [];
       };
+      ai_summaries: {
+        Row: {
+          id: string;
+          period_start: string;
+          period_end: string;
+          summary_text: string;
+          generated_at: string;
+        };
+        Insert: {
+          id?: string;
+          period_start: string;
+          period_end: string;
+          summary_text: string;
+          generated_at?: string;
+        };
+        Update: {
+          id?: string;
+          period_start?: string;
+          period_end?: string;
+          summary_text?: string;
+          generated_at?: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
     };
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Views: {};
@@ -190,3 +215,4 @@ export type Database = {
 export type UserRole = Database['public']['Enums']['user_role'];
 export type MenuCategory = Database['public']['Enums']['menu_category'];
 export type ExpenseCategory = Database['public']['Enums']['expense_category'];
+export type SummaryPeriod = 'today' | '7d' | '30d';
