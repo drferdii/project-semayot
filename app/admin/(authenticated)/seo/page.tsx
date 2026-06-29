@@ -1,3 +1,5 @@
+import { SEOView } from '@/components/admin/pages/SEOView';
+
 export default function SEOPage() {
-  return <p className="text-[#57534E]">SEO Panel — Slice 6.</p>;
+  return <SEOView />;
 }
