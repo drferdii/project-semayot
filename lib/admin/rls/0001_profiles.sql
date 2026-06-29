@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migration 0001: profiles table + RLS
+-- Migration 0001: profiles table + RLS (FIXED: break infinite recursion)
 -- =============================================================================
 
 -- profiles: extend auth.users
@@ -11,23 +11,31 @@ create table public.profiles (
   created_at timestamptz not null default now()
 );
 
--- Index for role-based queries
 create index idx_profiles_role on public.profiles(role) where is_active = true;
 
--- Enable RLS
 alter table public.profiles enable row level security;
+
+-- Helper function: SECURITY DEFINER breaks the recursion (runs with table owner
+-- permissions, bypassing RLS). Without this, owner_full_profiles policy would
+-- recursively check itself infinitely.
+create or replace function public.current_user_role()
+returns text
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select role from public.profiles where id = auth.uid() limit 1;
+$$;
 
 -- Policies
 create policy "owner_full_profiles" on public.profiles
-  for all using (exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and p.role = 'owner'
-  ));
+  for all using (public.current_user_role() = 'owner');
 
 create policy "user_read_own_profile" on public.profiles
   for select using (id = auth.uid());
 
--- Trigger: auto-create profile when new auth.users row inserted (via Supabase Auth)
+-- Trigger: auto-create profile when new auth.users row inserted
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
