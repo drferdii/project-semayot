@@ -1,5 +1,5 @@
-import { ExpensesView } from '@/components/admin/pages/ExpensesView';
+import { SettingsView } from '@/components/admin/pages/SettingsView';
 
 export default function SettingsPage() {
-  return <ExpensesView />;
+  return <SettingsView />;
 }
