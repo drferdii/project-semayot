@@ -12,3 +12,6 @@ export type Database = {
     };
   };
 };
+
+// Named exports for convenience (re-export from Database.Enums)
+export type UserRole = Database['public']['Enums']['user_role'];
