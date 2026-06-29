@@ -138,6 +138,37 @@ export type Database = {
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         Relationships: [];
       };
+      expenses: {
+        Row: {
+          id: string;
+          category: 'bahan' | 'operasional' | 'gaji' | 'lain';
+          amount_cents: number;
+          description: string | null;
+          incurred_by: string | null;
+          incurred_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          category: 'bahan' | 'operasional' | 'gaji' | 'lain';
+          amount_cents: number;
+          description?: string | null;
+          incurred_by?: string | null;
+          incurred_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          category?: 'bahan' | 'operasional' | 'gaji' | 'lain';
+          amount_cents?: number;
+          description?: string | null;
+          incurred_by?: string | null;
+          incurred_at?: string;
+          created_at?: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
     };
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Views: {};
@@ -158,3 +189,4 @@ export type Database = {
 // Named exports for convenience (re-export from Database.Enums)
 export type UserRole = Database['public']['Enums']['user_role'];
 export type MenuCategory = Database['public']['Enums']['menu_category'];
+export type ExpenseCategory = Database['public']['Enums']['expense_category'];
