@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '../globals.css';
+import { SuppressExtensionErrors } from './SuppressExtensionErrors';
 
 export const metadata: Metadata = {
   title: 'Admin Semayot',
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[#FCF9F2]">{children}</div>;
+  return (
+    <div className="min-h-screen bg-[#FCF9F2]">
+      <SuppressExtensionErrors />
+      {children}
+    </div>
+  );
 }
