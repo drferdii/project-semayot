@@ -26,6 +26,7 @@ export type Database = {
           is_active?: boolean;
           created_at?: string;
         };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         Relationships: [];
       };
       menu_items: {
@@ -71,6 +72,70 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
+      transactions: {
+        Row: {
+          id: string;
+          staff_id: string;
+          total_cents: number;
+          paid_cents: number;
+          change_cents: number;
+          payment_method: 'cash';
+          note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          staff_id: string;
+          total_cents: number;
+          paid_cents: number;
+          payment_method?: 'cash';
+          note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          staff_id?: string;
+          total_cents?: number;
+          paid_cents?: number;
+          payment_method?: 'cash';
+          note?: string | null;
+          created_at?: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
+      transaction_items: {
+        Row: {
+          id: string;
+          transaction_id: string;
+          menu_item_id: string;
+          name_snapshot: string;
+          price_cents_snapshot: number;
+          quantity: number;
+          subtotal_cents: number;
+        };
+        Insert: {
+          id?: string;
+          transaction_id: string;
+          menu_item_id: string;
+          name_snapshot: string;
+          price_cents_snapshot: number;
+          quantity: number;
+          subtotal_cents: number;
+        };
+        Update: {
+          id?: string;
+          transaction_id?: string;
+          menu_item_id?: string;
+          name_snapshot?: string;
+          price_cents_snapshot?: number;
+          quantity?: number;
+          subtotal_cents?: number;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         Relationships: [];
       };
     };
