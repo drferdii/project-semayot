@@ -76,8 +76,12 @@ export type Database = {
     };
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Views: {};
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    Functions: {};
+    Functions: {
+      current_user_role: {
+        Args: Record<string, never>;
+        Returns: 'owner' | 'staff';
+      };
+    };
     Enums: {
       user_role: 'owner' | 'staff';
       menu_category: 'dayak' | 'smoked' | 'pedas' | 'minuman';
