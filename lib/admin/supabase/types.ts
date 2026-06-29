@@ -28,6 +28,51 @@ export type Database = {
         };
         Relationships: [];
       };
+      menu_items: {
+        Row: {
+          id: string;
+          name: string;
+          description: string | null;
+          price_cents: number;
+          category: 'dayak' | 'smoked' | 'pedas' | 'minuman';
+          photo_url: string | null;
+          badge: string | null;
+          is_active: boolean;
+          needs_owner_confirmation: boolean;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          description?: string | null;
+          price_cents: number;
+          category: 'dayak' | 'smoked' | 'pedas' | 'minuman';
+          photo_url?: string | null;
+          badge?: string | null;
+          is_active?: boolean;
+          needs_owner_confirmation?: boolean;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          description?: string | null;
+          price_cents?: number;
+          category?: 'dayak' | 'smoked' | 'pedas' | 'minuman';
+          photo_url?: string | null;
+          badge?: string | null;
+          is_active?: boolean;
+          needs_owner_confirmation?: boolean;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     Views: {};
@@ -43,3 +88,4 @@ export type Database = {
 
 // Named exports for convenience (re-export from Database.Enums)
 export type UserRole = Database['public']['Enums']['user_role'];
+export type MenuCategory = Database['public']['Enums']['menu_category'];
