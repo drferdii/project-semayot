@@ -1,3 +1,5 @@
+import { POSForm } from '@/components/admin/pages/POSForm';
+
 export default function POSPage() {
-  return <p className="text-[#57534E]">POS — Slice 3.</p>;
+  return <POSForm />;
 }
