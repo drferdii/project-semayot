@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { MoneyDisplay } from '@/components/admin/MoneyDisplay';
 
 type MenuItem = {
@@ -17,6 +17,7 @@ type MenuItem = {
 
 export function MenuList() {
   const router = useRouter();
+  const pathname = usePathname();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +35,8 @@ export function MenuList() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  // Refetch when navigating back to this page (e.g., after create/edit/delete)
+  useEffect(() => { load(); }, [pathname]);
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Hapus "${name}"?`)) return;
