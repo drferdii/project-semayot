@@ -1,3 +1,5 @@
+import { ExpensesView } from '@/components/admin/pages/ExpensesView';
+
 export default function SettingsPage() {
-  return <p className="text-[#57534E]">Settings — Slice 6.</p>;
+  return <ExpensesView />;
 }
