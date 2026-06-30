@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@/lib/admin/supabase/client';
 
 export function LoginForm({ redirect }: { redirect: string }) {
   const router = useRouter();
@@ -16,10 +16,7 @@ export function LoginForm({ redirect }: { redirect: string }) {
     e.preventDefault();
     setError(null);
     startTransition(async () => {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         setError('Email atau password salah.');
