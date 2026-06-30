@@ -20,6 +20,7 @@ export function POSForm() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [paidInput, setPaidInput] = useState('');
   const [paidCents, setPaidCents] = useState(0);
+  const [customerPhone, setCustomerPhone] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +69,7 @@ export function POSForm() {
         body: JSON.stringify({
           items: cart.map((c) => ({ menu_item_id: c.menuItem.id, quantity: c.quantity })),
           paid_cents: paidCents,
+          customer_phone: customerPhone || undefined,
         }),
       });
       const json = await res.json();
@@ -76,6 +78,7 @@ export function POSForm() {
         setCart([]);
         setPaidInput('');
         setPaidCents(0);
+        setCustomerPhone('');
         setTimeout(() => router.push('/admin/transactions'), 1000);
       } else {
         setError(json.error?.message ?? 'Gagal menyimpan transaksi.');
@@ -201,6 +204,17 @@ export function POSForm() {
               <span className="font-display font-semibold text-xl text-foreground tabular-nums">
                 <MoneyDisplay cents={totalCents} />
               </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-muted-foreground font-bold">MEMBER (NO HP)</label>
+              <input
+                type="text"
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                className="w-36 px-3 py-2 border border-border bg-background font-mono text-xs text-foreground text-right focus:outline-none focus:border-foreground"
+                placeholder="0812..."
+              />
             </div>
 
             <div className="flex items-center justify-between">

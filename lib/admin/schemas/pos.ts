@@ -12,6 +12,8 @@ export const posCreateSchema = z.object({
     .max(50, 'Maksimal 50 item'),
   paid_cents: z.number().int().nonnegative('Uang dibayar tidak valid'),
   note: z.string().max(500).optional(),
+  customer_phone: z.string().optional(),
+  branch_id: z.string().uuid().optional(),
 });
 
 export type POSCreate = z.infer<typeof posCreateSchema>;

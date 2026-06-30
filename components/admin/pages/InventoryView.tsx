@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { StatusBadge } from '@/components/admin/StatusBadge';
 import { VerticalBranding } from '@/components/admin/VerticalBranding';
@@ -12,21 +13,22 @@ type InventoryItem = {
   category: string;
   stock: number;
   unit: string;
-  status: 'AMAN' | 'KRITIS' | 'HABIS';
+  cost_per_unit: number;
+  min_stock_alert: number;
 };
 
-const DUMMY_INVENTORY: InventoryItem[] = [
-  { id: 'INV-001', name: 'Daging Babi Segar (Karkas)', category: 'Bahan Baku Utama', stock: 125.5, unit: 'Kg', status: 'AMAN' },
-  { id: 'INV-002', name: 'Bumbu Rica-Rica Dasar', category: 'Bumbu', stock: 12.0, unit: 'Kg', status: 'KRITIS' },
-  { id: 'INV-003', name: 'Beras Premium', category: 'Bahan Pendukung', stock: 250, unit: 'Kg', status: 'AMAN' },
-  { id: 'INV-004', name: 'Kotak Takeaway (Besar)', category: 'Kemasan', stock: 50, unit: 'Pcs', status: 'KRITIS' },
-  { id: 'INV-005', name: 'Plastik Vacuum', category: 'Kemasan', stock: 0, unit: 'Roll', status: 'HABIS' },
-  { id: 'INV-006', name: 'Daun Singkong', category: 'Sayuran', stock: 15, unit: 'Ikat', status: 'AMAN' },
-  { id: 'INV-007', name: 'Arang Kayu Kopi', category: 'Bahan Bakar', stock: 45, unit: 'Karung', status: 'AMAN' },
-];
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function InventoryView() {
-  const [items] = useState<InventoryItem[]>(DUMMY_INVENTORY);
+  const { data, error, isLoading } = useSWR('/api/admin/inventory', fetcher);
+  
+  const getStatus = (item: InventoryItem) => {
+    if (item.stock <= 0) return 'HABIS';
+    if (item.stock <= item.min_stock_alert) return 'KRITIS';
+    return 'AMAN';
+  };
+
+  const items: InventoryItem[] = data?.data || [];
 
   return (
     <div className="relative min-h-[80vh] flex flex-col page-inventory animate-fade-in">
@@ -62,10 +64,22 @@ export function InventoryView() {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Memuat data inventaris...
+                  </td>
+                </tr>
+              ) : items.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Tidak ada data inventaris.
+                  </td>
+                </tr>
+              ) : items.map((item) => (
                 <tr key={item.id} className="border-b border-border/50 group hover:bg-background/50 transition-colors">
                   <td className="py-4 px-6 font-mono text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors">
-                    {item.id}
+                    {item.id.slice(0,8).toUpperCase()}...
                   </td>
                   <td className="py-4 px-6">
                     <div className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
@@ -82,9 +96,9 @@ export function InventoryView() {
                   </td>
                   <td className="py-4 px-6 text-right">
                     <StatusBadge 
-                      variant={item.status === 'AMAN' ? 'success' : item.status === 'KRITIS' ? 'warning' : 'danger'} 
+                      variant={getStatus(item) === 'AMAN' ? 'success' : getStatus(item) === 'KRITIS' ? 'warning' : 'danger'} 
                     >
-                      {item.status}
+                      {getStatus(item)}
                     </StatusBadge>
                   </td>
                   <td className="py-4 px-6 text-center">

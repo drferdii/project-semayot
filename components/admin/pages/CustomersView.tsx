@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { StatusBadge } from '@/components/admin/StatusBadge';
 import { VerticalBranding } from '@/components/admin/VerticalBranding';
@@ -10,22 +11,24 @@ type Customer = {
   id: string;
   name: string;
   phone: string;
-  totalOrders: number;
-  totalSpent: number;
-  lastOrder: string;
-  loyaltyTier: 'GOLD' | 'SILVER' | 'BRONZE';
+  points: number;
+  total_visits: number;
+  total_spent: number;
+  last_visit: string;
 };
 
-const DUMMY_CUSTOMERS: Customer[] = [
-  { id: 'CUST-821', name: 'Bapak Budi Santoso', phone: '0812-3456-XXXX', totalOrders: 42, totalSpent: 2850000, lastOrder: '2 hari lalu', loyaltyTier: 'GOLD' },
-  { id: 'CUST-822', name: 'Ibu Ratna', phone: '0811-9876-XXXX', totalOrders: 15, totalSpent: 980000, lastOrder: '1 minggu lalu', loyaltyTier: 'SILVER' },
-  { id: 'CUST-823', name: 'Ko Aseng', phone: '0852-1111-XXXX', totalOrders: 89, totalSpent: 6200000, lastOrder: 'Hari ini', loyaltyTier: 'GOLD' },
-  { id: 'CUST-824', name: 'Chandra', phone: '0813-2222-XXXX', totalOrders: 3, totalSpent: 150000, lastOrder: '1 bulan lalu', loyaltyTier: 'BRONZE' },
-  { id: 'CUST-825', name: 'Ibu Sisca', phone: '0878-9999-XXXX', totalOrders: 24, totalSpent: 1450000, lastOrder: '3 hari lalu', loyaltyTier: 'SILVER' },
-];
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function CustomersView() {
-  const [customers] = useState<Customer[]>(DUMMY_CUSTOMERS);
+  const { data, isLoading } = useSWR('/api/admin/customers', fetcher);
+  
+  const getTier = (points: number) => {
+    if (points >= 10000) return 'GOLD';
+    if (points >= 5000) return 'SILVER';
+    return 'BRONZE';
+  };
+
+  const customers: Customer[] = data?.data || [];
 
   return (
     <div className="relative min-h-[80vh] flex flex-col page-customers animate-fade-in">
@@ -59,35 +62,47 @@ export function CustomersView() {
               </tr>
             </thead>
             <tbody>
-              {customers.map((cust) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Memuat data pelanggan...
+                  </td>
+                </tr>
+              ) : customers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Tidak ada pelanggan terdaftar.
+                  </td>
+                </tr>
+              ) : customers.map((cust) => (
                 <tr key={cust.id} className="border-b border-border/50 group hover:bg-background/50 transition-colors">
                   <td className="py-4 px-6 font-mono text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors">
-                    {cust.id}
+                    {cust.id.slice(0,8).toUpperCase()}...
                   </td>
                   <td className="py-4 px-6">
                     <div className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
                       {cust.name}
                     </div>
                     <div className="font-mono text-sm text-muted-foreground font-bold uppercase tracking-wider mt-1">
-                      Terakhir: {cust.lastOrder}
+                      Terakhir: {cust.last_visit ? new Date(cust.last_visit).toLocaleDateString('id-ID') : '-'}
                     </div>
                   </td>
                   <td className="py-4 px-6 font-mono text-sm font-bold text-foreground tracking-wider">
                     {cust.phone}
                   </td>
                   <td className="py-4 px-6 text-center font-mono text-sm font-bold text-foreground">
-                    {cust.totalOrders}
+                    {cust.total_visits}
                   </td>
                   <td className="py-4 px-6 text-right">
                     <div className="font-mono text-sm font-bold text-foreground">
-                      Rp {cust.totalSpent.toLocaleString('id-ID')}
+                      Rp {Number(cust.total_spent).toLocaleString('id-ID')}
                     </div>
                   </td>
                   <td className="py-4 px-6">
                     <StatusBadge 
-                      variant={cust.loyaltyTier === 'GOLD' ? 'success' : cust.loyaltyTier === 'SILVER' ? 'warning' : 'neutral'} 
+                      variant={getTier(cust.points) === 'GOLD' ? 'success' : getTier(cust.points) === 'SILVER' ? 'warning' : 'neutral'} 
                     >
-                      {cust.loyaltyTier}
+                      {getTier(cust.points)}
                     </StatusBadge>
                   </td>
                   <td className="py-4 px-6 text-center">

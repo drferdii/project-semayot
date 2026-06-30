@@ -1,12 +1,19 @@
 'use client';
 
 import React from 'react';
+import useSWR from 'swr';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { StatCard } from '@/components/admin/StatCard';
 import { VerticalBranding } from '@/components/admin/VerticalBranding';
 import { FileText, Download } from 'lucide-react';
+import { MoneyDisplay } from '@/components/admin/MoneyDisplay';
+
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function FinancialsView() {
+  const { data, isLoading } = useSWR('/api/admin/financials', fetcher);
+  
+  const pnl = data?.data || { revenue: 0, cogs: 0, opex: 0, net_profit: 0 };
   return (
     <div className="relative min-h-[80vh] flex flex-col page-financials animate-fade-in">
       <PageHeader
@@ -34,28 +41,28 @@ export function FinancialsView() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <StatCard
               label="Pendapatan Kotor (Gross)"
-              value="Rp 142.500.000"
+              value={isLoading ? "..." : `Rp ${Number(pnl.revenue / 100).toLocaleString('id-ID')}`}
               delta="+14,2%"
               accent="success"
               className="p-6 border-emerald-600/30 bg-emerald-500/5"
             />
             <StatCard
               label="HPP / Harga Pokok Bahan"
-              value="Rp 58.200.000"
+              value={isLoading ? "..." : `Rp ${Number(pnl.cogs / 100).toLocaleString('id-ID')}`}
               delta="-2,1%"
               accent="success"
               className="p-6"
             />
             <StatCard
               label="Pengeluaran Operasional (Opex)"
-              value="Rp 21.400.000"
+              value={isLoading ? "..." : `Rp ${Number(pnl.opex / 100).toLocaleString('id-ID')}`}
               delta="+5,5%"
               accent="danger"
               className="p-6"
             />
             <StatCard
               label="Laba Bersih (Net Profit)"
-              value="Rp 62.900.000"
+              value={isLoading ? "..." : `Rp ${Number(pnl.net_profit / 100).toLocaleString('id-ID')}`}
               delta="+18,4%"
               accent="success"
               className="p-6 border-[#FF4F79]/30 bg-[#FF4F79]/5"

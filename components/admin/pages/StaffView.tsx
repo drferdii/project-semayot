@@ -1,30 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { StatusBadge } from '@/components/admin/StatusBadge';
 import { VerticalBranding } from '@/components/admin/VerticalBranding';
 import { UserPlus, ShieldAlert, Clock } from 'lucide-react';
 
-type StaffShift = {
+type FraudLog = {
   id: string;
-  name: string;
-  role: string;
-  shift: string;
-  sales: number;
-  voids: number;
-  status: 'ONLINE' | 'OFFLINE' | 'SUSPICIOUS';
+  action_type: string;
+  description: string;
+  created_at: string;
+  profiles: { full_name: string } | null;
 };
 
-const DUMMY_STAFF: StaffShift[] = [
-  { id: 'STF-01', name: 'Josep', role: 'KASIR', shift: 'Pagi (08:00 - 16:00)', sales: 3200000, voids: 0, status: 'ONLINE' },
-  { id: 'STF-02', name: 'Novia', role: 'KASIR', shift: 'Malam (16:00 - 22:00)', sales: 4100000, voids: 3, status: 'SUSPICIOUS' },
-  { id: 'STF-03', name: 'Bapak Ahong', role: 'DAPUR UTAMA', shift: 'Pagi (07:00 - 15:00)', sales: 0, voids: 0, status: 'OFFLINE' },
-  { id: 'STF-04', name: 'Dina', role: 'PELAYAN', shift: 'Malam (15:00 - 22:30)', sales: 0, voids: 0, status: 'ONLINE' },
-];
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function StaffView() {
-  const [staff] = useState<StaffShift[]>(DUMMY_STAFF);
+  const { data, isLoading } = useSWR('/api/admin/staff/fraud', fetcher);
+  
+  const fraudLogs: FraudLog[] = data?.data || [];
 
   return (
     <div className="relative min-h-[80vh] flex flex-col page-staff animate-fade-in">
@@ -48,51 +44,48 @@ export function StaffView() {
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-border bg-background">
-                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">ID Staf</th>
-                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">Nama / Role</th>
-                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">Jadwal Shift</th>
-                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold text-right">Penjualan (Kasir)</th>
-                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold text-center">Batal/Void</th>
+                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">Waktu Kejadian</th>
+                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">Nama Kasir</th>
+                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold text-center">Tipe Aksi (Fraud)</th>
+                <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold">Deskripsi Tambahan</th>
                 <th className="py-4 px-6 font-mono text-sm uppercase tracking-widest text-muted-foreground font-bold text-right">Status</th>
               </tr>
             </thead>
             <tbody>
-              {staff.map((s) => (
-                <tr key={s.id} className={`border-b border-border/50 group hover:bg-background/50 transition-colors ${s.status === 'SUSPICIOUS' ? 'bg-red-500/5' : ''}`}>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Memuat log keamanan...
+                  </td>
+                </tr>
+              ) : fraudLogs.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-muted-foreground font-mono text-sm">
+                    Aman terkendali. Tidak ada indikasi fraud.
+                  </td>
+                </tr>
+              ) : fraudLogs.map((log) => (
+                <tr key={log.id} className="border-b border-border/50 group hover:bg-background/50 transition-colors bg-red-500/5">
                   <td className="py-4 px-6 font-mono text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors">
-                    {s.id}
+                    {new Date(log.created_at).toLocaleString('id-ID')}
                   </td>
                   <td className="py-4 px-6">
                     <div className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
-                      {s.name}
-                    </div>
-                    <div className="font-mono text-sm text-muted-foreground font-bold uppercase tracking-wider mt-1">
-                      {s.role}
-                    </div>
-                  </td>
-                  <td className="py-4 px-6 font-mono text-sm font-bold text-foreground tracking-wider">
-                    {s.shift}
-                  </td>
-                  <td className="py-4 px-6 text-right">
-                    <div className="font-mono text-sm font-bold text-foreground">
-                      {s.sales > 0 ? `Rp ${s.sales.toLocaleString('id-ID')}` : '-'}
+                      {log.profiles?.full_name || 'Kasir (Tidak diketahui)'}
                     </div>
                   </td>
                   <td className="py-4 px-6 text-center">
-                    {s.voids > 0 ? (
-                      <div className="inline-flex items-center gap-1.5 font-mono text-sm font-bold text-red-600 border border-red-600/30 bg-red-600/10 px-2 py-0.5 uppercase">
-                        <ShieldAlert className="w-3 h-3" />
-                        {s.voids} KALI
-                      </div>
-                    ) : (
-                      <span className="font-mono text-sm font-bold text-muted-foreground">-</span>
-                    )}
+                    <div className="inline-flex items-center gap-1.5 font-mono text-sm font-bold text-red-600 border border-red-600/30 bg-red-600/10 px-2 py-0.5 uppercase">
+                      <ShieldAlert className="w-3 h-3" />
+                      {log.action_type.replace(/_/g, ' ')}
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 font-mono text-sm font-bold text-foreground tracking-wider">
+                    {log.description}
                   </td>
                   <td className="py-4 px-6 text-right">
-                    <StatusBadge 
-                      variant={s.status === 'ONLINE' ? 'success' : s.status === 'SUSPICIOUS' ? 'danger' : 'neutral'} 
-                    >
-                      {s.status}
+                    <StatusBadge variant="danger">
+                      SUSPICIOUS
                     </StatusBadge>
                   </td>
                 </tr>
