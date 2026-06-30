@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@/lib/admin/supabase/client';
 
 export function FileUpload({
   bucket,
@@ -30,10 +30,7 @@ export function FileUpload({
     setUploading(true);
     setError(null);
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createClient();
     const ext = file.name.split('.').pop();
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
