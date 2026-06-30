@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server';
 import { streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createClient } from '@/lib/admin/supabase/server';
 import { aggregateSummary, formatSummaryForPrompt } from '@/lib/admin/ai/aggregate';
 import { ADMIN_AI_SYSTEM_PROMPT } from '@/lib/admin/ai/prompts';
 
 export async function POST(request: Request) {
+  // Check API key early — surface a clean error instead of a cryptic provider crash
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: { code: 'CONFIG_ERROR', message: 'GEMINI_API_KEY belum dikonfigurasi di server.' } },
+      { status: 503 }
+    );
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -25,8 +34,10 @@ export async function POST(request: Request) {
 
   const summary = await aggregateSummary('today');
   const context = formatSummaryForPrompt(summary);
-
   const systemWithContext = `${ADMIN_AI_SYSTEM_PROMPT}\n\nDATA BISNIS HARI INI:\n${context}`;
+
+  // Instantiate google provider with explicit API key
+  const google = createGoogleGenerativeAI({ apiKey });
 
   try {
     const result = streamText({

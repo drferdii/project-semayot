@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createClient } from '@/lib/admin/supabase/server';
 import { aggregateSummary, formatSummaryForPrompt } from '@/lib/admin/ai/aggregate';
 import type { SummaryPeriod } from '@/lib/admin/supabase/types';
@@ -54,6 +54,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: { code: 'CONFIG_ERROR', message: 'GEMINI_API_KEY belum dikonfigurasi di server.' } },
+      { status: 503 }
+    );
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -83,6 +91,7 @@ export async function POST(request: Request) {
 
   const summary = await aggregateSummary(period);
   const summaryText = formatSummaryForPrompt(summary);
+  const google = createGoogleGenerativeAI({ apiKey });
 
   try {
     const result = streamText({
