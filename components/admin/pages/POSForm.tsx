@@ -101,7 +101,7 @@ export function POSForm() {
 
   if (loading) {
     return (
-      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+      <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
         Menyiapkan terminal kasir...
       </div>
     );
@@ -128,7 +128,7 @@ export function POSForm() {
             if (!catItems || catItems.length === 0) return null;
             return (
               <div key={cat} className="space-y-3">
-                <h3 className="font-mono text-[9px] font-bold text-muted uppercase tracking-wider">
+                <h3 className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                   {categoryLabel[cat]}
                 </h3>
                 
@@ -142,7 +142,7 @@ export function POSForm() {
                       <div className="font-display font-semibold text-sm text-foreground leading-snug">
                         {item.name}
                       </div>
-                      <div className="font-mono text-[10px] font-bold text-muted mt-2 tabular-nums">
+                      <div className="font-mono text-[10px] font-bold text-muted-foreground mt-2 tabular-nums">
                         <MoneyDisplay cents={item.price_cents} />
                       </div>
                     </button>
@@ -160,7 +160,7 @@ export function POSForm() {
           </h3>
 
           {cart.length === 0 ? (
-            <p className="font-mono text-xs text-muted uppercase tracking-wider py-12 text-center">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider py-12 text-center">
               Keranjang masih kosong. Klik hidangan di sebelah kiri.
             </p>
           ) : (
@@ -169,7 +169,7 @@ export function POSForm() {
                 <div key={c.menuItem.id} className="flex items-center justify-between text-xs border-b border-border/40 pb-3">
                   <div className="flex-1 min-w-0 pr-3">
                     <div className="font-display font-semibold text-foreground truncate">{c.menuItem.name}</div>
-                    <div className="font-mono text-[9px] text-muted mt-1 tabular-nums">
+                    <div className="font-mono text-[9px] text-muted-foreground mt-1 tabular-nums">
                       <MoneyDisplay cents={c.menuItem.price_cents} /> &times; {c.quantity}
                     </div>
                   </div>
@@ -197,14 +197,14 @@ export function POSForm() {
           {/* Checkout Calculations */}
           <div className="border-t-[3px] border-double border-foreground pt-4 space-y-3 font-mono text-xs">
             <div className="flex justify-between items-baseline">
-              <span className="text-muted font-bold">TOTAL HARGA</span>
+              <span className="text-muted-foreground font-bold">TOTAL HARGA</span>
               <span className="font-display font-semibold text-xl text-foreground tabular-nums">
                 <MoneyDisplay cents={totalCents} />
               </span>
             </div>
 
             <div className="flex items-center justify-between">
-              <label className="text-muted font-bold">UANG TUNAI (RP)</label>
+              <label className="text-muted-foreground font-bold">UANG TUNAI (RP)</label>
               <input
                 type="number"
                 value={paidInput}
@@ -220,7 +220,7 @@ export function POSForm() {
 
             {paidCents > 0 && (
               <div className="flex justify-between items-baseline border-t border-border/60 pt-3">
-                <span className="text-muted font-bold">UANG KEMBALIAN</span>
+                <span className="text-muted-foreground font-bold">UANG KEMBALIAN</span>
                 <span className={`font-bold tabular-nums text-sm ${changeCents >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   <MoneyDisplay cents={Math.max(0, changeCents)} />
                 </span>

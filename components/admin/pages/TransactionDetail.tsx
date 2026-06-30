@@ -44,7 +44,7 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
         {/* Header */}
         <div className="p-5 border-b border-border flex justify-between items-center bg-background">
           <div>
-            <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-widest block">
+            <span className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">
               TRANSAKSI_LOG
             </span>
             <h3 className="font-display font-bold text-base text-foreground uppercase tracking-wider">
@@ -53,7 +53,7 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
           </div>
           <button 
             onClick={onClose} 
-            className="font-mono text-xs font-bold text-foreground hover:text-muted border border-border px-3 py-1.5 bg-card transition-colors"
+            className="font-mono text-xs font-bold text-foreground hover:text-muted-foreground border border-border px-3 py-1.5 bg-card transition-colors"
           >
             TUTUP
           </button>
@@ -62,7 +62,7 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
         {/* Content */}
         <div className="p-6 space-y-6">
           {loading ? (
-            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 text-center animate-pulse">
+            <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 text-center animate-pulse">
               Memuat data kuitansi...
             </div>
           ) : !data ? (
@@ -72,7 +72,7 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
           ) : (
             <>
               {/* Meta Info */}
-              <div className="font-mono text-[10px] text-muted space-y-1 pb-4 border-b border-border/60">
+              <div className="font-mono text-[10px] text-muted-foreground space-y-1 pb-4 border-b border-border/60">
                 <div>
                   <span className="font-bold">WAKTU INPUT:</span>{' '}
                   <span className="text-foreground font-bold">
@@ -89,9 +89,9 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-foreground">
-                    <th className="text-left font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Daftar Item</th>
-                    <th className="text-right font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Qty</th>
-                    <th className="text-right font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Subtotal</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground pb-2 font-bold tracking-widest">Daftar Item</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted-foreground pb-2 font-bold tracking-widest">Qty</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted-foreground pb-2 font-bold tracking-widest">Subtotal</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,11 +99,11 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
                     <tr key={it.id} className="border-b border-border/40 hover:bg-background/25">
                       <td className="py-3">
                         <div className="font-display font-medium text-sm text-foreground">{it.name_snapshot}</div>
-                        <div className="font-mono text-[9px] text-muted mt-0.5">
+                        <div className="font-mono text-[9px] text-muted-foreground mt-0.5">
                           <MoneyDisplay cents={it.price_cents_snapshot} /> / unit
                         </div>
                       </td>
-                      <td className="py-3 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                      <td className="py-3 text-right font-mono text-xs font-bold text-muted-foreground tabular-nums">
                         {it.quantity}
                       </td>
                       <td className="py-3 text-right font-mono text-xs font-bold text-foreground tabular-nums">
@@ -117,14 +117,14 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
               {/* Totals Summary */}
               <div className="border-t-[3px] border-double border-foreground pt-4 space-y-2 font-mono text-xs">
                 <div className="flex justify-between">
-                  <span className="text-muted font-bold">TOTAL TAGIHAN</span>
+                  <span className="text-muted-foreground font-bold">TOTAL TAGIHAN</span>
                   <span className="font-bold text-foreground tabular-nums">
                     <MoneyDisplay cents={data.total_cents} />
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted font-bold">TUNAI DIBAYAR</span>
-                  <span className="text-muted font-bold tabular-nums">
+                  <span className="text-muted-foreground font-bold">TUNAI DIBAYAR</span>
+                  <span className="text-muted-foreground font-bold tabular-nums">
                     <MoneyDisplay cents={data.paid_cents} />
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
 
               {/* Note */}
               {data.note && (
-                <div className="p-4 border border-border bg-background/50 font-mono text-[10px] text-muted space-y-1">
+                <div className="p-4 border border-border bg-background/50 font-mono text-[10px] text-muted-foreground space-y-1">
                   <div className="font-bold uppercase tracking-wider">CATATAN TRANSAKSI:</div>
                   <p className="font-sans text-xs text-foreground leading-relaxed">{data.note}</p>
                 </div>

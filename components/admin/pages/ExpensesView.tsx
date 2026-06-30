@@ -100,7 +100,7 @@ export function ExpensesView() {
           </h3>
 
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Tanggal Transaksi *</label>
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">Tanggal Transaksi *</label>
             <input 
               type="date" 
               {...register('incurred_at')} 
@@ -110,7 +110,7 @@ export function ExpensesView() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Kategori Biaya *</label>
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">Kategori Biaya *</label>
             <select 
               {...register('category')} 
               className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground uppercase font-bold"
@@ -123,7 +123,7 @@ export function ExpensesView() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Nominal (Rp) *</label>
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">Nominal (Rp) *</label>
             <input
               type="number"
               {...register('amount_cents', { valueAsNumber: true })}
@@ -134,7 +134,7 @@ export function ExpensesView() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Deskripsi / Detail</label>
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">Deskripsi / Detail</label>
             <input 
               {...register('description')} 
               className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground" 
@@ -158,11 +158,11 @@ export function ExpensesView() {
           </h3>
           
           {loading ? (
-            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 text-center animate-pulse">
+            <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 text-center animate-pulse">
               Sinkronisasi data buku besar...
             </div>
           ) : items.length === 0 ? (
-            <p className="font-mono text-xs text-muted uppercase tracking-wider py-12 text-center">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider py-12 text-center">
               Belum terdeteksi adanya catatan pengeluaran.
             </p>
           ) : (
@@ -170,16 +170,16 @@ export function ExpensesView() {
               <table className="w-full border-collapse">
                 <thead className="bg-background sticky top-0 border-b border-border z-10">
                   <tr>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Tanggal</th>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Kategori</th>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Detail</th>
-                    <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Nominal</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Tanggal</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Kategori</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Detail</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Nominal</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((it) => (
                     <tr key={it.id} className="border-b border-border/60 hover:bg-background/40 transition-colors">
-                      <td className="py-4 px-4 font-mono text-[10px] text-muted font-bold">{it.incurred_at}</td>
+                      <td className="py-4 px-4 font-mono text-[10px] text-muted-foreground font-bold">{it.incurred_at}</td>
                       <td className="py-4 px-4 font-mono text-[9px] font-bold text-foreground uppercase tracking-wider">
                         {CATEGORY_LABEL[it.category] ?? it.category}
                       </td>

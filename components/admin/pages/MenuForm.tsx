@@ -56,7 +56,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
 
   if (loading) {
     return (
-      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+      <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
         Menyiapkan formulir editor katalog...
       </div>
     );
@@ -66,7 +66,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
     <div className="max-w-2xl animate-fade-in space-y-6">
       {/* Form Title */}
       <div className="border-b border-border pb-4">
-        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
           PROSES_FORM: {isEdit ? 'UPDATE_ITEM' : 'INSERT_ITEM'}
         </span>
         <h2 className="font-display text-xl font-semibold text-foreground uppercase tracking-wider">
@@ -82,7 +82,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
 
       <form onSubmit={handleSubmit(onSubmit)} className="border border-border bg-card p-6 sm:p-8 space-y-6">
         <div className="space-y-1">
-          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+          <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
             Nama Hidangan / Produk *
           </label>
           <input 
@@ -94,7 +94,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+          <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
             Keterangan / Deskripsi Rasa
           </label>
           <textarea 
@@ -107,7 +107,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
               Harga Jual (Rp) *
             </label>
             <input
@@ -120,7 +120,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
               Klasifikasi Kategori *
             </label>
             <select 
@@ -136,7 +136,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+          <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
             Label / Lencana Promosi
           </label>
           <input 
@@ -147,7 +147,7 @@ export function MenuForm({ menuId }: { menuId?: string }) {
         </div>
 
         <div className="space-y-2">
-          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+          <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
             Unggah Berkas Gambar / Foto Produk
           </label>
           <div className="border border-dashed border-border bg-background p-4">

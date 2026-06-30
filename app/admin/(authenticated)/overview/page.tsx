@@ -173,7 +173,7 @@ export default function OverviewPage() {
               <h1 className="font-display text-3xl md:text-4xl font-extrabold tracking-tight text-foreground uppercase leading-[1.05]">
                 Selamat Datang Kembali, {userFullName}!
               </h1>
-              <p className="text-xs text-muted max-w-[50ch] leading-relaxed">
+              <p className="text-xs text-muted-foreground max-w-[50ch] leading-relaxed">
                 {greeting.msg}
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function OverviewPage() {
                   style={{ borderTopWidth: '3px' }}
                 >
                   <div>
-                    <div className="font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-muted mb-2">
+                    <div className="font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-muted-foreground mb-2">
                       {k.label}
                     </div>
                     <div className="font-display text-2xl font-semibold tracking-tight text-foreground tabular-nums">
@@ -247,7 +247,7 @@ export default function OverviewPage() {
                       <circle key={i} cx={cx} cy={cy} r="3.5" fill="var(--card)" stroke="var(--foreground)" strokeWidth="2" />
                     ))}
                   </svg>
-                  <div className="flex justify-between font-mono text-[9px] text-muted font-bold mt-3 px-8">
+                  <div className="flex justify-between font-mono text-[9px] text-muted-foreground font-bold mt-3 px-8">
                     <span>SEN</span><span>SEL</span><span>RAB</span><span>KAM</span><span>JUM</span><span>SAB</span><span>MIN</span>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ export default function OverviewPage() {
                     <div key={i} className="space-y-1">
                       <div className="flex justify-between font-mono text-[9px] font-bold">
                         <span className="text-foreground uppercase tracking-wider">{bar.label}</span>
-                        <span className="text-muted">{bar.val} ({bar.pct}%)</span>
+                        <span className="text-muted-foreground">{bar.val} ({bar.pct}%)</span>
                       </div>
                       <div className="h-2 bg-background border border-border/60 overflow-hidden">
                         <div 
@@ -304,7 +304,7 @@ export default function OverviewPage() {
                   {[
                     { label: 'Babi Panggang Garing', sentiment: '98% POSITIF', color: 'text-emerald-700' },
                     { label: 'Babi Rica-Rica', sentiment: '94% POSITIF', color: 'text-emerald-700' },
-                    { label: 'Sop Babi Wortel', sentiment: '88% NETRAL', color: 'text-muted' },
+                    { label: 'Sop Babi Wortel', sentiment: '88% NETRAL', color: 'text-muted-foreground' },
                   ].map((s, idx) => (
                     <div key={idx} className="flex justify-between items-center font-mono text-[10px] border-b border-border/20 pb-1">
                       <span className="text-foreground font-bold uppercase">{s.label}</span>
@@ -321,9 +321,9 @@ export default function OverviewPage() {
                   <span className="font-mono text-[9px] text-[#FF4F79] font-black tracking-wider">94% AKURASI</span>
                 </div>
                 <div className="space-y-2">
-                  <span className="font-mono text-[8px] text-muted font-bold block uppercase tracking-widest">PROYEKSI HARI INI</span>
+                  <span className="font-mono text-[8px] text-muted-foreground font-bold block uppercase tracking-widest">PROYEKSI HARI INI</span>
                   <div className="font-display font-extrabold text-2xl text-foreground">Rp 1.850.000</div>
-                  <p className="font-sans text-xs text-muted leading-relaxed">
+                  <p className="font-sans text-xs text-muted-foreground leading-relaxed">
                     Tren menunjukkan adanya kenaikan pesanan Babi Panggang Garing menjelang jam makan malam.
                   </p>
                 </div>
@@ -335,7 +335,7 @@ export default function OverviewPage() {
           <section className="space-y-4">
             <div className="flex justify-between items-end border-b border-border pb-3">
               <div>
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
                   Buku Log Transaksi Langsung
                 </span>
                 <h3 className="font-display text-lg font-bold text-foreground uppercase tracking-wider">
@@ -351,25 +351,25 @@ export default function OverviewPage() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-border bg-card">
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Waktu</th>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">ID Transaksi</th>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Item Belanja / Menu</th>
-                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Kasir</th>
-                    <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Nominal</th>
-                    <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Status</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Waktu</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">ID Transaksi</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Item Belanja / Menu</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Kasir</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Nominal</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentTransactions.map((tx, i) => (
                     <tr key={i} className="border-b border-border/60 group hover:bg-card/30 transition-colors duration-200">
-                      <td className="py-4 px-4 font-mono text-[10px] text-muted font-bold">{tx.time}</td>
+                      <td className="py-4 px-4 font-mono text-[10px] text-muted-foreground font-bold">{tx.time}</td>
                       <td className="py-4 px-4 font-mono text-[10px] font-bold text-foreground">{tx.id}</td>
                       <td className="py-4 px-4">
                         <div className="font-display font-medium text-sm text-foreground tracking-tight">
                           {tx.menu}
                         </div>
                       </td>
-                      <td className="py-4 px-4 font-mono text-[9px] font-bold text-muted uppercase tracking-widest">
+                      <td className="py-4 px-4 font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
                         {tx.casher}
                       </td>
                       <td className="py-4 px-4 font-mono text-xs font-bold text-foreground text-right tabular-nums">
@@ -380,7 +380,7 @@ export default function OverviewPage() {
                           className={`inline-block font-mono text-[8px] font-bold px-2 py-0.5 border uppercase tracking-wider ${
                             tx.status === 'TERVERIFIKASI' 
                               ? 'border-emerald-600/30 text-emerald-700 bg-emerald-500/5' 
-                              : 'border-border text-muted bg-background/50'
+                              : 'border-border text-muted-foreground bg-background/50'
                           }`}
                         >
                           {tx.status}
@@ -421,7 +421,7 @@ export default function OverviewPage() {
               {chatMessages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-3 opacity-75 px-4 select-none">
                   <SemayotMascot variant="menu" size={85} />
-                  <p className="font-mono text-[9px] text-muted uppercase tracking-widest max-w-[220px] leading-relaxed font-bold">
+                  <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest max-w-[220px] leading-relaxed font-bold">
                     Tanyakan apa saja seputar data transaksi hari ini atau analisis menu, Chief.
                   </p>
                 </div>
@@ -445,7 +445,7 @@ export default function OverviewPage() {
                 ))
               )}
               {chatLoading && (
-                <div className="font-mono text-[8px] text-muted font-bold uppercase tracking-widest animate-pulse pl-1">
+                <div className="font-mono text-[8px] text-muted-foreground font-bold uppercase tracking-widest animate-pulse pl-1">
                   Kueri data diproses...
                 </div>
               )}
@@ -497,7 +497,7 @@ export default function OverviewPage() {
             <div className="space-y-4 font-mono text-[10px]">
               {/* User Session Info */}
               <div className="space-y-1.5">
-                <span className="text-muted font-bold uppercase tracking-wider block">PENGGUNA AKTIF</span>
+                <span className="text-muted-foreground font-bold uppercase tracking-wider block">PENGGUNA AKTIF</span>
                 <div className="flex justify-between items-center bg-background border border-border/50 px-3 py-2">
                   <span className="font-bold text-foreground truncate">{userId}</span>
                   <span className="text-[#FF4F79] font-black uppercase text-[8px] tracking-wider border border-[#FF4F79]/30 px-1.5 py-0.5">
@@ -508,7 +508,7 @@ export default function OverviewPage() {
 
               {/* Stock Index */}
               <div className="space-y-1.5">
-                <span className="text-muted font-bold uppercase tracking-wider block">STOK DAGING ASAP</span>
+                <span className="text-muted-foreground font-bold uppercase tracking-wider block">STOK DAGING ASAP</span>
                 <div className="bg-background border border-border/50 p-3 space-y-2">
                   <div className="flex justify-between font-bold">
                     <span>INVENTARIS</span>
@@ -522,27 +522,27 @@ export default function OverviewPage() {
 
               {/* Weather Info */}
               <div className="space-y-1.5">
-                <span className="text-muted font-bold uppercase tracking-wider block">CUACA BENGKAYANG</span>
+                <span className="text-muted-foreground font-bold uppercase tracking-wider block">CUACA BENGKAYANG</span>
                 <div className="bg-background border border-border/50 p-3">
                   <div className="font-display font-bold text-sm text-foreground uppercase">26°C · Hujan Ringan</div>
-                  <div className="text-[8px] text-muted font-bold mt-1 uppercase tracking-wide">Kelembaban: 88% | Angin: 12 km/h</div>
+                  <div className="text-[8px] text-muted-foreground font-bold mt-1 uppercase tracking-wide">Kelembaban: 88% | Angin: 12 km/h</div>
                 </div>
               </div>
 
               {/* Diagnostics List */}
               <div className="space-y-1.5">
-                <span className="text-muted font-bold uppercase tracking-wider block">KONEKSI PERIFERAL</span>
+                <span className="text-muted-foreground font-bold uppercase tracking-wider block">KONEKSI PERIFERAL</span>
                 <div className="bg-background border border-border/50 p-3 space-y-1.5">
                   <div className="flex justify-between">
-                    <span className="text-muted">PRINTER KASIR</span>
+                    <span className="text-muted-foreground">PRINTER KASIR</span>
                     <span className="text-emerald-700 font-bold">[ONLINE]</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted">DATABASE SYNC</span>
+                    <span className="text-muted-foreground">DATABASE SYNC</span>
                     <span className="text-emerald-700 font-bold">[12ms]</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted">SUPABASE AUTH</span>
+                    <span className="text-muted-foreground">SUPABASE AUTH</span>
                     <span className="text-emerald-700 font-bold">[NORMAL]</span>
                   </div>
                 </div>
@@ -550,7 +550,7 @@ export default function OverviewPage() {
 
               {/* Business News */}
               <div className="space-y-1.5">
-                <span className="text-muted font-bold uppercase tracking-wider block">BERITA BISNIS LOKAL</span>
+                <span className="text-muted-foreground font-bold uppercase tracking-wider block">BERITA BISNIS LOKAL</span>
                 <div className="bg-background border border-border/50 p-3 leading-relaxed text-foreground font-sans">
                   {news}
                 </div>

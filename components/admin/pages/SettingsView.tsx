@@ -93,14 +93,14 @@ export function SettingsView() {
               className={`px-6 py-3 font-mono text-[10px] font-bold uppercase tracking-widest transition-all border-b-2 -mb-[2px] ${
                 tab === t 
                   ? 'border-foreground text-foreground' 
-                  : 'border-transparent text-muted hover:text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
               {t === 'bisnis' ? 'Info Bisnis' : t === 'staff' ? 'Staf/Pengguna' : 'Pengeluaran'}
             </button>
           ))}
         </div>
-        <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-widest pb-3 hidden sm:inline">
+        <span className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-widest pb-3 hidden sm:inline">
           KODE_MODUL: SETTINGS
         </span>
       </div>
@@ -122,7 +122,7 @@ export function SettingsView() {
             <h3 className="font-display text-base font-semibold text-foreground uppercase tracking-wider">
               Informasi Operasional Bisnis
             </h3>
-            <p className="font-mono text-[9px] text-muted font-bold uppercase tracking-wider mt-1">
+            <p className="font-mono text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-1">
               Sumber: <code>lib/semayot/business-info.ts</code> (Read-Only)
             </p>
           </div>
@@ -153,7 +153,7 @@ export function SettingsView() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+                <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
                   Email Undangan
                 </label>
                 <input
@@ -166,7 +166,7 @@ export function SettingsView() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+                <label className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider block">
                   Nama Lengkap
                 </label>
                 <input
@@ -196,11 +196,11 @@ export function SettingsView() {
             </h3>
             
             {loading ? (
-              <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-4 animate-pulse">
+              <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-4 animate-pulse">
                 Menyinkronkan daftar pengguna...
               </div>
             ) : staff.length === 0 ? (
-              <p className="font-mono text-xs text-muted uppercase tracking-wider py-8 text-center border border-border bg-card">
+              <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider py-8 text-center border border-border bg-card">
                 Belum ada staf terdaftar.
               </p>
             ) : (
@@ -208,23 +208,23 @@ export function SettingsView() {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-card border-b border-border">
-                      <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Nama Staf</th>
-                      <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Akses Peran</th>
-                      <th className="text-center font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Status</th>
-                      <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Aksi</th>
+                      <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Nama Staf</th>
+                      <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Akses Peran</th>
+                      <th className="text-center font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Status</th>
+                      <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
                     {staff.map((s) => (
                       <tr key={s.id} className="border-b border-border/60 hover:bg-card/30 transition-colors">
                         <td className="py-4 px-4 font-display font-medium text-foreground">{s.full_name}</td>
-                        <td className="py-4 px-4 font-mono text-xs font-bold text-muted uppercase tracking-wider">{s.role}</td>
+                        <td className="py-4 px-4 font-mono text-xs font-bold text-muted-foreground uppercase tracking-wider">{s.role}</td>
                         <td className="py-4 px-4 text-center">
                           <span 
                             className={`inline-block font-mono text-[8px] font-bold px-2 py-1 border uppercase tracking-wider ${
                               s.is_active 
                                 ? 'border-emerald-600/30 text-emerald-700 bg-emerald-500/5' 
-                                : 'border-border text-muted bg-background/50'
+                                : 'border-border text-muted-foreground bg-background/50'
                             }`}
                           >
                             {s.is_active ? 'AKTIF' : 'NON-AKTIF'}
@@ -265,8 +265,8 @@ export function SettingsView() {
 function Field({ label, value, mono }: { label: string; value: string | null; mono?: boolean }) {
   return (
     <div className="grid grid-cols-3 gap-4 py-4 items-center">
-      <div className="font-mono text-[9px] font-bold text-muted uppercase tracking-wider">{label}</div>
-      <div className={`col-span-2 text-foreground text-sm font-medium ${mono ? 'font-mono text-xs break-all text-muted' : ''}`}>
+      <div className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{label}</div>
+      <div className={`col-span-2 text-foreground text-sm font-medium ${mono ? 'font-mono text-xs break-all text-muted-foreground' : ''}`}>
         {value ?? '—'}
       </div>
     </div>

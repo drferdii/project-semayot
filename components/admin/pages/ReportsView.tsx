@@ -94,7 +94,7 @@ export function ReportsView() {
       {/* Header and Controls */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-border pb-4">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
             Konsol Pelaporan Keuangan
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
@@ -109,7 +109,7 @@ export function ReportsView() {
               className={`px-4 py-2 uppercase tracking-wider transition-all duration-200 ${
                 tab === 'daily' 
                   ? 'bg-foreground text-background' 
-                  : 'text-muted hover:text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Harian
@@ -119,7 +119,7 @@ export function ReportsView() {
               className={`px-4 py-2 uppercase tracking-wider transition-all duration-200 ${
                 tab === 'monthly' 
                   ? 'bg-foreground text-background' 
-                  : 'text-muted hover:text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Bulanan
@@ -139,7 +139,7 @@ export function ReportsView() {
       {tab === 'daily' && (
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] text-muted font-bold uppercase tracking-wider">
+            <span className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
               Pilih Tanggal:
             </span>
             <input 
@@ -151,7 +151,7 @@ export function ReportsView() {
           </div>
 
           {loading ? (
-            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-12 animate-pulse">
+            <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-12 animate-pulse">
               Memproses kalkulasi neraca harian...
             </div>
           ) : !daily ? (
@@ -174,7 +174,7 @@ export function ReportsView() {
                   Distribusi Kategori Pengeluaran
                 </h3>
                 {pieData.length === 0 ? (
-                  <p className="font-mono text-xs text-muted uppercase tracking-wider text-center py-12">
+                  <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider text-center py-12">
                     Tidak terdeteksi adanya pengeluaran pada tanggal ini.
                   </p>
                 ) : (
@@ -210,7 +210,7 @@ export function ReportsView() {
       {tab === 'monthly' && (
         <div className="space-y-6">
           {loading ? (
-            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-12 animate-pulse">
+            <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-12 animate-pulse">
               Mengumpulkan riwayat transaksi bulanan...
             </div>
           ) : !monthly ? (
@@ -233,7 +233,7 @@ export function ReportsView() {
                   Tren Keuangan Harian ({monthly.year}-{String(monthly.month).padStart(2, '0')})
                 </h3>
                 {lineData.length === 0 ? (
-                  <p className="font-mono text-xs text-muted uppercase tracking-wider text-center py-12">
+                  <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider text-center py-12">
                     Belum terdeteksi adanya aktivitas transaksi pada bulan ini.
                   </p>
                 ) : (
@@ -275,7 +275,7 @@ function StatCard({ label, value, valueCents, accent }: { label: string; value?:
       className="border border-border border-top-[3px] p-6 bg-card hover:bg-background transition-colors duration-300"
       style={{ borderTopWidth: '3px' }}
     >
-      <div className="font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-muted mb-2">{label}</div>
+      <div className="font-mono text-[9px] font-bold uppercase tracking-[0.1em] text-muted-foreground mb-2">{label}</div>
       <div className={`font-display text-2xl font-semibold tracking-tight tabular-nums ${color}`}>
         {value ?? (valueCents !== undefined ? <MoneyDisplay cents={valueCents} /> : '—')}
       </div>

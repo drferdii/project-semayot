@@ -94,7 +94,7 @@ export function AIView() {
         <div className="md:col-span-11 space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border pb-4">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
             Asisten Keputusan AI
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
@@ -107,7 +107,7 @@ export function AIView() {
             className={`px-4 py-2 uppercase tracking-wider transition-colors duration-200 ${
               tab === 'summary' 
                 ? 'bg-foreground text-background' 
-                : 'text-muted hover:text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Ringkasan
@@ -117,7 +117,7 @@ export function AIView() {
             className={`px-4 py-2 uppercase tracking-wider transition-colors duration-200 ${
               tab === 'chat' 
                 ? 'bg-foreground text-background' 
-                : 'text-muted hover:text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Tanya AI
@@ -128,7 +128,7 @@ export function AIView() {
       {tab === 'summary' && (
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <span className="font-mono text-[10px] text-muted font-bold uppercase tracking-wider">
+            <span className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
               Filter Periode:
             </span>
             <select
@@ -154,7 +154,7 @@ export function AIView() {
           )}
 
           {summaryLoading ? (
-            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+            <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
               Memproses data analitik bisnis...
             </div>
           ) : summary ? (
@@ -184,7 +184,7 @@ export function AIView() {
             </div>
           ) : (
             <div className="border border-border bg-card p-12 text-center space-y-6">
-              <p className="font-mono text-xs text-muted uppercase tracking-wider">
+              <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
                 Belum ada ringkasan terproses untuk periode ini.
               </p>
               <button
@@ -211,7 +211,7 @@ export function AIView() {
             {messages.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 opacity-75 select-none">
                 <SemayotMascot variant="menu" size={85} />
-                <p className="font-mono text-[10px] text-muted uppercase tracking-widest max-w-sm font-bold leading-relaxed">
+                <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest max-w-sm font-bold leading-relaxed">
                   Masukkan pertanyaan mengenai transaksi, profitabilitas, pengeluaran, atau ketersediaan menu. AI memiliki akses database real-time.
                 </p>
               </div>
@@ -235,7 +235,7 @@ export function AIView() {
               ))
             )}
             {chatLoading && (
-              <div className="font-mono text-[9px] text-muted font-bold uppercase tracking-widest animate-pulse mt-2 pl-2">
+              <div className="font-mono text-[9px] text-muted-foreground font-bold uppercase tracking-widest animate-pulse mt-2 pl-2">
                 Memproses tanggapan dari database...
               </div>
             )}

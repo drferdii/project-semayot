@@ -33,7 +33,7 @@ export function TransactionsList() {
 
   if (loading) {
     return (
-      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+      <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
         Menyelaraskan dengan database transaksi...
       </div>
     );
@@ -46,21 +46,21 @@ export function TransactionsList() {
       {/* Header */}
       <div className="flex justify-between items-end border-b border-border pb-4">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
             Buku Audit Keuangan
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
             Logbook Transaksi Kasir
           </h2>
         </div>
-        <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-widest hidden sm:inline">
+        <span className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-widest hidden sm:inline">
           DATABASE_LOGS
         </span>
       </div>
 
       {items.length === 0 ? (
         <div className="border border-border bg-card p-12 text-center">
-          <p className="font-mono text-xs text-muted uppercase tracking-wider">
+          <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
             Belum terdeteksi adanya data transaksi masuk.
           </p>
         </div>
@@ -69,18 +69,18 @@ export function TransactionsList() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-card border-b border-border">
-                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Waktu Input</th>
-                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">ID Transaksi</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Total Belanja</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Tunai Diterima</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Uang Kembali</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Aksi</th>
+                <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Waktu Input</th>
+                <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">ID Transaksi</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Total Belanja</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Tunai Diterima</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Uang Kembali</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {items.map((t) => (
                 <tr key={t.id} className="border-b border-border/60 hover:bg-card/30 transition-colors">
-                  <td className="py-4 px-4 font-mono text-[10px] text-muted font-bold">
+                  <td className="py-4 px-4 font-mono text-[10px] text-muted-foreground font-bold">
                     {new Date(t.created_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'medium' }).toUpperCase()}
                   </td>
                   <td className="py-4 px-4 font-mono text-[10px] font-bold text-foreground">
@@ -89,16 +89,16 @@ export function TransactionsList() {
                   <td className="py-4 px-4 text-right font-mono text-xs font-bold text-foreground tabular-nums">
                     <MoneyDisplay cents={t.total_cents} />
                   </td>
-                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted-foreground tabular-nums">
                     <MoneyDisplay cents={t.paid_cents} />
                   </td>
-                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted-foreground tabular-nums">
                     <MoneyDisplay cents={t.change_cents} />
                   </td>
                   <td className="py-4 px-4 text-right font-mono text-[9px] font-bold uppercase tracking-widest">
                     <button 
                       onClick={() => setSelected(t.id)} 
-                      className="text-foreground hover:text-muted transition-colors border border-border px-3 py-1 bg-background"
+                      className="text-foreground hover:text-muted-foreground transition-colors border border-border px-3 py-1 bg-background"
                     >
                       DETAIL
                     </button>

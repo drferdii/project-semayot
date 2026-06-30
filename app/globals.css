@@ -4,27 +4,57 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Set background default ke cream premium OKLCH */
-  --background: oklch(96% 0.015 85);
-  --foreground: oklch(35% 0.02 160);
-  --card: oklch(98% 0.005 85);
-  --card-foreground: oklch(35% 0.02 160);
-  --popover: oklch(98% 0.005 85);
-  --popover-foreground: oklch(35% 0.02 160);
-  --primary: oklch(35% 0.02 160);
-  --primary-foreground: oklch(96% 0.015 85);
-  --secondary: oklch(78% 0.02 130);
-  --secondary-foreground: oklch(35% 0.02 160);
-  --muted: oklch(65% 0.01 160);
-  --muted-foreground: oklch(65% 0.01 160);
-  --accent: oklch(78% 0.02 130);
-  --accent-foreground: oklch(35% 0.02 160);
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --border: oklch(88% 0.01 130);
-  --input: oklch(98% 0.005 85);
-  --ring: oklch(35% 0.02 160);
-  --radius: 0.125rem; /* Sudut tajam sesuai gaya blueprint */
+  /* ==================================================
+     THEME: SOFT BLUSH / MILK TEA (DARI COLOR HUNT)
+     Palet: #FCF8F8, #FBEFEF, #F9DFDF, #F5AFAF
+     ================================================== */
+  --background: #FCF8F8; /* Warna latar paling terang dari palet (sangat lembut) */
+  --foreground: #594A4D; /* Coklat/Taupe pudar agar teks tidak kontras tajam (anti sakit mata) */
+  
+  --card: #FFFFFF; 
+  --card-foreground: #594A4D;
+  
+  --popover: #FFFFFF;
+  --popover-foreground: #594A4D;
+  
+  --primary: #F5AFAF; /* Warna pink tergelap dari palet untuk tombol utama */
+  --primary-foreground: #594A4D; /* Teks harus gelap karena tombolnya pink pudar */ 
+  
+  --secondary: #FBEFEF; 
+  --secondary-foreground: #594A4D;
+  
+  --muted: #FBEFEF;
+  --muted-foreground: #7A666A; /* Dibuat lebih gelap agar teks tidak hilang/menyatu dengan background */
+  
+  --accent: #F9DFDF;
+  --accent-foreground: #594A4D;
+  
+  --destructive: #F5AFAF;
+  --destructive-foreground: #594A4D;
+  
+  --border: #F9DFDF; /* Border menggunakan pink pudar agar seamless */
+  --input: #FFFFFF;
+  --ring: #F5AFAF;
+  
+  --radius: 0.5rem;
+  
+  /* Sidebar Specific Tokens */
+  --sidebar-bg: #FBEFEF; /* Latar sidebar warna blush */
+  --sidebar-text: #594A4D;
+  --sidebar-muted: #998387;
+  --sidebar-accent: #F9DFDF;
+  --sidebar-accent-soft: #FCF8F8;
+  
+  /* Brand Pinks */
+  --brand-pink: #F5AFAF;
+  --brand-pink-soft: #F9DFDF;
+  --brand-pink-bg: #FBEFEF;
+  
+  /* Chart Colors */
+  --chart-1: oklch(35% 0.02 160);
+  --chart-2: oklch(65% 0.01 160);
+  --chart-3: oklch(78% 0.02 130);
+  --chart-4: oklch(55% 0.06 85);
 }
 
 @theme inline {
@@ -54,6 +84,21 @@
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-text: var(--sidebar-text);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-soft: var(--sidebar-accent-soft);
+  
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-pink-soft: var(--brand-pink-soft);
+  --color-brand-pink-bg: var(--brand-pink-bg);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
 }
 
 @layer base {
@@ -197,34 +242,6 @@
   transform: translateZ(0);
 }
 
-/* 3D perspective container for tilt effects */
-.perspective-container {
-  perspective: 1000px;
-  transform-style: preserve-3d;
-}
-
-/* Glassmorphism surface — consistent translucent card treatment */
-.glass-surface {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Gradient text for display headings */
-.gradient-heading {
-  background: linear-gradient(135deg, #1C1917 30%, #FF4F79 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* GPU acceleration for continuously animated elements */
-.gpu-accelerated {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
 /* Smooth ripple effect for maps */
 @keyframes ripple {
   0% {
@@ -269,14 +286,6 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Menu card accent glow on hover */
-.menu-card-glow:hover {
-  border-color: rgba(255, 79, 121, 0.2);
-  box-shadow:
-    0 16px 40px rgba(28, 25, 23, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
 /* Mascot bounce animation */
 @keyframes mascotBounce {
   0%, 100% {
@@ -306,21 +315,6 @@
   font-weight: 900;
   font-style: italic;
   text-shadow: 2px 2px 0 #1C1917, -1px -1px 0 #1C1917;
-}
-
-/* Accessibility: disable continuous animations for reduced-motion users */
-@media (prefers-reduced-motion: reduce) {
-  .animate-float,
-  .mascot-bounce,
-  .oink-comic,
-  .animate-warm-pulse,
-  .animate-steam,
-  .animate-shimmer {
-    animation: none !important;
-  }
-  .grain-overlay::before {
-    animation: none !important;
-  }
 }
 
 /* Accessibility: disable continuous animations for reduced-motion users */

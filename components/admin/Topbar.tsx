@@ -34,7 +34,7 @@ export function Topbar() {
         
         <div className="flex items-center gap-8 font-mono">
           <div className="hidden lg:flex items-center gap-3">
-            <span className="text-[10px] text-muted font-bold uppercase tracking-widest">{today}</span>
+            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{today}</span>
             <div className="opacity-20 text-foreground">|</div>
           </div>
           

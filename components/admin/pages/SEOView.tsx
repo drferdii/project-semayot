@@ -20,7 +20,7 @@ const STATUS_LABEL: Record<Status, string> = {
 };
 
 const STATUS_BORDER: Record<Status, string> = {
-  pending: 'border-border text-muted bg-background/50',
+  pending: 'border-border text-muted-foreground bg-background/50',
   applied: 'border-emerald-600/30 text-emerald-700 bg-emerald-500/5',
   skipped: 'border-amber-600/30 text-amber-700 bg-amber-500/5',
 };
@@ -70,7 +70,7 @@ export function SEOView() {
 
   if (loading) {
     return (
-      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+      <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
         Memuat rekomendasi optimasi SEO...
       </div>
     );
@@ -97,14 +97,14 @@ export function SEOView() {
       {/* Header */}
       <div className="flex justify-between items-end border-b border-border pb-4">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
             Konsol Pengindeksan & Search Engine
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
             Rekomendasi SEO
           </h2>
         </div>
-        <div className="font-mono text-[10px] font-bold text-muted uppercase tracking-widest">
+        <div className="font-mono text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
           {counts.pending} BELUM &middot; {counts.applied} DITERAPKAN &middot; {counts.skipped} DILEWATI
         </div>
       </div>
@@ -118,7 +118,7 @@ export function SEOView() {
                 <h3 className="font-display text-lg font-semibold text-foreground leading-snug">
                   {r.title}
                 </h3>
-                <div className="flex items-center gap-1 font-mono text-[9px] text-muted font-bold uppercase tracking-wider mt-1">
+                <div className="flex items-center gap-1 font-mono text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-1">
                   <span>Lokasi Penerapan:</span>
                   <span className="text-foreground">{r.apply_at}</span>
                 </div>
@@ -129,7 +129,7 @@ export function SEOView() {
               </span>
             </div>
 
-            <p className="text-sm text-muted leading-relaxed max-w-[70ch]">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-[70ch]">
               {r.why_it_matters}
             </p>
 
@@ -149,7 +149,7 @@ export function SEOView() {
 
             {/* Status Switcher Buttons */}
             <div className="pt-2 flex flex-wrap gap-2 items-center">
-              <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider mr-2">
+              <span className="font-mono text-[8px] font-bold text-muted-foreground uppercase tracking-wider mr-2">
                 TANDAI STATUS:
               </span>
               {(['pending', 'applied', 'skipped'] as Status[]).map((s) => (
@@ -159,7 +159,7 @@ export function SEOView() {
                   className={`font-mono text-[9px] font-bold px-3 py-1.5 border uppercase tracking-wider transition-all duration-300 ${
                     r.status === s 
                       ? 'border-foreground bg-foreground text-background' 
-                      : 'border-border bg-transparent text-muted hover:border-foreground hover:text-foreground'
+                      : 'border-border bg-transparent text-muted-foreground hover:border-foreground hover:text-foreground'
                   }`}
                 >
                   {STATUS_LABEL[s]}

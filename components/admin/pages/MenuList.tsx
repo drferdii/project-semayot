@@ -60,7 +60,7 @@ export function MenuList() {
 
   if (loading) {
     return (
-      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+      <div className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-widest py-8 animate-pulse">
         Menyinkronkan katalog menu kuliner...
       </div>
     );
@@ -81,7 +81,7 @@ export function MenuList() {
       {/* Header */}
       <div className="flex justify-between items-end border-b border-border pb-4">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground block mb-1 font-bold">
             Konsol Katalog Produk
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
@@ -98,7 +98,7 @@ export function MenuList() {
 
       {items.length === 0 ? (
         <div className="border border-border bg-card p-12 text-center">
-          <p className="font-mono text-xs text-muted uppercase tracking-wider mb-4">
+          <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider mb-4">
             Katalog makanan dan minuman masih kosong.
           </p>
           <button
@@ -113,11 +113,11 @@ export function MenuList() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-card border-b border-border">
-                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Nama Menu</th>
-                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Kategori</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Harga Satuan</th>
-                <th className="text-center font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Status</th>
-                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Aksi</th>
+                <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Nama Menu</th>
+                <th className="text-left font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Kategori</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Harga Satuan</th>
+                <th className="text-center font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Status</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted-foreground py-4 px-4 font-bold tracking-widest">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -131,7 +131,7 @@ export function MenuList() {
                       </span>
                     )}
                   </td>
-                  <td className="py-4 px-4 font-mono text-xs font-bold text-muted uppercase tracking-wider">
+                  <td className="py-4 px-4 font-mono text-xs font-bold text-muted-foreground uppercase tracking-wider">
                     {CATEGORY_LABEL[item.category] ?? item.category}
                   </td>
                   <td className="py-4 px-4 text-right font-mono text-xs font-bold text-foreground tabular-nums">
@@ -142,7 +142,7 @@ export function MenuList() {
                       className={`inline-block font-mono text-[8px] font-bold px-2 py-1 border uppercase tracking-wider ${
                         item.is_active 
                           ? 'border-emerald-600/30 text-emerald-700 bg-emerald-500/5' 
-                          : 'border-border text-muted bg-background/50'
+                          : 'border-border text-muted-foreground bg-background/50'
                       }`}
                     >
                       {item.is_active ? 'AKTIF' : 'NON-AKTIF'}
@@ -151,7 +151,7 @@ export function MenuList() {
                   <td className="py-4 px-4 text-right font-mono text-[9px] font-bold uppercase tracking-widest space-x-4">
                     <button 
                       onClick={() => router.push(`/admin/menu/${item.id}`)} 
-                      className="text-foreground hover:text-muted transition-colors"
+                      className="text-foreground hover:text-muted-foreground transition-colors"
                     >
                       EDIT
                     </button>
