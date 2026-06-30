@@ -1,9 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { MoneyDisplay } from '@/components/admin/MoneyDisplay';
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/admin/supabase/client';
 import { SemayotMascot } from '@/components/semayot/semayot-mascot';
 import { 
@@ -79,20 +76,71 @@ export default function OverviewPage() {
     setGreeting({ title, msg });
   }, []);
 
-  // AI Chat Assistant
-  const { messages, sendMessage, status, error: chatError } = useChat({
-    id: 'admin-overview-chat',
-    transport: new DefaultChatTransport({ api: '/api/admin/ai/chat' }),
-  });
-  const chatLoading = status === 'submitted' || status === 'streaming';
-  const [chatInput, setChatInput] = useState('');
 
-  const onChatSubmit = (e: React.FormEvent) => {
+  // --- Custom AI Chat (plain fetch, no SDK format ambiguity) ---
+  type ChatMsg = { role: 'user' | 'assistant'; content: string };
+  const [chatMessages, setChatMessages] = useState<ChatMsg[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const onChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = chatInput.trim();
     if (!text || chatLoading) return;
-    sendMessage({ text });
+
+    const userMsg: ChatMsg = { role: 'user', content: text };
+    const next = [...chatMessages, userMsg];
+    setChatMessages(next);
     setChatInput('');
+    setChatLoading(true);
+    setChatError(null);
+
+    try {
+      const res = await fetch('/api/admin/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: next }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `HTTP ${res.status}`);
+      }
+
+      // Read SSE stream and accumulate text-delta chunks
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      let assistantText = '';
+      setChatMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const raw = line.slice(6).trim();
+          if (raw === '[DONE]') break;
+          try {
+            const parsed = JSON.parse(raw);
+            if (parsed.type === 'text-delta' && parsed.delta) {
+              assistantText += parsed.delta;
+              setChatMessages((prev) => [
+                ...prev.slice(0, -1),
+                { role: 'assistant', content: assistantText },
+              ]);
+            }
+          } catch { /* skip non-JSON lines */ }
+        }
+      }
+    } catch (err: any) {
+      setChatError(err.message || 'Gagal terhubung ke agen AI.');
+    } finally {
+      setChatLoading(false);
+      setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+    }
   };
 
   const kpis = [
@@ -370,7 +418,7 @@ export default function OverviewPage() {
 
             {/* Chat Messages */}
             <div className="flex-1 overflow-y-auto py-3 space-y-4 font-mono text-xs leading-relaxed">
-              {messages.length === 0 ? (
+              {chatMessages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-3 opacity-75 px-4 select-none">
                   <SemayotMascot variant="menu" size={85} />
                   <p className="font-mono text-[9px] text-muted uppercase tracking-widest max-w-[220px] leading-relaxed font-bold">
@@ -378,12 +426,12 @@ export default function OverviewPage() {
                   </p>
                 </div>
               ) : (
-                messages.map((m) => (
-                  <div 
-                    key={m.id} 
+                chatMessages.map((m, i) => (
+                  <div
+                    key={i}
                     className={`p-3 border max-w-[90%] ${
-                      m.role === 'user' 
-                        ? 'border-[#1C1917] bg-[#1C1917] text-white ml-auto' 
+                      m.role === 'user'
+                        ? 'border-[#1C1917] bg-[#1C1917] text-white ml-auto'
                         : 'border-border bg-background text-foreground'
                     }`}
                   >
@@ -391,7 +439,7 @@ export default function OverviewPage() {
                       {m.role === 'user' ? 'CHIEF' : 'AGEN_JEAN'}
                     </div>
                     <div className="font-sans text-xs whitespace-pre-wrap leading-normal">
-                      {messageText(m.parts)}
+                      {m.content}
                     </div>
                   </div>
                 ))
@@ -403,9 +451,10 @@ export default function OverviewPage() {
               )}
               {chatError && (
                 <div className="font-mono text-[9px] text-red-600 border border-red-600/25 bg-red-600/5 p-3 uppercase tracking-wider">
-                  ERROR: {chatError.message}
+                  ERROR: {chatError}
                 </div>
               )}
+              <div ref={chatEndRef} />
             </div>
 
             {/* Chat Input Form */}
