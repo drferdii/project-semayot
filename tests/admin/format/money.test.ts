@@ -30,4 +30,9 @@ describe('parseRupiahToCents', () => {
     expect(parseRupiahToCents('abc')).toBe(null);
     expect(parseRupiahToCents('')).toBe(null);
   });
+
+  it('parses negative values (refunds)', () => {
+    expect(parseRupiahToCents('-Rp 5.000')).toBe(-5000_00);
+    expect(parseRupiahToCents('-1234')).toBe(-1234_00);
+  });
 });

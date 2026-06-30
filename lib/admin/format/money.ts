@@ -21,13 +21,14 @@ export function formatRupiah(cents: number): string {
 
 /**
  * Parse Rupiah string to integer cents.
- * Accepts formats: "Rp 45.000", "45000", "Rp 1.234.567,89"
+ * Accepts formats: "Rp 45.000", "45000", "Rp 1.234.567,89", "-Rp 5.000" (refunds).
  * Returns null if invalid.
  */
 export function parseRupiahToCents(input: string): number | null {
+  const isNegative = input.trim().startsWith('-');
   const cleaned = input.replace(/[^\d,]/g, '').replace(',', '.');
   if (!cleaned) return null;
   const num = parseFloat(cleaned);
   if (isNaN(num)) return null;
-  return Math.round(num * 100);
+  return Math.round(num * 100) * (isNegative ? -1 : 1);
 }

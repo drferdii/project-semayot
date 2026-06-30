@@ -14,6 +14,7 @@ export const SemayotHeader: React.FC = () => {
     { label: "Menu", href: "#menu" },
     { label: "Tentang", href: "#about" },
     { label: "Lokasi", href: "#location" },
+    { label: "Admin", href: "/admin/overview" },
   ];
 
   useEffect(() => {
