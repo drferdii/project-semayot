@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import { MoneyDisplay } from '@/components/admin/MoneyDisplay';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +22,11 @@ export function StatCard({ label, value, valueCents, accent = 'neutral', delta, 
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       className={cn(
         'border border-border border-top-[3px] p-6 bg-card hover:bg-background transition-colors duration-300 flex flex-col justify-between',
         className
@@ -55,6 +62,6 @@ export function StatCard({ label, value, valueCents, accent = 'neutral', delta, 
           )}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

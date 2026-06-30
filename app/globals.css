@@ -349,4 +349,31 @@
 /* Cegah tabrakan visual: sembunyikan branding global hanya ketika di halaman overview */
 body:has(.page-overview) .branding-global {
   display: none !important;
+}
+
+/* ======================================
+   NEUMORPHISM (SOFT UI) BUTTONS
+   ====================================== */
+.neumorphic-btn {
+  background: var(--background);
+  border: 1px solid rgba(255, 255, 255, 0.4) !important; /* soft edge */
+  box-shadow: 
+    4px 4px 10px rgba(180, 160, 165, 0.25), 
+    -4px -4px 10px rgba(255, 255, 255, 0.9) !important;
+  color: var(--foreground) !important;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.neumorphic-btn:hover {
+  box-shadow: 
+    6px 6px 14px rgba(180, 160, 165, 0.3), 
+    -6px -6px 14px rgba(255, 255, 255, 1) !important;
+  transform: translateY(-1px);
+}
+
+.neumorphic-btn:active {
+  box-shadow: 
+    inset 4px 4px 8px rgba(180, 160, 165, 0.25), 
+    inset -4px -4px 8px rgba(255, 255, 255, 0.7) !important;
+  transform: translateY(1px);
 }

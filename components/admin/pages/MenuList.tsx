@@ -90,7 +90,7 @@ export function MenuList() {
         </div>
         <button
           onClick={() => router.push('/admin/menu/new')}
-          className="border border-foreground bg-foreground text-background font-mono text-[10px] font-bold px-5 py-3 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300"
+          className="neumorphic-btn rounded-md font-mono text-[10px] font-bold px-5 py-3 uppercase tracking-widest"
         >
           + Tambah Menu Baru
         </button>
@@ -103,7 +103,7 @@ export function MenuList() {
           </p>
           <button
             onClick={() => router.push('/admin/menu/new')}
-            className="border border-foreground bg-foreground text-background font-mono text-[10px] font-bold px-6 py-3 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300"
+            className="neumorphic-btn rounded-md font-mono text-[10px] font-bold px-6 py-3 uppercase tracking-widest"
           >
             Tambah Item Pertama
           </button>

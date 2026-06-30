@@ -83,7 +83,7 @@ export default function OverviewPage() {
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const onChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +131,9 @@ export default function OverviewPage() {
                 ...prev.slice(0, -1),
                 { role: 'assistant', content: assistantText },
               ]);
+              if (chatContainerRef.current) {
+                chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+              }
             }
           } catch { /* skip non-JSON lines */ }
         }
@@ -139,7 +142,11 @@ export default function OverviewPage() {
       setChatError(err.message || 'Gagal terhubung ke agen AI.');
     } finally {
       setChatLoading(false);
-      setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 50);
     }
   };
 
@@ -158,16 +165,17 @@ export default function OverviewPage() {
   ];
 
   return (
-    <div className="animate-fade-in py-6 page-overview select-none">
+    <div className="animate-fade-in py-6 page-overview select-none space-y-8">
+      
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* LEFT COLUMN: Core Analytics & Operations */}
         <div className="lg:col-span-8 space-y-8">
 
           {/* PERSONALIZED WELCOME CARD */}
-          <div className="border border-border bg-[#FFF0F3] p-8 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 hover:shadow-md transition-shadow duration-300">
-            <div className="space-y-3 z-10 text-center sm:text-left">
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#FF4F79] font-black block">
+          <div className="border border-border bg-[#FFF0F3] p-12 min-h-[300px] relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8 hover:shadow-md transition-shadow duration-300">
+            <div className="space-y-4 z-10 text-center sm:text-left flex flex-col justify-center">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF4F79] font-black block">
                 {greeting.title}
               </span>
               <h1 className="font-display text-3xl md:text-4xl font-extrabold tracking-tight text-foreground uppercase leading-[1.05]">
@@ -177,11 +185,11 @@ export default function OverviewPage() {
                 {greeting.msg}
               </p>
             </div>
-            <div className="flex-shrink-0 z-10 bg-background rounded-full p-2 border border-border shadow-sm select-none">
-              <SemayotMascot variant="welcome" size={110} />
+            <div className="flex-shrink-0 z-10 bg-background rounded-full p-4 border border-border shadow-sm select-none">
+              <SemayotMascot variant="welcome" size={140} />
             </div>
             {/* Decorative elements */}
-            <div className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full bg-[#FFC2D6]/20 blur-xl pointer-events-none" />
+            <div className="absolute -right-16 -bottom-16 w-64 h-64 rounded-full bg-[#FFC2D6]/20 blur-2xl pointer-events-none" />
           </div>
           
           {/* FIRST SECTION: Metrik Operasional Utama */}
@@ -399,7 +407,7 @@ export default function OverviewPage() {
         <div className="lg:col-span-4 space-y-8 lg:sticky lg:top-28 z-20">
           
           {/* AI Assistant Chatbox */}
-          <div className="border border-border bg-card p-6 h-[420px] flex flex-col justify-between">
+          <div className="border border-border bg-card p-6 h-[500px] flex flex-col justify-between">
             <div className="border-b border-border pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-[#FFC2D6] flex items-center justify-center text-xs shadow-sm select-none">
@@ -417,7 +425,7 @@ export default function OverviewPage() {
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto py-3 space-y-4 font-mono text-xs leading-relaxed">
+            <div ref={chatContainerRef} className="flex-1 overflow-y-auto py-3 space-y-4 font-mono text-xs leading-relaxed pr-2">
               {chatMessages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-3 opacity-75 px-4 select-none">
                   <SemayotMascot variant="menu" size={85} />
@@ -454,7 +462,6 @@ export default function OverviewPage() {
                   ERROR: {chatError}
                 </div>
               )}
-              <div ref={chatEndRef} />
             </div>
 
             {/* Chat Input Form */}
@@ -469,7 +476,7 @@ export default function OverviewPage() {
               <button
                 type="submit"
                 disabled={chatLoading || !chatInput.trim()}
-                className="border border-[#1C1917] bg-[#1C1917] text-white font-mono text-[9px] font-bold px-4 py-2.5 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50 cursor-pointer"
+                className="neumorphic-btn rounded-md font-mono text-[9px] font-bold px-4 py-2.5 uppercase tracking-widest disabled:opacity-50 cursor-pointer"
               >
                 KIRIM
               </button>

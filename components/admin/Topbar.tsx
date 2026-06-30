@@ -35,7 +35,7 @@ export function Topbar() {
         <div className="flex items-center gap-8 font-mono">
           <div className="hidden lg:flex items-center gap-3">
             <select className="bg-background border border-border text-foreground text-xs font-bold uppercase tracking-widest px-3 py-1.5 focus:outline-none">
-              <option value="00000000-0000-0000-0000-000000000001">PUSAT (PONTIANAK)</option>
+              <option value="00000000-0000-0000-0000-000000000001">PUSAT (BENGKAYANG)</option>
               <option value="outlet-b">OUTLET B (SINGKAWANG)</option>
             </select>
           </div>

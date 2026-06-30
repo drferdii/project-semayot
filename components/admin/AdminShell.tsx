@@ -17,7 +17,11 @@ export function AdminShell({
       <Sidebar role={role} fullName={fullName} />
       <div className="flex-1 flex flex-col min-w-0 relative z-10">
         <Topbar />
-        <main className="flex-1 p-8 overflow-y-auto max-w-[1440px] w-full mx-auto">{children}</main>
+        <main className="flex-1 p-8 overflow-y-auto w-full flex flex-col items-center">
+          <div className="w-full max-w-7xl">
+            {children}
+          </div>
+        </main>
       </div>
       
       {/* Teks Vertikal Raksasa di Kanan (Branding Shadow Kanan) */}
