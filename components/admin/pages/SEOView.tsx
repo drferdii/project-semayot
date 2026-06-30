@@ -14,15 +14,15 @@ type Rec = {
 };
 
 const STATUS_LABEL: Record<Status, string> = {
-  pending: 'Belum',
-  applied: 'Diterapkan',
-  skipped: 'Dilewati',
+  pending: 'BELUM',
+  applied: 'DITERAPKAN',
+  skipped: 'DILEWATI',
 };
 
-const STATUS_COLOR: Record<Status, string> = {
-  pending: 'bg-[rgba(28,25,23,0.06)] text-[#57534E]',
-  applied: 'bg-[rgba(21,128,61,0.1)] text-[#15803D]',
-  skipped: 'bg-[rgba(217,119,6,0.1)] text-[#D97706]',
+const STATUS_BORDER: Record<Status, string> = {
+  pending: 'border-border text-muted bg-background/50',
+  applied: 'border-emerald-600/30 text-emerald-700 bg-emerald-500/5',
+  skipped: 'border-amber-600/30 text-amber-700 bg-amber-500/5',
 };
 
 export function SEOView() {
@@ -35,10 +35,14 @@ export function SEOView() {
   const load = async () => {
     setLoading(true);
     setError(null);
-    const r = await fetch('/api/admin/seo/recommendations');
-    const j = await r.json();
-    if (r.ok) setRecs(j.data ?? []);
-    else setError(j.error?.message ?? 'Gagal memuat.');
+    try {
+      const r = await fetch('/api/admin/seo/recommendations');
+      const j = await r.json();
+      if (r.ok) setRecs(j.data ?? []);
+      else setError(j.error?.message ?? 'Gagal memuat.');
+    } catch {
+      setError('Koneksi terputus.');
+    }
     setLoading(false);
   };
 
@@ -64,8 +68,21 @@ export function SEOView() {
     }
   };
 
-  if (loading) return <p className="text-[#57534E]">Memuat...</p>;
-  if (error) return <p className="text-[#DC2626]">{error}</p>;
+  if (loading) {
+    return (
+      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+        Memuat rekomendasi optimasi SEO...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="font-mono text-xs text-red-600 border border-red-600/20 bg-red-600/5 p-4 uppercase tracking-wider">
+        AUDIT_ERROR: {error}
+      </div>
+    );
+  }
 
   const counts = {
     pending: recs.filter((r) => r.status === 'pending').length,
@@ -74,49 +91,76 @@ export function SEOView() {
   };
 
   return (
-    <div>
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold text-[#1C1917]">Rekomendasi SEO</h2>
-        <p className="text-sm text-[#57534E] mt-1">
-          {counts.pending} belum · {counts.applied} diterapkan · {counts.skipped} dilewati
-        </p>
+    <div className="animate-fade-in max-w-4xl relative">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <div className="md:col-span-11 space-y-8">
+      {/* Header */}
+      <div className="flex justify-between items-end border-b border-border pb-4">
+        <div>
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+            Konsol Pengindeksan & Search Engine
+          </span>
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
+            Rekomendasi SEO
+          </h2>
+        </div>
+        <div className="font-mono text-[10px] font-bold text-muted uppercase tracking-widest">
+          {counts.pending} BELUM &middot; {counts.applied} DITERAPKAN &middot; {counts.skipped} DILEWATI
+        </div>
       </div>
 
-      <div className="space-y-3">
+      {/* Recommendations Checklist */}
+      <div className="space-y-4">
         {recs.map((r) => (
-          <div key={r.id} className="bg-white rounded-xl border border-[rgba(28,25,23,0.08)] p-4">
-            <div className="flex items-start justify-between gap-3 mb-2">
+          <div key={r.id} className="border border-border bg-card p-6 space-y-4">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-semibold text-[#1C1917]">{r.title}</h3>
-                <p className="text-xs text-[#57534E] mt-1">📍 {r.apply_at}</p>
+                <h3 className="font-display text-lg font-semibold text-foreground leading-snug">
+                  {r.title}
+                </h3>
+                <div className="flex items-center gap-1 font-mono text-[9px] text-muted font-bold uppercase tracking-wider mt-1">
+                  <span>Lokasi Penerapan:</span>
+                  <span className="text-foreground">{r.apply_at}</span>
+                </div>
               </div>
-              <span className={`text-xs px-2 py-0.5 rounded whitespace-nowrap ${STATUS_COLOR[r.status]}`}>
+              
+              <span className={`font-mono text-[8px] font-bold px-2.5 py-1 border uppercase tracking-widest ${STATUS_BORDER[r.status]}`}>
                 {STATUS_LABEL[r.status]}
               </span>
             </div>
 
-            <p className="text-sm text-[#57534E] mb-3">{r.why_it_matters}</p>
+            <p className="text-sm text-muted leading-relaxed max-w-[70ch]">
+              {r.why_it_matters}
+            </p>
 
             {r.copy_value && (
               <div className="relative">
-                <pre className="bg-[#1C1917] text-[#FAF6F0] text-xs p-3 rounded overflow-x-auto max-h-40">
+                <pre className="bg-foreground text-background font-mono text-[11px] p-4 overflow-x-auto max-h-40 border border-border">
                   {r.copy_value}
                 </pre>
                 <button
                   onClick={() => copy(r.id, r.copy_value!)}
-                  className="absolute top-2 right-2 text-xs bg-[#FF4F79] text-white px-2 py-1 rounded hover:bg-[#E03D63]"
+                  className="absolute top-3 right-3 font-mono text-[9px] font-bold px-3 py-1.5 border border-border bg-background text-foreground hover:bg-foreground hover:text-background transition-all duration-300 uppercase tracking-widest"
                 >
-                  {copied === r.id ? '✓ Tersalin' : 'Salin'}
+                  {copied === r.id ? '✓ TERSALIN' : 'SALIN'}
                 </button>
               </div>
             )}
 
-            <div className="mt-3 flex gap-2">
+            {/* Status Switcher Buttons */}
+            <div className="pt-2 flex flex-wrap gap-2 items-center">
+              <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider mr-2">
+                TANDAI STATUS:
+              </span>
               {(['pending', 'applied', 'skipped'] as Status[]).map((s) => (
                 <button
                   key={s}
                   onClick={() => updateStatus(r.id, s)}
-                  className={`text-xs px-2 py-1 rounded ${r.status === s ? 'bg-[#1C1917] text-white' : 'bg-[rgba(28,25,23,0.06)] text-[#1C1917] hover:bg-[rgba(28,25,23,0.1)]'}`}
+                  className={`font-mono text-[9px] font-bold px-3 py-1.5 border uppercase tracking-wider transition-all duration-300 ${
+                    r.status === s 
+                      ? 'border-foreground bg-foreground text-background' 
+                      : 'border-border bg-transparent text-muted hover:border-foreground hover:text-foreground'
+                  }`}
                 >
                   {STATUS_LABEL[s]}
                 </button>
@@ -124,6 +168,14 @@ export function SEOView() {
             </div>
           </div>
         ))}
+      </div>
+    </div>
+        {/* Vertical Branding */}
+        <div className="hidden md:flex md:col-span-1 justify-center pt-16 select-none opacity-20 hover:opacity-40 transition-opacity duration-300">
+          <div className="font-mono text-[9px] font-black uppercase tracking-[0.3em] branding-vertical text-center whitespace-nowrap">
+            OPTIMASI SEO SEMAYOT
+          </div>
+        </div>
       </div>
     </div>
   );

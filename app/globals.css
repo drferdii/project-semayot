@@ -1,35 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Set background default to cream lembut */
-  --background: #FCF9F2;
-  --foreground: #1C1917;
-  --card: #FAF6F0;
-  --card-foreground: #1C1917;
-  --popover: #FAF6F0;
-  --popover-foreground: #1C1917;
-  --primary: #1C1917;
-  --primary-foreground: #FAF6F0;
-  --secondary: #FFF0F3;
-  --secondary-foreground: #1C1917;
-  --muted: #F5F5F5;
-  --muted-foreground: #737373;
-  --accent: #FF4F79;
-  --accent-foreground: #FAF6F0;
+  /* Set background default ke cream premium OKLCH */
+  --background: oklch(96% 0.015 85);
+  --foreground: oklch(35% 0.02 160);
+  --card: oklch(98% 0.005 85);
+  --card-foreground: oklch(35% 0.02 160);
+  --popover: oklch(98% 0.005 85);
+  --popover-foreground: oklch(35% 0.02 160);
+  --primary: oklch(35% 0.02 160);
+  --primary-foreground: oklch(96% 0.015 85);
+  --secondary: oklch(78% 0.02 130);
+  --secondary-foreground: oklch(35% 0.02 160);
+  --muted: oklch(65% 0.01 160);
+  --muted-foreground: oklch(65% 0.01 160);
+  --accent: oklch(78% 0.02 130);
+  --accent-foreground: oklch(35% 0.02 160);
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border: rgba(28, 25, 23, 0.12);
-  --input: #F5F5F5;
-  --ring: #1C1917;
-  --radius: 1rem;
+  --border: oklch(88% 0.01 130);
+  --input: oklch(98% 0.005 85);
+  --ring: oklch(35% 0.02 160);
+  --radius: 0.125rem; /* Sudut tajam sesuai gaya blueprint */
 }
 
 @theme inline {
-  --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Open Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Epilogue', Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -49,9 +50,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
@@ -336,3 +337,22 @@
     animation: none !important;
   }
 }
+
+/* ACARS / Transit Design Token Extensions */
+.grid-overlay { 
+  position: fixed; inset: 0; 
+  background-image: 
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px); 
+  background-size: calc((100% - 80px) / 12) 40px; 
+  pointer-events: none; z-index: -1; 
+  max-width: 1440px; margin-inline: auto; padding-inline: 40px; 
+  background-origin: content-box; background-clip: content-box; opacity: 0.12; 
+}
+.branding-vertical { writing-mode: vertical-rl; text-orientation: mixed; }
+.font-display { font-family: var(--font-display); }
+
+/* Cegah tabrakan visual: sembunyikan branding global hanya ketika di halaman overview */
+body:has(.page-overview) .branding-global {
+  display: none !important;
+}

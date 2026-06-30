@@ -36,65 +36,111 @@ export function TransactionDetail({ id, onClose }: { id: string; onClose: () => 
   }, [id]);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/40 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="p-4 border-b border-[rgba(28,25,23,0.08)] flex justify-between items-center">
-          <h3 className="font-semibold text-[#1C1917]">Detail Transaksi</h3>
-          <button onClick={onClose} className="text-[#57534E] hover:text-[#1C1917] text-xl leading-none">×</button>
+    <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+      <div 
+        className="bg-card border-2 border-foreground max-w-md w-full max-h-[85vh] overflow-y-auto" 
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="p-5 border-b border-border flex justify-between items-center bg-background">
+          <div>
+            <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-widest block">
+              TRANSAKSI_LOG
+            </span>
+            <h3 className="font-display font-bold text-base text-foreground uppercase tracking-wider">
+              Detail Transaksi Kasir
+            </h3>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="font-mono text-xs font-bold text-foreground hover:text-muted border border-border px-3 py-1.5 bg-card transition-colors"
+          >
+            TUTUP
+          </button>
         </div>
-        <div className="p-4">
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
           {loading ? (
-            <p className="text-[#57534E]">Memuat...</p>
+            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 text-center animate-pulse">
+              Memuat data kuitansi...
+            </div>
           ) : !data ? (
-            <p className="text-[#DC2626]">Gagal memuat.</p>
+            <div className="font-mono text-xs text-red-600 border border-red-600/20 bg-red-600/5 p-4 uppercase tracking-wider">
+              ERROR: Transaksi tidak ditemukan.
+            </div>
           ) : (
             <>
-              <div className="text-xs text-[#57534E] mb-3">
-                {new Date(data.created_at).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })}
-                <br />
-                ID: {data.id.slice(0, 8)}...
+              {/* Meta Info */}
+              <div className="font-mono text-[10px] text-muted space-y-1 pb-4 border-b border-border/60">
+                <div>
+                  <span className="font-bold">WAKTU INPUT:</span>{' '}
+                  <span className="text-foreground font-bold">
+                    {new Date(data.created_at).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'medium' }).toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold">ID REFERENSI:</span>{' '}
+                  <span className="text-foreground font-bold">{data.id.toUpperCase()}</span>
+                </div>
               </div>
 
-              <table className="w-full text-sm mb-4">
-                <thead className="text-[#57534E] text-xs">
-                  <tr>
-                    <th className="text-left pb-1">Item</th>
-                    <th className="text-right pb-1">Qty</th>
-                    <th className="text-right pb-1">Subtotal</th>
+              {/* Items Table */}
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-foreground">
+                    <th className="text-left font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Daftar Item</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Qty</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted pb-2 font-bold tracking-widest">Subtotal</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(data.transaction_items ?? []).map((it) => (
-                    <tr key={it.id} className="border-t border-[rgba(28,25,23,0.04)]">
-                      <td className="py-1">
-                        <div className="font-medium text-[#1C1917]">{it.name_snapshot}</div>
-                        <div className="text-xs text-[#57534E]"><MoneyDisplay cents={it.price_cents_snapshot} /> /item</div>
+                    <tr key={it.id} className="border-b border-border/40 hover:bg-background/25">
+                      <td className="py-3">
+                        <div className="font-display font-medium text-sm text-foreground">{it.name_snapshot}</div>
+                        <div className="font-mono text-[9px] text-muted mt-0.5">
+                          <MoneyDisplay cents={it.price_cents_snapshot} /> / unit
+                        </div>
                       </td>
-                      <td className="py-1 text-right">{it.quantity}</td>
-                      <td className="py-1 text-right font-medium"><MoneyDisplay cents={it.subtotal_cents} /></td>
+                      <td className="py-3 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                        {it.quantity}
+                      </td>
+                      <td className="py-3 text-right font-mono text-xs font-bold text-foreground tabular-nums">
+                        <MoneyDisplay cents={it.subtotal_cents} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
 
-              <div className="border-t-2 border-[#1C1917] pt-3 space-y-1 text-sm">
+              {/* Totals Summary */}
+              <div className="border-t-[3px] border-double border-foreground pt-4 space-y-2 font-mono text-xs">
                 <div className="flex justify-between">
-                  <span className="text-[#57534E]">Total</span>
-                  <span className="font-semibold text-[#1C1917]"><MoneyDisplay cents={data.total_cents} /></span>
+                  <span className="text-muted font-bold">TOTAL TAGIHAN</span>
+                  <span className="font-bold text-foreground tabular-nums">
+                    <MoneyDisplay cents={data.total_cents} />
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#57534E]">Tunai</span>
-                  <span className="text-[#57534E]"><MoneyDisplay cents={data.paid_cents} /></span>
+                  <span className="text-muted font-bold">TUNAI DIBAYAR</span>
+                  <span className="text-muted font-bold tabular-nums">
+                    <MoneyDisplay cents={data.paid_cents} />
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#57534E]">Kembalian</span>
-                  <span className="text-[#15803D] font-semibold"><MoneyDisplay cents={data.change_cents} /></span>
+                <div className="flex justify-between border-t border-border/60 pt-2 text-sm">
+                  <span className="text-foreground font-bold">KEMBALIAN</span>
+                  <span className="text-emerald-700 font-bold tabular-nums">
+                    <MoneyDisplay cents={data.change_cents} />
+                  </span>
                 </div>
               </div>
 
+              {/* Note */}
               {data.note && (
-                <div className="mt-3 text-xs text-[#57534E]">
-                  <strong>Catatan:</strong> {data.note}
+                <div className="p-4 border border-border bg-background/50 font-mono text-[10px] text-muted space-y-1">
+                  <div className="font-bold uppercase tracking-wider">CATATAN TRANSAKSI:</div>
+                  <p className="font-sans text-xs text-foreground leading-relaxed">{data.note}</p>
                 </div>
               )}
             </>

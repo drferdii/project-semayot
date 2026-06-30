@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import { streamText } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { google } from '@ai-sdk/google';
 import { createClient } from '@/lib/admin/supabase/server';
 import { aggregateSummary, formatSummaryForPrompt } from '@/lib/admin/ai/aggregate';
 import type { SummaryPeriod } from '@/lib/admin/supabase/types';
 import { ADMIN_AI_SYSTEM_PROMPT } from '@/lib/admin/ai/prompts';
-
-const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY! });
 
 async function requireOwner(supabase: Awaited<ReturnType<typeof createClient>>) {
   const { data: role, error } = await supabase.rpc('current_user_role');
@@ -88,7 +86,7 @@ export async function POST(request: Request) {
 
   try {
     const result = streamText({
-      model: openrouter('mistralai/mistral-7b-instruct:free'),
+      model: google('gemini-2.5-flash'),
       system: ADMIN_AI_SYSTEM_PROMPT,
       prompt: `Berikut adalah data performa bisnis ${summary.period} untuk Rumah Makan Semayot:\n\n${summaryText}\n\nBuat ringkasan singkat untuk owner dengan format yang sudah ditentukan.`,
       temperature: 0.7,

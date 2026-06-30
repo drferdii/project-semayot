@@ -31,45 +31,92 @@ export function TransactionsList() {
       });
   }, [pathname]);
 
-  if (loading) return <p className="text-[#57534E]">Memuat...</p>;
+  if (loading) {
+    return (
+      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+        Menyelaraskan dengan database transaksi...
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-[#1C1917] mb-4">Transaksi</h2>
+    <div className="animate-fade-in max-w-5xl relative">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <div className="md:col-span-11 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-end border-b border-border pb-4">
+        <div>
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+            Buku Audit Keuangan
+          </span>
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground uppercase">
+            Logbook Transaksi Kasir
+          </h2>
+        </div>
+        <span className="font-mono text-[8px] font-bold text-muted uppercase tracking-widest hidden sm:inline">
+          DATABASE_LOGS
+        </span>
+      </div>
 
       {items.length === 0 ? (
-        <p className="text-[#57534E] text-center py-8">Belum ada transaksi.</p>
+        <div className="border border-border bg-card p-12 text-center">
+          <p className="font-mono text-xs text-muted uppercase tracking-wider">
+            Belum terdeteksi adanya data transaksi masuk.
+          </p>
+        </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[rgba(28,25,23,0.08)] overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-[#FAF6F0] text-[#57534E] text-xs uppercase">
-              <tr>
-                <th className="text-left p-3">Waktu</th>
-                <th className="text-right p-3">Total</th>
-                <th className="text-right p-3">Tunai</th>
-                <th className="text-right p-3">Kembali</th>
-                <th className="text-right p-3">Aksi</th>
+        <div className="border border-border overflow-hidden">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-card border-b border-border">
+                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Waktu Input</th>
+                <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">ID Transaksi</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Total Belanja</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Tunai Diterima</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Uang Kembali</th>
+                <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {items.map((t) => (
-                <tr key={t.id} className="border-t border-[rgba(28,25,23,0.04)]">
-                  <td className="p-3 text-[#1C1917]">
-                    {new Date(t.created_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}
+                <tr key={t.id} className="border-b border-border/60 hover:bg-card/30 transition-colors">
+                  <td className="py-4 px-4 font-mono text-[10px] text-muted font-bold">
+                    {new Date(t.created_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'medium' }).toUpperCase()}
                   </td>
-                  <td className="p-3 text-right font-medium"><MoneyDisplay cents={t.total_cents} /></td>
-                  <td className="p-3 text-right text-[#57534E]"><MoneyDisplay cents={t.paid_cents} /></td>
-                  <td className="p-3 text-right text-[#57534E]"><MoneyDisplay cents={t.change_cents} /></td>
-                  <td className="p-3 text-right">
-                    <button onClick={() => setSelected(t.id)} className="text-[#FF4F79] text-sm">Detail</button>
+                  <td className="py-4 px-4 font-mono text-[10px] font-bold text-foreground">
+                    {t.id.slice(0, 8).toUpperCase()}_TX
+                  </td>
+                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-foreground tabular-nums">
+                    <MoneyDisplay cents={t.total_cents} />
+                  </td>
+                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                    <MoneyDisplay cents={t.paid_cents} />
+                  </td>
+                  <td className="py-4 px-4 text-right font-mono text-xs font-bold text-muted tabular-nums">
+                    <MoneyDisplay cents={t.change_cents} />
+                  </td>
+                  <td className="py-4 px-4 text-right font-mono text-[9px] font-bold uppercase tracking-widest">
+                    <button 
+                      onClick={() => setSelected(t.id)} 
+                      className="text-foreground hover:text-muted transition-colors border border-border px-3 py-1 bg-background"
+                    >
+                      DETAIL
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      )}
-
+        )}
+        </div>
+        {/* Vertical Branding */}
+        <div className="hidden md:flex md:col-span-1 justify-center pt-16 select-none opacity-20 hover:opacity-40 transition-opacity duration-300">
+          <div className="font-mono text-[9px] font-black uppercase tracking-[0.3em] branding-vertical text-center whitespace-nowrap">
+            LOG TRANSAKSI SEMAYOT
+          </div>
+        </div>
+      </div>
       {selected && <TransactionDetail id={selected} onClose={() => setSelected(null)} />}
     </div>
   );

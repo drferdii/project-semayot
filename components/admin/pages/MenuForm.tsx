@@ -50,68 +50,128 @@ export function MenuForm({ menuId }: { menuId?: string }) {
     if (res.ok) {
       router.push('/admin/menu');
     } else {
-      setServerError(json.error?.message ?? 'Gagal simpan menu.');
+      setServerError(json.error?.message ?? 'Gagal menyimpan menu.');
     }
   };
 
-  if (loading) return <p className="text-[#57534E]">Memuat...</p>;
+  if (loading) {
+    return (
+      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+        Menyiapkan formulir editor katalog...
+      </div>
+    );
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-4">
-      {serverError && <div className="text-sm text-[#DC2626] bg-[rgba(220,38,38,0.05)] rounded-lg p-3">{serverError}</div>}
-
-      <div>
-        <label className="block text-sm font-medium mb-1.5">Nama Produk *</label>
-        <input {...register('name')} className="w-full px-3 py-2 rounded-lg border border-[rgba(28,25,23,0.12)] bg-white" placeholder="cth. Daging Asap Suwir" />
-        {errors.name && <p className="text-xs text-[#DC2626] mt-1">{errors.name.message}</p>}
+    <div className="max-w-2xl animate-fade-in space-y-6">
+      {/* Form Title */}
+      <div className="border-b border-border pb-4">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted block mb-1 font-bold">
+          PROSES_FORM: {isEdit ? 'UPDATE_ITEM' : 'INSERT_ITEM'}
+        </span>
+        <h2 className="font-display text-xl font-semibold text-foreground uppercase tracking-wider">
+          {isEdit ? 'Ubah Informasi Menu' : 'Tambahkan Menu Hidangan'}
+        </h2>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1.5">Deskripsi</label>
-        <textarea {...register('description')} className="w-full px-3 py-2 rounded-lg border border-[rgba(28,25,23,0.12)] bg-white" rows={2} />
-      </div>
+      {serverError && (
+        <div className="font-mono text-xs text-red-600 border border-red-600/20 bg-red-600/5 p-4 uppercase tracking-wider">
+          DB_ERROR: {serverError}
+        </div>
+      )}
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Harga (Rp) *</label>
-          <input
-            type="number"
-            {...register('price_cents', { valueAsNumber: true })}
-            className="w-full px-3 py-2 rounded-lg border border-[rgba(28,25,23,0.12)] bg-white"
-            placeholder="cth. 45000"
+      <form onSubmit={handleSubmit(onSubmit)} className="border border-border bg-card p-6 sm:p-8 space-y-6">
+        <div className="space-y-1">
+          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            Nama Hidangan / Produk *
+          </label>
+          <input 
+            {...register('name')} 
+            className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground" 
+            placeholder="cth: DAGING ASAP SUWIR PREMIUM" 
           />
-          {errors.price_cents && <p className="text-xs text-[#DC2626] mt-1">{errors.price_cents.message}</p>}
+          {errors.name && <p className="font-mono text-[9px] text-red-600 mt-1 uppercase tracking-wider">{errors.name.message}</p>}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Kategori *</label>
-          <select {...register('category')} className="w-full px-3 py-2 rounded-lg border border-[rgba(28,25,23,0.12)] bg-white">
-            <option value="dayak">Dayak</option>
-            <option value="smoked">Daging Asap</option>
-            <option value="pedas">Pedas</option>
-            <option value="minuman">Minuman</option>
-          </select>
+        <div className="space-y-1">
+          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            Keterangan / Deskripsi Rasa
+          </label>
+          <textarea 
+            {...register('description')} 
+            className="w-full px-4 py-3 border border-border bg-background font-sans text-xs text-foreground focus:outline-none focus:border-foreground leading-relaxed" 
+            rows={3} 
+            placeholder="Tuliskan komposisi atau kepedasan hidangan..."
+          />
         </div>
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1.5">Badge</label>
-        <input {...register('badge')} className="w-full px-3 py-2 rounded-lg border border-[rgba(28,25,23,0.12)] bg-white" placeholder="cth. Favorit, Rekomendasi" />
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+              Harga Jual (Rp) *
+            </label>
+            <input
+              type="number"
+              {...register('price_cents', { valueAsNumber: true })}
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground"
+              placeholder="cth: 45000"
+            />
+            {errors.price_cents && <p className="font-mono text-[9px] text-red-600 mt-1 uppercase tracking-wider">{errors.price_cents.message}</p>}
+          </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1.5">Foto Produk</label>
-        <FileUpload bucket="menu-photos" currentUrl={photoUrl} onUploaded={setPhotoUrl} />
-      </div>
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+              Klasifikasi Kategori *
+            </label>
+            <select 
+              {...register('category')} 
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground uppercase font-bold"
+            >
+              <option value="dayak">DAYAK TRADISIONAL</option>
+              <option value="smoked">DAGING ASAP</option>
+              <option value="pedas">CITA RASA PEDAS</option>
+              <option value="minuman">MINUMAN SEGAR</option>
+            </select>
+          </div>
+        </div>
 
-      <div className="flex gap-2 pt-4">
-        <button type="submit" disabled={isSubmitting} className="bg-[#FF4F79] text-white px-5 py-2 rounded-lg font-medium hover:bg-[#E03D63] disabled:opacity-50">
-          {isSubmitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Menu'}
-        </button>
-        <button type="button" onClick={() => router.push('/admin/menu')} className="px-5 py-2 rounded-lg border border-[rgba(28,25,23,0.12)]">
-          Batal
-        </button>
-      </div>
-    </form>
+        <div className="space-y-1">
+          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            Label / Lencana Promosi
+          </label>
+          <input 
+            {...register('badge')} 
+            className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground" 
+            placeholder="cth: TERLARIS, REKOMENDASI, PEDAS GILA" 
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">
+            Unggah Berkas Gambar / Foto Produk
+          </label>
+          <div className="border border-dashed border-border bg-background p-4">
+            <FileUpload bucket="menu-photos" currentUrl={photoUrl} onUploaded={setPhotoUrl} />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-3 pt-4 border-t border-border/60">
+          <button 
+            type="submit" 
+            disabled={isSubmitting} 
+            className="border border-foreground bg-foreground text-background font-mono text-[10px] font-bold px-6 py-3.5 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50"
+          >
+            {isSubmitting ? 'MEMPROSES...' : isEdit ? 'SIMPAN PERUBAHAN' : 'TAMBAH CATALOG'}
+          </button>
+          <button 
+            type="button" 
+            onClick={() => router.push('/admin/menu')} 
+            className="border border-border hover:border-foreground bg-transparent text-foreground font-mono text-[10px] font-bold px-6 py-3.5 uppercase tracking-widest hover:bg-card transition-all duration-300"
+          >
+            BATAL
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

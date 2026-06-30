@@ -61,66 +61,90 @@ export function POSForm() {
     setSubmitting(true);
     setError(null);
     setSuccessMsg(null);
-    const res = await fetch('/api/admin/pos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        items: cart.map((c) => ({ menu_item_id: c.menuItem.id, quantity: c.quantity })),
-        paid_cents: paidCents,
-      }),
-    });
-    const json = await res.json();
-    if (res.ok) {
-      setSuccessMsg(`Transaksi #${json.data.id.slice(0, 8)} berhasil!`);
-      setCart([]);
-      setPaidInput('');
-      setPaidCents(0);
-      // Navigate to transactions list after 1s
-      setTimeout(() => router.push('/admin/transactions'), 1000);
-    } else {
-      setError(json.error?.message ?? 'Gagal menyimpan transaksi.');
+    try {
+      const res = await fetch('/api/admin/pos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map((c) => ({ menu_item_id: c.menuItem.id, quantity: c.quantity })),
+          paid_cents: paidCents,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setSuccessMsg(`Transaksi #${json.data.id.slice(0, 8).toUpperCase()} berhasil!`);
+        setCart([]);
+        setPaidInput('');
+        setPaidCents(0);
+        setTimeout(() => router.push('/admin/transactions'), 1000);
+      } else {
+        setError(json.error?.message ?? 'Gagal menyimpan transaksi.');
+      }
+    } catch {
+      setError('Koneksi terputus.');
     }
     setSubmitting(false);
   };
 
-  // Group items by category
   const itemsByCategory = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
     (acc[item.category] ??= []).push(item);
     return acc;
   }, {});
+
   const categoryOrder = ['dayak', 'smoked', 'pedas', 'minuman'];
   const categoryLabel: Record<string, string> = {
-    dayak: 'Dayak',
-    smoked: 'Daging Asap',
-    pedas: 'Pedas',
-    minuman: 'Minuman',
+    dayak: 'DAYAK TRADISIONAL',
+    smoked: 'DAGING ASAP OTENTIK',
+    pedas: 'CITA RASA PEDAS',
+    minuman: 'MINUMAN SEGAR',
   };
 
-  if (loading) return <p className="text-[#57534E]">Memuat...</p>;
+  if (loading) {
+    return (
+      <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 animate-pulse">
+        Menyiapkan terminal kasir...
+      </div>
+    );
+  }
 
   return (
-    <div>
-      {error && <div className="text-sm text-[#DC2626] bg-[rgba(220,38,38,0.05)] rounded-lg p-3 mb-4">{error}</div>}
-      {successMsg && <div className="text-sm text-[#15803D] bg-[rgba(21,128,61,0.1)] rounded-lg p-3 mb-4">{successMsg}</div>}
+    <div className="space-y-6 animate-fade-in max-w-6xl">
+      {error && (
+        <div className="font-mono text-xs text-red-600 border border-red-600/20 bg-red-600/5 p-4 uppercase tracking-wider">
+          KASIR_ERROR: {error}
+        </div>
+      )}
+      {successMsg && (
+        <div className="font-mono text-xs text-emerald-700 border border-emerald-600/20 bg-emerald-600/5 p-4 uppercase tracking-wider">
+          KASIR_SUKSES: {successMsg}
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: menu grid */}
-        <div>
+        <div className="lg:col-span-7 space-y-6">
           {categoryOrder.map((cat) => {
             const catItems = itemsByCategory[cat];
             if (!catItems || catItems.length === 0) return null;
             return (
-              <div key={cat} className="mb-4">
-                <h3 className="text-xs uppercase tracking-wide text-[#57534E] mb-2">{categoryLabel[cat]}</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div key={cat} className="space-y-3">
+                <h3 className="font-mono text-[9px] font-bold text-muted uppercase tracking-wider">
+                  {categoryLabel[cat]}
+                </h3>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {catItems.map((item) => (
                     <button
                       key={item.id}
                       onClick={() => addToCart(item)}
-                      className="bg-white p-3 rounded-lg border border-[rgba(28,25,23,0.08)] hover:border-[#FF4F79] text-left"
+                      className="bg-card p-4 border border-border hover:border-foreground text-left transition-all duration-200"
                     >
-                      <div className="text-sm font-medium text-[#1C1917]">{item.name}</div>
-                      <div className="text-xs text-[#57534E] mt-1"><MoneyDisplay cents={item.price_cents} /></div>
+                      <div className="font-display font-semibold text-sm text-foreground leading-snug">
+                        {item.name}
+                      </div>
+                      <div className="font-mono text-[10px] font-bold text-muted mt-2 tabular-nums">
+                        <MoneyDisplay cents={item.price_cents} />
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -130,37 +154,57 @@ export function POSForm() {
         </div>
 
         {/* Right: cart + total + cash */}
-        <div className="bg-white rounded-xl border border-[rgba(28,25,23,0.08)] p-4 self-start">
-          <h3 className="font-semibold text-[#1C1917] mb-2">Pesanan</h3>
+        <div className="lg:col-span-5 border border-border bg-card p-6 space-y-6">
+          <h3 className="font-display text-sm font-semibold text-foreground uppercase tracking-wider border-b border-border pb-3">
+            Ringkasan Pesanan
+          </h3>
+
           {cart.length === 0 ? (
-            <p className="text-sm text-[#57534E] text-center py-4">Keranjang kosong. Klik menu di kiri untuk menambah.</p>
+            <p className="font-mono text-xs text-muted uppercase tracking-wider py-12 text-center">
+              Keranjang masih kosong. Klik hidangan di sebelah kiri.
+            </p>
           ) : (
-            <div className="space-y-1 mb-3 max-h-60 overflow-y-auto">
+            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
               {cart.map((c) => (
-                <div key={c.menuItem.id} className="flex items-center justify-between text-sm border-b border-[rgba(28,25,23,0.04)] pb-1">
-                  <div className="flex-1">
-                    <div className="font-medium text-[#1C1917]">{c.menuItem.name}</div>
-                    <div className="text-xs text-[#57534E]">
-                      <MoneyDisplay cents={c.menuItem.price_cents} /> × {c.quantity} = <MoneyDisplay cents={c.menuItem.price_cents * c.quantity} />
+                <div key={c.menuItem.id} className="flex items-center justify-between text-xs border-b border-border/40 pb-3">
+                  <div className="flex-1 min-w-0 pr-3">
+                    <div className="font-display font-semibold text-foreground truncate">{c.menuItem.name}</div>
+                    <div className="font-mono text-[9px] text-muted mt-1 tabular-nums">
+                      <MoneyDisplay cents={c.menuItem.price_cents} /> &times; {c.quantity}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => updateQty(c.menuItem.id, c.quantity - 1)} className="w-6 h-6 rounded bg-[rgba(28,25,23,0.06)] text-[#1C1917] text-xs">−</button>
-                    <span className="w-6 text-center text-sm">{c.quantity}</span>
-                    <button onClick={() => updateQty(c.menuItem.id, c.quantity + 1)} className="w-6 h-6 rounded bg-[rgba(28,25,23,0.06)] text-[#1C1917] text-xs">+</button>
+                  
+                  <div className="flex items-center gap-2 font-mono">
+                    <button 
+                      onClick={() => updateQty(c.menuItem.id, c.quantity - 1)} 
+                      className="w-7 h-7 border border-border bg-background text-foreground hover:border-foreground hover:bg-foreground hover:text-background transition-colors flex items-center justify-center font-bold"
+                    >
+                      &minus;
+                    </button>
+                    <span className="w-8 text-center text-xs font-bold tabular-nums">{c.quantity}</span>
+                    <button 
+                      onClick={() => updateQty(c.menuItem.id, c.quantity + 1)} 
+                      className="w-7 h-7 border border-border bg-background text-foreground hover:border-foreground hover:bg-foreground hover:text-background transition-colors flex items-center justify-center font-bold"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="border-t-2 border-[#1C1917] pt-3 mt-2 space-y-1 text-sm">
-            <div className="flex justify-between">
-              <span className="text-[#57534E]">Total</span>
-              <span className="font-semibold text-[#1C1917]"><MoneyDisplay cents={totalCents} /></span>
+          {/* Checkout Calculations */}
+          <div className="border-t-[3px] border-double border-foreground pt-4 space-y-3 font-mono text-xs">
+            <div className="flex justify-between items-baseline">
+              <span className="text-muted font-bold">TOTAL HARGA</span>
+              <span className="font-display font-semibold text-xl text-foreground tabular-nums">
+                <MoneyDisplay cents={totalCents} />
+              </span>
             </div>
+
             <div className="flex items-center justify-between">
-              <label className="text-[#57534E]">Tunai (Rp)</label>
+              <label className="text-muted font-bold">UANG TUNAI (RP)</label>
               <input
                 type="number"
                 value={paidInput}
@@ -169,14 +213,15 @@ export function POSForm() {
                   const num = parseInt(e.target.value, 10);
                   setPaidCents(isNaN(num) ? 0 : num * 100);
                 }}
-                className="w-32 px-2 py-1 rounded border border-[rgba(28,25,23,0.12)] text-right"
+                className="w-36 px-3 py-2 border border-border bg-background font-mono text-xs text-foreground text-right focus:outline-none focus:border-foreground"
                 placeholder="0"
               />
             </div>
+
             {paidCents > 0 && (
-              <div className="flex justify-between">
-                <span className="text-[#57534E]">Kembalian</span>
-                <span className={`font-semibold ${changeCents >= 0 ? 'text-[#15803D]' : 'text-[#DC2626]'}`}>
+              <div className="flex justify-between items-baseline border-t border-border/60 pt-3">
+                <span className="text-muted font-bold">UANG KEMBALIAN</span>
+                <span className={`font-bold tabular-nums text-sm ${changeCents >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   <MoneyDisplay cents={Math.max(0, changeCents)} />
                 </span>
               </div>
@@ -187,9 +232,9 @@ export function POSForm() {
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="w-full mt-4 bg-[#FF4F79] text-white py-2.5 rounded-lg font-medium hover:bg-[#E03D63] disabled:opacity-50"
+            className="w-full border border-foreground bg-foreground text-background font-mono text-[10px] font-bold py-3.5 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50"
           >
-            {submitting ? 'Menyimpan...' : 'Catat Transaksi'}
+            {submitting ? 'MEMPROSES TRANSAKSI...' : 'CATAT TRANSAKSI KASIR'}
           </button>
         </div>
       </div>

@@ -17,10 +17,10 @@ type Expense = {
 };
 
 const CATEGORY_LABEL: Record<string, string> = {
-  bahan: 'Bahan',
-  operasional: 'Operasional',
-  gaji: 'Gaji',
-  lain: 'Lain',
+  bahan: 'BAHAN BAKU',
+  operasional: 'OPERASIONAL',
+  gaji: 'GAJI KARYAWAN',
+  lain: 'LAIN-LAIN',
 };
 
 export function ExpensesView() {
@@ -43,9 +43,13 @@ export function ExpensesView() {
 
   const load = async () => {
     setLoading(true);
-    const r = await fetch('/api/admin/expenses');
-    const j = await r.json();
-    if (r.ok) setItems(j.data ?? []);
+    try {
+      const r = await fetch('/api/admin/expenses');
+      const j = await r.json();
+      if (r.ok) setItems(j.data ?? []);
+    } catch (e) {
+      console.error(e);
+    }
     setLoading(false);
   };
 
@@ -55,98 +59,134 @@ export function ExpensesView() {
     setError(null);
     setSuccessMsg(null);
     setSubmitting(true);
-    const r = await fetch('/api/admin/expenses', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const j = await r.json();
-    if (r.ok) {
-      setSuccessMsg('Pengeluaran berhasil dicatat.');
-      reset({ category: 'bahan', amount_cents: 0, description: '', incurred_at: new Date().toISOString().slice(0, 10) });
-      await load();
-    } else {
-      setError(j.error?.message ?? 'Gagal menyimpan.');
+    try {
+      const r = await fetch('/api/admin/expenses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const j = await r.json();
+      if (r.ok) {
+        setSuccessMsg('Pengeluaran berhasil dicatat.');
+        reset({ category: 'bahan', amount_cents: 0, description: '', incurred_at: new Date().toISOString().slice(0, 10) });
+        await load();
+      } else {
+        setError(j.error?.message ?? 'Gagal menyimpan.');
+      }
+    } catch {
+      setError('Koneksi terputus.');
     }
     setSubmitting(false);
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold text-[#1C1917] mb-4">Pengeluaran</h2>
+    <div className="space-y-6">
+      {error && (
+        <div className="font-mono text-xs text-red-600 border border-red-600/20 bg-red-600/5 p-4 uppercase tracking-wider">
+          PROCESS_ERROR: {error}
+        </div>
+      )}
+      {successMsg && (
+        <div className="font-mono text-xs text-emerald-700 border border-emerald-600/20 bg-emerald-600/5 p-4 uppercase tracking-wider">
+          RECORD_OK: {successMsg}
+        </div>
+      )}
 
-      {error && <div className="text-sm text-[#DC2626] bg-[rgba(220,38,38,0.05)] rounded-lg p-3 mb-3">{error}</div>}
-      {successMsg && <div className="text-sm text-[#15803D] bg-[rgba(21,128,61,0.1)] rounded-lg p-3 mb-3">{successMsg}</div>}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Form Input */}
+        <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-5 border border-border bg-card p-6 space-y-4">
+          <h3 className="font-display text-sm font-semibold text-foreground uppercase tracking-wider border-b border-border pb-3">
+            Catat Pengeluaran Baru
+          </h3>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-xl border border-[rgba(28,25,23,0.08)] p-4 space-y-3">
-          <h3 className="font-semibold text-[#1C1917] mb-2">Catat Pengeluaran</h3>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Tanggal *</label>
-            <input type="date" {...register('incurred_at')} className="w-full px-3 py-2 rounded border border-[rgba(28,25,23,0.12)] text-sm" />
-            {errors.incurred_at && <p className="text-xs text-[#DC2626] mt-1">{errors.incurred_at.message}</p>}
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Tanggal Transaksi *</label>
+            <input 
+              type="date" 
+              {...register('incurred_at')} 
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground" 
+            />
+            {errors.incurred_at && <p className="font-mono text-[9px] text-red-600 mt-1 uppercase tracking-wider">{errors.incurred_at.message}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Kategori *</label>
-            <select {...register('category')} className="w-full px-3 py-2 rounded border border-[rgba(28,25,23,0.12)] text-sm">
-              <option value="bahan">Bahan</option>
-              <option value="operasional">Operasional</option>
-              <option value="gaji">Gaji</option>
-              <option value="lain">Lain</option>
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Kategori Biaya *</label>
+            <select 
+              {...register('category')} 
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground uppercase font-bold"
+            >
+              <option value="bahan">BAHAN BAKU</option>
+              <option value="operasional">OPERASIONAL</option>
+              <option value="gaji">GAJI KARYAWAN</option>
+              <option value="lain">LAIN-LAIN</option>
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Nominal (Rp) *</label>
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Nominal (Rp) *</label>
             <input
               type="number"
               {...register('amount_cents', { valueAsNumber: true })}
-              className="w-full px-3 py-2 rounded border border-[rgba(28,25,23,0.12)] text-sm"
-              placeholder="cth. 50000"
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground"
+              placeholder="Nominal rupiah"
             />
-            {errors.amount_cents && <p className="text-xs text-[#DC2626] mt-1">{errors.amount_cents.message}</p>}
+            {errors.amount_cents && <p className="font-mono text-[9px] text-red-600 mt-1 uppercase tracking-wider">{errors.amount_cents.message}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Deskripsi</label>
-            <input {...register('description')} className="w-full px-3 py-2 rounded border border-[rgba(28,25,23,0.12)] text-sm" placeholder="cth. Beli daging sapi 5kg" />
+          <div className="space-y-1">
+            <label className="font-mono text-[8px] font-bold text-muted uppercase tracking-wider block">Deskripsi / Detail</label>
+            <input 
+              {...register('description')} 
+              className="w-full px-4 py-3 border border-border bg-background font-mono text-xs text-foreground focus:outline-none focus:border-foreground" 
+              placeholder="cth: Belu bumbu dapur atau sayur" 
+            />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-[#FF4F79] text-white py-2.5 rounded-lg font-medium hover:bg-[#E03D63] disabled:opacity-50"
+            className="w-full border border-foreground bg-foreground text-background font-mono text-[10px] font-bold py-3.5 uppercase tracking-widest hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50"
           >
-            {submitting ? 'Menyimpan...' : 'Catat Pengeluaran'}
+            {submitting ? 'Menyimpan Log...' : 'Catat Pengeluaran'}
           </button>
         </form>
 
-        <div className="bg-white rounded-xl border border-[rgba(28,25,23,0.08)] overflow-hidden">
-          <h3 className="font-semibold text-[#1C1917] p-4 border-b border-[rgba(28,25,23,0.08)]">Daftar Pengeluaran</h3>
+        {/* History Table */}
+        <div className="lg:col-span-7 border border-border bg-card overflow-hidden flex flex-col">
+          <h3 className="font-display text-sm font-semibold text-foreground p-6 border-b border-border uppercase tracking-wider">
+            Log Buku Pengeluaran
+          </h3>
+          
           {loading ? (
-            <p className="text-sm text-[#57534E] text-center py-8">Memuat...</p>
+            <div className="font-mono text-[10px] text-muted font-bold uppercase tracking-widest py-8 text-center animate-pulse">
+              Sinkronisasi data buku besar...
+            </div>
           ) : items.length === 0 ? (
-            <p className="text-sm text-[#57534E] text-center py-8">Belum ada catatan pengeluaran.</p>
+            <p className="font-mono text-xs text-muted uppercase tracking-wider py-12 text-center">
+              Belum terdeteksi adanya catatan pengeluaran.
+            </p>
           ) : (
-            <div className="max-h-96 overflow-y-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-[#FAF6F0] text-[#57534E] text-xs sticky top-0">
+            <div className="overflow-y-auto max-h-[420px]">
+              <table className="w-full border-collapse">
+                <thead className="bg-background sticky top-0 border-b border-border z-10">
                   <tr>
-                    <th className="text-left p-3">Tanggal</th>
-                    <th className="text-left p-3">Kategori</th>
-                    <th className="text-left p-3">Deskripsi</th>
-                    <th className="text-right p-3">Nominal</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Tanggal</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Kategori</th>
+                    <th className="text-left font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Detail</th>
+                    <th className="text-right font-mono text-[9px] uppercase text-muted py-4 px-4 font-bold tracking-widest">Nominal</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((it) => (
-                    <tr key={it.id} className="border-t border-[rgba(28,25,23,0.04)]">
-                      <td className="p-3 text-[#1C1917]">{it.incurred_at}</td>
-                      <td className="p-3 text-[#57534E]">{CATEGORY_LABEL[it.category] ?? it.category}</td>
-                      <td className="p-3 text-[#57534E]">{it.description ?? '—'}</td>
-                      <td className="p-3 text-right font-medium text-[#DC2626]"><MoneyDisplay cents={it.amount_cents} /></td>
+                    <tr key={it.id} className="border-b border-border/60 hover:bg-background/40 transition-colors">
+                      <td className="py-4 px-4 font-mono text-[10px] text-muted font-bold">{it.incurred_at}</td>
+                      <td className="py-4 px-4 font-mono text-[9px] font-bold text-foreground uppercase tracking-wider">
+                        {CATEGORY_LABEL[it.category] ?? it.category}
+                      </td>
+                      <td className="py-4 px-4 text-sm text-foreground">{it.description ?? '—'}</td>
+                      <td className="py-4 px-4 text-right font-mono text-xs font-bold text-red-700 tabular-nums">
+                        <MoneyDisplay cents={it.amount_cents} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>

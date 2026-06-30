@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import { streamText } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { google } from '@ai-sdk/google';
 import { createClient } from '@/lib/admin/supabase/server';
 import { aggregateSummary, formatSummaryForPrompt } from '@/lib/admin/ai/aggregate';
 import { ADMIN_AI_SYSTEM_PROMPT } from '@/lib/admin/ai/prompts';
-
-const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY! });
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -32,7 +30,7 @@ export async function POST(request: Request) {
 
   try {
     const result = streamText({
-      model: openrouter('mistralai/mistral-7b-instruct:free'),
+      model: google('gemini-2.5-flash'),
       system: systemWithContext,
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
       temperature: 0.7,
