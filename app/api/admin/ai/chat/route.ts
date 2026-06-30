@@ -27,23 +27,48 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({}));
-  const messages = body.messages as Array<{ role: 'user' | 'assistant'; content: string }> | undefined;
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+  const rawMessages = body.messages as any[] | undefined;
+  if (!rawMessages || !Array.isArray(rawMessages) || rawMessages.length === 0) {
     return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: 'messages required' } }, { status: 400 });
+  }
+
+  // Extract plain text from each message regardless of whether the SDK sent
+  // {content: string} (legacy) or {parts: [{type:'text', text:'...'}]} (AI SDK v4+)
+  function extractText(m: any): string {
+    if (typeof m.content === 'string') return m.content;
+    if (Array.isArray(m.parts)) {
+      return m.parts
+        .filter((p: any) => p.type === 'text')
+        .map((p: any) => p.text as string)
+        .join('');
+    }
+    return '';
+  }
+
+  // Build CoreMessage[] format that streamText expects
+  const coreMessages = rawMessages
+    .filter((m: any) => m.role === 'user' || m.role === 'assistant')
+    .map((m: any) => ({
+      role: m.role as 'user' | 'assistant',
+      content: extractText(m),
+    }))
+    .filter((m) => m.content.length > 0);
+
+  if (coreMessages.length === 0) {
+    return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: 'No valid message content found' } }, { status: 400 });
   }
 
   const summary = await aggregateSummary('today');
   const context = formatSummaryForPrompt(summary);
   const systemWithContext = `${ADMIN_AI_SYSTEM_PROMPT}\n\nDATA BISNIS HARI INI:\n${context}`;
 
-  // Instantiate google provider with explicit API key
   const google = createGoogleGenerativeAI({ apiKey });
 
   try {
     const result = streamText({
       model: google('gemini-2.5-flash'),
       system: systemWithContext,
-      messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      messages: coreMessages,
       temperature: 0.7,
       maxOutputTokens: 500,
     });
