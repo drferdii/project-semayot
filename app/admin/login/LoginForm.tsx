@@ -27,14 +27,29 @@ export function LoginForm({ redirect }: { redirect: string }) {
     }
 
     startTransition(async () => {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        setError('Email atau password salah.');
-        return;
+      try {
+        const supabase = createClient();
+        
+        // Timeout 10 detik untuk menghindari UI hang
+        const timeoutPromise = new Promise<{ error: Error }>((_, reject) => {
+          setTimeout(() => reject(new Error('Koneksi ke server terlalu lama (Timeout). Silakan coba lagi nanti.')), 10000);
+        });
+
+        // Race antara autentikasi dan timeout
+        const authPromise = supabase.auth.signInWithPassword({ email, password });
+        
+        const response = await Promise.race([authPromise, timeoutPromise]) as Awaited<typeof authPromise>;
+
+        if (response.error) {
+          setError('Email atau password salah.');
+          return;
+        }
+
+        router.push(redirect);
+        router.refresh();
+      } catch (err: any) {
+        setError(err.message || 'Terjadi kesalahan jaringan atau server tidak merespons.');
       }
-      router.push(redirect);
-      router.refresh();
     });
   };
 
