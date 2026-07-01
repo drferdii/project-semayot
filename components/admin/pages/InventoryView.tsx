@@ -20,7 +20,7 @@ type InventoryItem = {
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function InventoryView() {
-  const { data, error, isLoading } = useSWR('/api/admin/inventory', fetcher);
+  const { data, error } = useSWR('/api/admin/inventory', fetcher, { suspense: true });
   
   const getStatus = (item: InventoryItem) => {
     if (item.stock <= 0) return 'HABIS';
@@ -64,13 +64,7 @@ export function InventoryView() {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-sm">
-                    Memuat data inventaris...
-                  </td>
-                </tr>
-              ) : items.length === 0 ? (
+              {items.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-sm">
                     Tidak ada data inventaris.

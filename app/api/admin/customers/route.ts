@@ -31,7 +31,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from('customers')
       .select('*')
       .order('points', { ascending: false });

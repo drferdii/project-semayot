@@ -20,7 +20,7 @@ type Customer = {
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function CustomersView() {
-  const { data, isLoading } = useSWR('/api/admin/customers', fetcher);
+  const { data } = useSWR('/api/admin/customers', fetcher, { suspense: true });
   
   const getTier = (points: number) => {
     if (points >= 10000) return 'GOLD';
@@ -62,13 +62,7 @@ export function CustomersView() {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={7} className="py-8 text-center text-muted-foreground font-mono text-sm">
-                    Memuat data pelanggan...
-                  </td>
-                </tr>
-              ) : customers.length === 0 ? (
+              {customers.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-8 text-center text-muted-foreground font-mono text-sm">
                     Tidak ada pelanggan terdaftar.

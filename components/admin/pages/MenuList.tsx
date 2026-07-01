@@ -40,8 +40,9 @@ export function MenuList() {
       } else {
         setError(json.error?.message ?? 'Gagal memuat menu.');
       }
-    } catch {
-      setError('Koneksi terputus.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan terputus.'));
     }
     setLoading(false);
   };

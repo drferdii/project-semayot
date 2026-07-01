@@ -40,8 +40,9 @@ export function SEOView() {
       const j = await r.json();
       if (r.ok) setRecs(j.data ?? []);
       else setError(j.error?.message ?? 'Gagal memuat.');
-    } catch {
-      setError('Koneksi terputus.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan terputus.'));
     }
     setLoading(false);
   };

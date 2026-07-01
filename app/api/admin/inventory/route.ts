@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const branchId = url.searchParams.get('branch_id') || '00000000-0000-0000-0000-000000000001';
 
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from('inventory')
       .select('*')
       .eq('branch_id', branchId)

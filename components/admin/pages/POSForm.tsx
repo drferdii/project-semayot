@@ -83,8 +83,9 @@ export function POSForm() {
       } else {
         setError(json.error?.message ?? 'Gagal menyimpan transaksi.');
       }
-    } catch {
-      setError('Koneksi terputus.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan terputus.'));
     }
     setSubmitting(false);
   };

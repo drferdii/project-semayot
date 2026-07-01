@@ -18,7 +18,7 @@ type FraudLog = {
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function StaffView() {
-  const { data, isLoading } = useSWR('/api/admin/staff/fraud', fetcher);
+  const { data } = useSWR('/api/admin/staff/fraud', fetcher, { suspense: true });
   
   const fraudLogs: FraudLog[] = data?.data || [];
 
@@ -52,13 +52,7 @@ export function StaffView() {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={5} className="py-8 text-center text-muted-foreground font-mono text-sm">
-                    Memuat log keamanan...
-                  </td>
-                </tr>
-              ) : fraudLogs.length === 0 ? (
+              {fraudLogs.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-muted-foreground font-mono text-sm">
                     Aman terkendali. Tidak ada indikasi fraud.

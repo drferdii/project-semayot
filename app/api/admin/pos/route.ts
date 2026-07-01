@@ -112,12 +112,12 @@ export async function POST(request: Request) {
   // --- NEW: CRM & LOYALTY ---
   let customerId = null;
   if (customer_phone) {
-    const { data: cust } = await (supabase as any).from('customers').select('id, points, total_visits, total_spent').eq('phone', customer_phone).single();
+    const { data: cust } = await supabase.from('customers').select('id, points, total_visits, total_spent').eq('phone', customer_phone).single();
     if (cust) {
       customerId = cust.id;
       // 1 point per Rp 10.000 (totalCents / 1,000,000 since it's cents)
       const pointsEarned = Math.floor(totalCents / 1000000);
-      await (supabase as any).from('customers').update({
+      await supabase.from('customers').update({
         points: cust.points + pointsEarned,
         total_visits: cust.total_visits + 1,
         total_spent: cust.total_spent + (totalCents / 100),
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
       note: note ?? null,
       customer_id: customerId,
       branch_id: branch_id || '00000000-0000-0000-0000-000000000001'
-    } as any)
+    })
     .select()
     .single();
   if (txErr) {
@@ -157,20 +157,20 @@ export async function POST(request: Request) {
   }
 
   // --- NEW: INVENTORY DEDUCTION (COGS) ---
-  const { data: recipes } = await (supabase as any).from('recipes').select('menu_item_id, inventory_id, quantity_required').in('menu_item_id', itemIds);
+  const { data: recipes } = await supabase.from('recipes').select('menu_item_id, inventory_id, quantity_required').in('menu_item_id', itemIds);
   if (recipes && recipes.length > 0) {
     const deductions = new Map<string, number>();
     for (const item of txItems) {
-      const itemRecipes = recipes.filter((r: any) => r.menu_item_id === item.menu_item_id);
+      const itemRecipes = recipes.filter((r) => r.menu_item_id === item.menu_item_id);
       for (const r of itemRecipes) {
         const current = deductions.get(r.inventory_id) || 0;
         deductions.set(r.inventory_id, current + (r.quantity_required * item.quantity));
       }
     }
     for (const [invId, qtyToDeduct] of deductions.entries()) {
-      const { data: inv } = await (supabase as any).from('inventory').select('stock').eq('id', invId).single();
+      const { data: inv } = await supabase.from('inventory').select('stock').eq('id', invId).single();
       if (inv) {
-        await (supabase as any).from('inventory').update({ stock: inv.stock - qtyToDeduct }).eq('id', invId);
+        await supabase.from('inventory').update({ stock: inv.stock - qtyToDeduct }).eq('id', invId);
       }
     }
   }

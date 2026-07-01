@@ -84,6 +84,8 @@ export type Database = {
           change_cents: number;
           payment_method: 'cash';
           note: string | null;
+          customer_id: string | null;
+          branch_id: string;
           created_at: string;
         };
         Insert: {
@@ -93,6 +95,8 @@ export type Database = {
           paid_cents: number;
           payment_method?: 'cash';
           note?: string | null;
+          customer_id?: string | null;
+          branch_id?: string;
           created_at?: string;
         };
         Update: {
@@ -102,6 +106,8 @@ export type Database = {
           paid_cents?: number;
           payment_method?: 'cash';
           note?: string | null;
+          customer_id?: string | null;
+          branch_id?: string;
           created_at?: string;
         };
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -165,6 +171,90 @@ export type Database = {
           incurred_by?: string | null;
           incurred_at?: string;
           created_at?: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
+      customers: {
+        Row: {
+          id: string;
+          phone: string;
+          points: number;
+          total_visits: number;
+          total_spent: number;
+          last_visit: string | null;
+        };
+        Insert: {
+          id?: string;
+          phone: string;
+          points?: number;
+          total_visits?: number;
+          total_spent?: number;
+          last_visit?: string | null;
+        };
+        Update: {
+          id?: string;
+          phone?: string;
+          points?: number;
+          total_visits?: number;
+          total_spent?: number;
+          last_visit?: string | null;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
+      inventory: {
+        Row: {
+          id: string;
+          branch_id: string;
+          name: string;
+          category: string;
+          stock: number;
+          unit: string;
+          min_stock: number;
+          last_restock: string | null;
+        };
+        Insert: {
+          id?: string;
+          branch_id?: string;
+          name: string;
+          category: string;
+          stock?: number;
+          unit: string;
+          min_stock?: number;
+          last_restock?: string | null;
+        };
+        Update: {
+          id?: string;
+          branch_id?: string;
+          name?: string;
+          category?: string;
+          stock?: number;
+          unit?: string;
+          min_stock?: number;
+          last_restock?: string | null;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        Relationships: [];
+      };
+      recipes: {
+        Row: {
+          id: string;
+          menu_item_id: string;
+          inventory_id: string;
+          quantity_required: number;
+        };
+        Insert: {
+          id?: string;
+          menu_item_id: string;
+          inventory_id: string;
+          quantity_required: number;
+        };
+        Update: {
+          id?: string;
+          menu_item_id?: string;
+          inventory_id?: string;
+          quantity_required?: number;
         };
         // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         Relationships: [];

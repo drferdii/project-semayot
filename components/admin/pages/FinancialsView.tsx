@@ -11,7 +11,7 @@ import { MoneyDisplay } from '@/components/admin/MoneyDisplay';
 const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 export function FinancialsView() {
-  const { data, isLoading } = useSWR('/api/admin/financials', fetcher);
+  const { data } = useSWR('/api/admin/financials', fetcher, { suspense: true });
   
   const pnl = data?.data || { revenue: 0, cogs: 0, opex: 0, net_profit: 0 };
   return (
@@ -41,28 +41,28 @@ export function FinancialsView() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <StatCard
               label="Pendapatan Kotor (Gross)"
-              value={isLoading ? "..." : `Rp ${Number(pnl.revenue / 100).toLocaleString('id-ID')}`}
+              value={`Rp ${Number(pnl.revenue / 100).toLocaleString('id-ID')}`}
               delta="+14,2%"
               accent="success"
               className="p-6 border-emerald-600/30 bg-emerald-500/5"
             />
             <StatCard
               label="HPP / Harga Pokok Bahan"
-              value={isLoading ? "..." : `Rp ${Number(pnl.cogs / 100).toLocaleString('id-ID')}`}
+              value={`Rp ${Number(pnl.cogs / 100).toLocaleString('id-ID')}`}
               delta="-2,1%"
               accent="success"
               className="p-6"
             />
             <StatCard
               label="Pengeluaran Operasional (Opex)"
-              value={isLoading ? "..." : `Rp ${Number(pnl.opex / 100).toLocaleString('id-ID')}`}
+              value={`Rp ${Number(pnl.opex / 100).toLocaleString('id-ID')}`}
               delta="+5,5%"
               accent="danger"
               className="p-6"
             />
             <StatCard
               label="Laba Bersih (Net Profit)"
-              value={isLoading ? "..." : `Rp ${Number(pnl.net_profit / 100).toLocaleString('id-ID')}`}
+              value={`Rp ${Number(pnl.net_profit / 100).toLocaleString('id-ID')}`}
               delta="+18,4%"
               accent="success"
               className="p-6 border-[#FF4F79]/30 bg-[#FF4F79]/5"

@@ -36,8 +36,9 @@ export function SettingsView() {
       const j = await r.json();
       if (r.ok) setStaff(j.data ?? []);
       else setError(j.error?.message ?? 'Gagal memuat staff.');
-    } catch {
-      setError('Koneksi terputus.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan terputus.'));
     }
     setLoading(false);
   };
@@ -66,8 +67,9 @@ export function SettingsView() {
       } else {
         setError(j.error?.message ?? 'Gagal mengundang.');
       }
-    } catch {
-      setError('Koneksi gagal.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan gagal.'));
     }
     setInviting(false);
   };

@@ -30,9 +30,9 @@ export function LoginForm({ redirect }: { redirect: string }) {
       try {
         const supabase = createClient();
         
-        // Timeout 10 detik untuk menghindari UI hang
+        // Timeout 15 detik untuk menghindari UI hang
         const timeoutPromise = new Promise<{ error: Error }>((_, reject) => {
-          setTimeout(() => reject(new Error('Koneksi ke server terlalu lama (Timeout). Silakan coba lagi nanti.')), 10000);
+          setTimeout(() => reject(new Error('Koneksi ke server terlalu lama (Timeout). Silakan coba lagi nanti.')), 15000);
         });
 
         // Race antara autentikasi dan timeout

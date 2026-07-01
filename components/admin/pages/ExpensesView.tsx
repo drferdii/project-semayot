@@ -73,8 +73,9 @@ export function ExpensesView() {
       } else {
         setError(j.error?.message ?? 'Gagal menyimpan.');
       }
-    } catch {
-      setError('Koneksi terputus.');
+    } catch (e: any) {
+      console.error(e);
+      setError(e instanceof SyntaxError ? 'Respons server tidak valid (500).' : (e.message || 'Koneksi jaringan terputus.'));
     }
     setSubmitting(false);
   };
